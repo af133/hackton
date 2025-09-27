@@ -3,59 +3,87 @@
 @section('title', 'Register - SkillSwap')
 
 @section('content')
-<div class="min-h-screen flex flex-col justify-center items-center bg-gray-50 dark:bg-gray-900 transition-colors duration-300 p-4">
-    <div class="absolute top-5 right-5">
-        <x-theme-toggle/>
+<div class="min-h-screen grid grid-cols-1 lg:grid-cols-2">
+
+    <div class="hidden lg:flex flex-col items-center justify-center bg-primary p-12 text-white text-center" data-aos="fade-right">
+        <div class="w-full max-w-md">
+            <i class="ri-user-add-line text-8xl opacity-80"></i>
+            <h1 class="text-4xl font-bold mt-4">Bergabung dengan Komunitas Pembelajar.</h1>
+            <p class="mt-4 text-lg opacity-70">
+                Buat akunmu sekarang dan mulailah perjalanan baru dalam berbagi dan mendapatkan keahlian.
+            </p>
+        </div>
     </div>
 
-    <div class="flex flex-col md:flex-row w-full max-w-5xl bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden" data-aos="fade-up" data-aos-duration="1000">
-        <div class="hidden md:flex md:w-1/2 bg-gray-100 dark:bg-gray-700">
-            <img src="{{ asset('Hero.png') }}" alt="Learning Illustration" class="object-cover w-full h-full">
-        </div>
+    <div class="flex justify-center bg-gray-50 dark:bg-gray-900 p-6 sm:p-12 lg:py-24">
+        {{-- PERUBAHAN 1: Mengurangi spasi antar blok --}}
+        <div class="max-w-md w-full space-y-6">
 
-        <div class="w-full md:w-1/2 p-10 flex flex-col justify-center">
-            <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-6">Create Your Account</h2>
-            <form method="POST" action="{{ route('auth.register') }}" class="space-y-5">
+            {{-- Header Form --}}
+            <div data-aos="fade-up">
+                <a href="/" class="text-3xl font-bold text-primary">SkillSwap</a>
+                <h2 class="mt-6 text-3xl font-extrabold text-gray-900 dark:text-white">
+                    Buat Akun Baru
+                </h2>
+                <p class="mt-2 text-base text-gray-600 dark:text-gray-400">
+                    Hanya perlu beberapa langkah untuk memulai.
+                </p>
+            </div>
+
+            {{-- PERUBAHAN 2: Mengurangi spasi di dalam form --}}
+            <form class="space-y-5" action="{{ route('register') }}" method="POST" data-aos="fade-up" data-aos-delay="100">
                 @csrf
-                <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
-                    <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus
-                           class="mt-1 block w-full px-4 py-2 border rounded-lg text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500">
-                    @error('name')
-                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-                    @enderror
+                {{-- Input Nama --}}
+                <div class="relative">
+                    <input id="name" name="name" type="text" required placeholder="Nama Lengkap"
+                        class="peer w-full px-4 py-3 bg-transparent border-b-2 border-gray-300 dark:border-gray-600 text-base dark:text-white placeholder-transparent focus:outline-none focus:border-primary transition-colors">
+                    <label for="name" class="absolute left-0 -top-5 text-gray-600 dark:text-gray-400 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-5 peer-focus:text-primary peer-focus:text-sm">
+                        Nama Lengkap
+                    </label>
                 </div>
 
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
-                    <input id="email" type="email" name="email" value="{{ old('email') }}" required
-                           class="mt-1 block w-full px-4 py-2 border rounded-lg text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500">
-                    @error('email')
-                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-                    @enderror
+                {{-- Input Email --}}
+                <div class="relative">
+                    <input id="email" name="email" type="email" required placeholder="Alamat Email"
+                        class="peer w-full px-4 py-3 bg-transparent border-b-2 border-gray-300 dark:border-gray-600 text-base dark:text-white placeholder-transparent focus:outline-none focus:border-primary transition-colors">
+                    <label for="email" class="absolute left-0 -top-5 text-gray-600 dark:text-gray-400 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-5 peer-focus:text-primary peer-focus:text-sm">
+                        Alamat Email
+                    </label>
                 </div>
 
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
-                    <input id="password" type="password" name="password" required
-                           class="mt-1 block w-full px-4 py-2 border rounded-lg text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500">
-                    @error('password')
-                        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-                    @enderror
+                {{-- Input Password --}}
+                <div class="relative">
+                    <input id="password" name="password" type="password" required placeholder="Buat Password"
+                        class="peer w-full px-4 py-3 bg-transparent border-b-2 border-gray-300 dark:border-gray-600 text-base dark:text-white placeholder-transparent focus:outline-none focus:border-primary transition-colors">
+                    <label for="password" class="absolute left-0 -top-5 text-gray-600 dark:text-gray-400 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-5 peer-focus:text-primary peer-focus:text-sm">
+                        Buat Password
+                    </label>
                 </div>
 
-                <div>
-                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Confirm Password</label>
-                    <input id="password_confirmation" type="password" name="password_confirmation" required
-                           class="mt-1 block w-full px-4 py-2 border rounded-lg text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500">
+                {{-- Input Konfirmasi Password --}}
+                <div class="relative">
+                    <input id="password_confirmation" name="password_confirmation" type="password" required placeholder="Konfirmasi Password"
+                        class="peer w-full px-4 py-3 bg-transparent border-b-2 border-gray-300 dark:border-gray-600 text-base dark:text-white placeholder-transparent focus:outline-none focus:border-primary transition-colors">
+                    <label for="password_confirmation" class="absolute left-0 -top-5 text-gray-600 dark:text-gray-400 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-5 peer-focus:text-primary peer-focus:text-sm">
+                        Konfirmasi Password
+                    </label>
                 </div>
 
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition">Register</button>
+                {{-- PERUBAHAN 3: Mengurangi spasi tombol --}}
+                <div class="pt-2">
+                    <button type="submit"
+                        class="w-full flex justify-center py-3 px-4 rounded-lg shadow-md text-base font-semibold text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 transform hover:scale-105">
+                        Buat Akun
+                    </button>
+                </div>
             </form>
 
-            <p class="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
-                Already have an account?
-                <a href="{{ route('auth.login') }}" class="text-blue-600 hover:underline">Login</a>
+            {{-- Link ke Halaman Login --}}
+            <p class="text-center text-sm text-gray-600 dark:text-gray-400" data-aos="fade-up" data-aos-delay="200">
+                Sudah punya akun?
+                <a href="{{ route('auth.view.login') }}" class="font-semibold text-primary hover:underline">
+                    Login di sini
+                </a>
             </p>
         </div>
     </div>

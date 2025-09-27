@@ -4,33 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'SkillSwap')</title>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" rel="stylesheet" />
-
+    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900 transition-colors duration-300">
+<body class="bg-background text-gray-900 transition-colors duration-300">
 
-    <main class="min-h-screen">
-        @yield('content')
-    </main>
+    <div class="flex min-h-screen">
+        <x-sidebar />
+
+        <main class="flex-1 md:ml-64 pb-20 md:pb-6">
+            @yield('content')
+        </main>
+
+        <x-navbar-mobile />
+    </div>
 
     @stack('scripts')
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="//unpkg.com/alpinejs" defer></script>
     <script>
-    AOS.init({
-        duration: 800,
-        once: true,
-        easing: 'ease-out-cubic',
-    });
-</script>
+        AOS.init({
+            duration: 800,
+            once: true,
+            easing: 'ease-out-cubic',
+        });
+    </script>
 </body>
 </html>
