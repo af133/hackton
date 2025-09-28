@@ -81,7 +81,7 @@
             {{-- Link ke Halaman Login --}}
             <p class="text-center text-sm text-gray-600 dark:text-gray-400" data-aos="fade-up" data-aos-delay="200">
                 Sudah punya akun?
-                <a href="{{ route('auth.view.login') }}" class="font-semibold text-primary hover:underline">
+                <a href="{{ route('login') }}" class="font-semibold text-primary hover:underline">
                     Login di sini
                 </a>
             </p>
