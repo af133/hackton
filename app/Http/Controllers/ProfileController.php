@@ -14,4 +14,8 @@ class ProfileController extends Controller
     {
         return view('profile.edit');
     }
+    public function mission()
+    {
+        return view('profile.mission');
+    }
 }

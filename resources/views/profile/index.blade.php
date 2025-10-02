@@ -1,145 +1,195 @@
 @extends('layouts.app')
 
 @section('title', 'Profil Pengguna - SkillSwap')
-@section('body_class', 'bg-background') {{-- Menggunakan warna background baru --}}
+@section('body_class', 'bg-background') {{-- Menggunakan warna background dari palet --}}
 
 @section('content')
 <div x-data="{ sidebarOpen: false }" class="flex h-screen bg-background">
-    @include('components.sidebar')
+    @include('components.sidebar') {{-- Anggap komponen sidebar ada --}}
 
     <div class="flex-1 flex flex-col overflow-hidden">
-        @include('components.header-mobile')
+        @include('components.header-mobile') {{-- Anggap komponen header mobile ada --}}
 
-        <div class="relative flex-1 overflow-y-auto">
-            <main class="relative z-10 p-6 md:p-8">
+        <main class="flex-1 overflow-x-hidden overflow-y-auto">
+            <div class="container mx-auto px-6 py-8">
 
                 {{--
                 ======================================================================
-                1. KARTU PROFIL UTAMA (REDESAIN)
+                BAGIAN ATAS: PROFIL PENGGUNA & BADGE
                 ======================================================================
                 --}}
-                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-md mb-8">
-                    <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 md:gap-8">
-                        <div class="flex-shrink-0">
-                            <img class="h-32 w-32 rounded-full object-cover ring-4 ring-secondary" src="https://i.pravatar.cc/300?u=andre" alt="User Avatar">
-                        </div>
-                        <div class="flex-grow w-full">
-                            <div class="flex items-start justify-between">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                    {{-- KARTU PROFIL UTAMA --}}
+                    <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-md">
+                        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+                            <div class="flex-shrink-0">
+                                <img class="h-32 w-32 rounded-full object-cover ring-4 ring-secondary" src="https://i.pravatar.cc/300?u=aisyah" alt="User Avatar">
+                            </div>
+                            <div class="flex-grow w-full text-center sm:text-left">
                                 <h1 class="text-3xl font-bold text-gray-800">Aisyah Farah</h1>
-                                <a href="{{ route('profile.edit') }}" class="text-gray-400 hover:text-primary p-2 rounded-full bg-gray-100 hover:bg-secondary transition-colors" title="Edit Profil">
-                                    <i class="ri-edit-2-line text-xl"></i>
-                                </a>
-                            </div>
-                            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3 text-gray-600">
-                                <p><strong class="font-medium text-gray-500 w-32 inline-block">Registrasi</strong>: 24 Sep 2025</p>
-                                <p><strong class="font-medium text-gray-500 w-32 inline-block">Tanggal Lahir</strong>: 08 Apr 1999</p>
-                                <p><strong class="font-medium text-gray-500 w-32 inline-block">Lokasi</strong>: Jakarta, Indonesia</p>
-                                <p><strong class="font-medium text-gray-500 w-32 inline-block">Telepon</strong>: (+62) 812 3456 7890</p>
-                                <p class="md:col-span-2"><strong class="font-medium text-gray-500 w-32 inline-block">E-mail</strong>: aisyah.farah@example.com</p>
-                            </div>
-                            <div class="mt-5 flex items-center gap-x-3">
-                                <a href="#" class="w-10 h-10 flex items-center justify-center text-gray-500 bg-gray-100 rounded-full hover:bg-primary hover:text-white transition-colors"><i class="ri-instagram-line text-xl"></i></a>
-                                <a href="#" class="w-10 h-10 flex items-center justify-center text-gray-500 bg-gray-100 rounded-full hover:bg-primary hover:text-white transition-colors"><i class="ri-facebook-fill text-xl"></i></a>
-                                <a href="#" class="w-10 h-10 flex items-center justify-center text-gray-500 bg-gray-100 rounded-full hover:bg-primary hover:text-white transition-colors"><i class="ri-linkedin-fill text-xl"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {{-- Kolom Kiri --}}
-                    <div class="lg:col-span-2 space-y-8">
-                        {{-- PENGALAMAN KERJA --}}
-                        <div class="bg-white p-6 rounded-2xl shadow-md">
-                            <h2 class="text-xl font-bold text-gray-800 mb-5">Pengalaman Kerja</h2>
-                            <div class="space-y-6">
-                                <div class="flex gap-x-4">
-                                    <div class="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-background rounded-lg text-primary"><i class="ri-building-4-line text-2xl"></i></div>
-                                    <div>
-                                        <h3 class="font-semibold text-gray-800">UI/UX Designer</h3>
-                                        <p class="text-sm text-primary">Creative Agency</p>
-                                        <p class="text-xs text-gray-500 mt-1">Jan 2023 - Sekarang</p>
+                                <p class="mt-2 text-gray-600 max-w-lg">
+                                    Saya mahir dalam UI/UX Designer dan senang membagikan ilmu melalui video yang saya bagikan. Saya tertarik mempelajari Digital Marketing.
+                                </p>
+                                <div class="mt-4 flex flex-wrap justify-center sm:justify-start items-center gap-x-6 gap-y-3">
+                                    <div class="flex items-center gap-2">
+                                        <i class="ri-coin-line w-6 h-6 text-yellow-500"></i>
+                                        <span class="font-bold text-lg text-gray-700">1.500 coin</span>
+                                    </div>
+                                    <div class="flex items-center gap-x-3 text-2xl">
+                                        <a href="#" class="text-gray-400 hover:text-primary transition-colors" title="Mail"><i class="ri-mail-line"></i></a>
+                                        <a href="#" class="text-gray-400 hover:text-primary transition-colors" title="Instagram"><i class="ri-instagram-line"></i></a>
+                                        <a href="#" class="text-gray-400 hover:text-primary transition-colors" title="LinkedIn"><i class="ri-linkedin-box-fill"></i></a>
                                     </div>
                                 </div>
-                                <div class="flex gap-x-4">
-                                    <div class="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-background rounded-lg text-primary"><i class="ri-computer-line text-2xl"></i></div>
-                                    <div>
-                                        <h3 class="font-semibold text-gray-800">Frontend Developer (Intern)</h3>
-                                        <p class="text-sm text-primary">Tech Startup Inc.</p>
-                                        <p class="text-xs text-gray-500 mt-1">Jul 2022 - Des 2022</p>
+                                <div class="mt-4 pt-4">
+                                    <p class="font-semibold text-gray-500 mb-2">Level Skill:</p>
+                                    <div class="flex flex-wrap justify-center sm:justify-start gap-2">
+                                        <span class="px-3 py-1 text-sm bg-secondary text-primary rounded-full font-bold">UI/UX Design: <span class="font-normal">Intermediate</span></span>
+                                        <span class="px-3 py-1 text-sm bg-secondary text-primary rounded-full font-bold">Digital Marketing: <span class="font-normal">Beginner</span></span>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        {{-- PORTOFOLIO --}}
-                        <div class="bg-white p-6 rounded-2xl shadow-md">
-                            <h2 class="text-xl font-bold text-gray-800 mb-5">Portofolio</h2>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <img src="https://images.unsplash.com/photo-1559028006-44a0a99490e1?q=80&w=1974" class="rounded-lg object-cover w-full h-48 hover:opacity-90 cursor-pointer transition-opacity" alt="Portfolio 1">
-                                <img src="https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?q=80&w=2070" class="rounded-lg object-cover w-full h-48 hover:opacity-90 cursor-pointer transition-opacity" alt="Portfolio 2">
+                                 <div class="mt-4 flex justify-center sm:justify-start items-center gap-x-3">
+                                    <a href="#" class="px-5 py-2 bg-primary text-white font-semibold rounded-lg shadow-sm hover:bg-primary/90 transition-colors">View CV</a>
+                                    <a href="#" class="px-5 py-2 bg-gray-100 text-gray-800 font-semibold rounded-lg shadow-sm hover:bg-gray-200 transition-colors">View Portofolio</a>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    {{-- Kolom Kanan --}}
-                    <div class="lg:col-span-1 space-y-8">
-                        {{-- STATISTIK & KEAHLIAN --}}
-                        <div class="bg-white p-6 rounded-2xl shadow-md">
-                            <h2 class="text-xl font-bold text-gray-800 mb-5">Statistik & Keahlian</h2>
-                            <div class="grid grid-cols-2 gap-4 text-center mb-6">
-                                <div><p class="text-2xl font-bold">12</p><p class="text-sm text-gray-500">Kursus</p></div>
-                                <div><p class="text-2xl font-bold">150</p><p class="text-sm text-gray-500">Skill Kredit</p></div>
-                            </div>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="px-3 py-1 text-sm bg-secondary text-primary rounded-full font-bold">UI/UX Design</span>
-                                <span class="px-3 py-1 text-sm bg-secondary text-primary rounded-full font-bold">Prototyping</span>
-                                <span class="px-3 py-1 text-sm bg-secondary text-primary rounded-full font-bold">HTML & CSS</span>
-                            </div>
+                    {{-- KARTU BADGE --}}
+                    <div class="bg-white p-6 rounded-2xl shadow-md">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-bold text-gray-800">Badges</h2>
+                            <a href="{{ route('profile.mission') }}" class="text-sm font-semibold text-primary hover:underline flex items-center gap-1">
+                                Lihat Misi
+                                <i class="ri-arrow-right-s-line"></i>
+                            </a>
                         </div>
-
-                        {{-- KURSUS SAYA (REDESAIN TOTAL) --}}
-                        <div class="bg-white p-6 rounded-2xl shadow-md">
-                            <h2 class="text-xl font-bold text-gray-800 mb-5">Kursus Saya</h2>
-                            <div class="relative space-y-6">
-                                <!-- Garis Timeline -->
-                                <div class="absolute left-5 top-2 bottom-2 w-1 bg-secondary rounded-full"></div>
-
-                                <!-- Item Kursus 1 (Selesai) -->
-                                <div class="flex items-center gap-x-4 relative">
-                                    <div class="w-10 h-10 rounded-full bg-primary flex-shrink-0 flex items-center justify-center ring-4 ring-white z-10">
-                                        <i class="ri-check-line text-white text-xl"></i>
-                                    </div>
-                                    <div class="flex-grow bg-background p-3 rounded-lg">
-                                        <h3 class="font-semibold text-gray-800 text-sm">UX/UI Design - Website</h3>
-                                        <p class="text-xs text-gray-500">68 Pelajaran</p>
-                                    </div>
+                        <div class="space-y-4">
+                             <div>
+                                <h3 class="font-semibold text-gray-600 text-sm mb-2">Individual Badge</h3>
+                                <div class="rounded-xl overflow-hidden shadow-sm">
+                                    <img src="{{ asset('images/Badge.png') }}" alt="Fast Learner Badge" class="w-full h-auto object-cover">
                                 </div>
-                                <!-- Item Kursus 2 (Mulai) -->
-                                 <div class="flex items-center gap-x-4 relative">
-                                    <div class="w-10 h-10 rounded-full bg-primary flex-shrink-0 flex items-center justify-center ring-4 ring-white z-10">
-                                        <i class="ri-play-fill text-white text-xl"></i>
+                            </div>
+                             <div>
+                                <h3 class="font-semibold text-gray-600 text-sm">General Badge</h3>
+                                <div class="flex items-center gap-3 mt-2">
+                                    <div class="w-20 h-20 flex-shrink-0 flex items-center justify-center bg-gray-100 rounded-lg">
+                                        <img src="{{ asset('images/BadgeAchive.png') }}" alt="Top Mentor Badge" class="w-20 h-20">
                                     </div>
-                                    <div class="flex-grow bg-background p-3 rounded-lg">
-                                        <h3 class="font-semibold text-gray-800 text-sm">UX/UI Design - Animasi</h3>
-                                        <p class="text-xs text-gray-500">12 Pelajaran</p>
-                                    </div>
-                                </div>
-                                <!-- Item Kursus 3 (Belum Mulai) -->
-                                 <div class="flex items-center gap-x-4 relative">
-                                    <div class="w-10 h-10 rounded-full bg-gray-300 flex-shrink-0 ring-4 ring-white z-10"></div>
-                                    <div class="flex-grow bg-background p-3 rounded-lg">
-                                        <h3 class="font-semibold text-gray-500 text-sm">UX/UI Design - Aplikasi</h3>
-                                        <p class="text-xs text-gray-400">12 Pelajaran</p>
+                                    <div class="flex-grow">
+                                        <p class="font-bold text-gray-700 text-sm">Top Mentor</p>
+                                        <div class="w-full bg-gray-200 rounded-full h-1.5 mt-1">
+                                            <div class="bg-primary h-1.5 rounded-full" style="width: 60%"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </main>
-        </div>
+
+                {{--
+                ======================================================================
+                BAGIAN BAWAH: DAFTAR KELAS
+                ======================================================================
+                --}}
+                <div class="space-y-8">
+                    {{-- KELAS YANG DIMILIKI (DIAJARKAN) --}}
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-2xl font-bold text-gray-800">Materi yang diajarkan</h2>
+                            <a href="#" class="text-sm font-semibold text-primary hover:underline">Lihat Semua</a>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {{-- Course Card 1 (Owned) --}}
+                            <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 transform hover:-translate-y-1 transition-all duration-300 hover:shadow-lg">
+                                <div class="h-48 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?q=80&w=2070')"></div>
+                                <div class="p-5">
+                                    <h3 class="text-lg font-bold text-gray-900">Apa itu UI dan UX?</h3>
+                                    <p class="text-sm text-gray-500">Oleh Aisyah Farah H</p>
+                                    <div class="flex items-center text-yellow-400 mt-1"><i class="ri-star-s-fill"></i><i class="ri-star-s-fill"></i><i class="ri-star-s-fill"></i><i class="ri-star-s-fill"></i><i class="ri-star-half-s-line"></i></div>
+                                    <div class="flex items-center justify-between mt-4">
+                                        <button class="px-6 py-2.5 font-semibold text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors">Lihat Materi</button>
+                                        <div class="flex items-center gap-x-2 text-gray-400">
+                                            <button class="w-10 h-10 hover:text-pink-500 rounded-full hover:bg-gray-100 transition-colors"><i class="ri-heart-line"></i></button>
+                                            <button class="w-10 h-10 hover:text-indigo-500 rounded-full hover:bg-gray-100 transition-colors"><i class="ri-share-line"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- Course Card 2 (Owned) --}}
+                            <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 transform hover:-translate-y-1 transition-all duration-300 hover:shadow-lg">
+                                <div class="h-48 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1555774698-0b77e0ab232f?q=80&w=2070')"></div>
+                                <div class="p-5">
+                                    <h3 class="text-lg font-bold text-gray-900">Dasar Prototyping</h3>
+                                    <p class="text-sm text-gray-500">Oleh Aisyah Farah H</p>
+                                    <div class="flex items-center text-yellow-400 mt-1"><i class="ri-star-s-fill"></i><i class="ri-star-s-fill"></i><i class="ri-star-s-fill"></i><i class="ri-star-s-fill"></i><i class="ri-star-s-fill"></i></div>
+                                    <div class="flex items-center justify-between mt-4">
+                                        <button class="px-6 py-2.5 font-semibold text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors">Lihat Materi</button>
+                                        <div class="flex items-center gap-x-2 text-gray-400">
+                                            <button class="w-10 h-10 hover:text-pink-500 rounded-full hover:bg-gray-100 transition-colors"><i class="ri-heart-line"></i></button>
+                                            <button class="w-10 h-10 hover:text-indigo-500 rounded-full hover:bg-gray-100 transition-colors"><i class="ri-share-line"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                             {{-- Course Card 3 (Owned) --}}
+                            <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 transform hover:-translate-y-1 transition-all duration-300 hover:shadow-lg">
+                                <div class="h-48 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1522204523234-8729aa6e3d5f?q=80&w=2070')"></div>
+                                <div class="p-5">
+                                    <h3 class="text-lg font-bold text-gray-900">Design System Lanjutan</h3>
+                                    <p class="text-sm text-gray-500">Oleh Aisyah Farah H</p>
+                                    <div class="flex items-center text-yellow-400 mt-1"><i class="ri-star-s-fill"></i><i class="ri-star-s-fill"></i><i class="ri-star-s-fill"></i><i class="ri-star-s-fill"></i><i class="ri-star-line"></i></div>
+                                    <div class="flex items-center justify-between mt-4">
+                                        <button class="px-6 py-2.5 font-semibold text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors">Lihat Materi</button>
+                                        <div class="flex items-center gap-x-2 text-gray-400">
+                                            <button class="w-10 h-10 hover:text-pink-500 rounded-full hover:bg-gray-100 transition-colors"><i class="ri-heart-line"></i></button>
+                                            <button class="w-10 h-10 hover:text-indigo-500 rounded-full hover:bg-gray-100 transition-colors"><i class="ri-share-line"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- KELAS YANG DIIKUTI --}}
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-2xl font-bold text-gray-800">Materi yang diikuti</h2>
+                            <a href="#" class="text-sm font-semibold text-primary hover:underline">Lihat Semua</a>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                             {{-- Course Card 1 (Following) --}}
+                            <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 transform hover:-translate-y-1 transition-all duration-300 hover:shadow-lg">
+                                <div class="h-48 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1557862921-37829c790f19?q=80&w=2071')"></div>
+                                <div class="p-5">
+                                    <h3 class="text-lg font-bold text-gray-900">Digital Marketing</h3>
+                                    <p class="text-sm text-gray-500">Oleh Ahmad Sapta</p>
+                                    <div class="flex items-center text-yellow-400 mt-1"><i class="ri-star-s-fill"></i><i class="ri-star-s-fill"></i><i class="ri-star-s-fill"></i><i class="ri-star-s-fill"></i><i class="ri-star-half-s-line"></i></div>
+                                    <div class="flex items-center justify-between mt-4">
+                                        <button class="px-6 py-2.5 font-semibold text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors">Lanjutkan Sesi</button>
+                                        <div class="flex items-center gap-x-2 text-gray-400">
+                                            <button class="w-10 h-10 hover:text-pink-500 rounded-full hover:bg-gray-100 transition-colors"><i class="ri-heart-line"></i></button>
+                                            <button class="w-10 h-10 hover:text-indigo-500 rounded-full hover:bg-gray-100 transition-colors"><i class="ri-share-line"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                           {{-- Add more followed course cards here --}}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
     </div>
-    @include('components.navbar-mobile')
+    @include('components.navbar-mobile') {{-- Anggap komponen navbar mobile ada --}}
 </div>
+
+{{-- Pastikan Anda telah menyertakan Remix Icon CDN di file layout utama (layouts.app) --}}
+{{-- <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" /> --}}
 @endsection
+
+
