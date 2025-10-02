@@ -40,9 +40,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/kelas/modul', [LessonController::class, 'show'])->name('modul.show');
     Route::get('/kelas/modul/create', [LessonController::class, 'showcreate']);
 
-    Route::get('/sosial',[SocialController::class,'index']);
-    Route::get('/sosial/detail',[SocialController::class,'showdetail']);
-    Route::get('/sosial/detail/post',[SocialController::class,'showpost']);
+    Route::get('/sosial',[SocialController::class,'index'])->name('social');
+    Route::get('/sosial/detail',[SocialController::class,'showdetail'])->name('social.show');
+    Route::get('/sosial/detail/post',[SocialController::class,'showpost'])->name('sosial.post');
 
 
 });
