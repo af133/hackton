@@ -4,10 +4,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\SocialController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LandingpageController;
-use App\Http\Controllers\SocialController;
 
 Route::get('/', [LandingpageController::class, 'index'])->name('landing');
 
@@ -40,19 +41,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/kelas/modul', [LessonController::class, 'show'])->name('modul.show');
     Route::get('/kelas/modul/create', [LessonController::class, 'showcreate']);
 
-<<<<<<< HEAD
     Route::get('/sosial',[SocialController::class,'index'])->name('social');
     Route::get('/sosial/detail',[SocialController::class,'showdetail'])->name('social.show');
     Route::get('/sosial/detail/post',[SocialController::class,'showpost'])->name('sosial.post');
 
-
-=======
-    Route::get('/sosial',[SocialController::class,'index'])->name('sosial');
-    Route::get('/sosial/detail',[SocialController::class,'showdetail']);
-    Route::get('/sosial/detail/post',[SocialController::class,'showpost']);
-Route::post('/communities', [CommunityController::class,'store'])->name('communities.store');
+    Route::post('/communities', [CommunityController::class,'store'])->name('communities.store');
     Route::post('/communities/{chat}/join', [CommunityController::class,'join'])->name('communities.join');
     Route::post('/communities/{chat}/leave', [CommunityController::class,'leave'])->name('communities.leave');
     Route::post('/communities/{chat}/send', [CommunityController::class,'sendMessage'])->name('communities.send');
->>>>>>> 2278567 (update)
 });

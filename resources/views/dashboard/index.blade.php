@@ -169,7 +169,7 @@
                                 <p class="text-gray-500 dark:text-gray-400 mb-4">
                                     Anda belum mengikuti sesi apa pun. Mulailah dengan menjelajahi kelas yang tersedia!
                                 </p>
-                                <a href="{{ route('kelas.show') }}" 
+                                <a href="{{ route('kelas.show') }}"
                                 class="inline-block px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-primary 600">
                                 Lihat Kelas
                                 </a>
@@ -190,7 +190,7 @@
                         <div class="bg-white dark:bg-gray-800/50 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                              <div class="flex items-center justify-between mb-4">
                                 <h3 class="font-semibold text-gray-700 dark:text-gray-200">Komunitas</h3>
-                                <a href="{{ route('sosial') }}" class="text-sm font-medium text-primary  hover:underline">Lihat Semua</a>
+                                <a href="{{ route('social') }}" class="text-sm font-medium text-primary  hover:underline">Lihat Semua</a>
                             </div>
                             @if ($komunitas->isEmpty())
                                 <p class="text-gray-500 dark:text-gray-400 text-center">
