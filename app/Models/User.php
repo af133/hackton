@@ -21,6 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'no_hp',
+        'koin'=>0,
+        'status_id',
     ];
 
     /**
@@ -45,4 +48,58 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+     public function status()
+    {
+        return $this->belongsTo(Status::class);
+    }
+    public function kelas()
+    {
+        return $this->hasMany(kelas::class, 'dibuat_oleh'); 
+    }
+
+    public function pembelians()
+    {
+        return $this->hasMany(Pembelian::class, 'pengguna_id');
+    }
+    public function tarikUangs()
+    {
+        return $this->hasMany(TarikUang::class);
+    }
+    public function createdCommunities()
+    {
+        return $this->hasMany(Community::class,'creator_id');
+    }
+    public function communities()
+    {
+        return $this->belongsToMany(Community::class,'community_user');
+    }
+    public function communityMessages()
+    {
+        return $this->hasMany(CommunityMessage::class);
+    }
+
+    public function detailPembelians()
+{
+    return $this->hasManyThrough(
+        detailPembelian::class,
+        Pembelian::class,
+        'user_id',        
+        'pembelian_id',  
+        'id',            
+        'id'        
+    );
+}
+
+public function kelasDiikuti()
+{
+    return $this->hasManyThrough(
+        kelas::class,
+        detailPembelian::class,
+        'pembelian_id',   
+        'id',           
+        'id',            
+        'kelas_id' 
+    );
+}
+
 }

@@ -17,6 +17,10 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('no_hp')->nullable();
+            $table->integer('koin')->default(0);
+             $table->unsignedBigInteger('status_id')->default(2);
+            $table->foreign('status_id')->references('id')->on('statuss')->onDelete('cascade')  ;
             $table->rememberToken();
             $table->timestamps();
         });

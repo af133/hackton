@@ -64,12 +64,19 @@
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
-
-                <div class="flex items-center justify-end">
-                    <a href="#" class="text-sm font-medium text-primary hover:underline">
+                <div class="flex items-center justify-between">
+                    {{-- Lupa Password --}}
+                    <a href="#" 
+                    class="text-sm font-medium text-primary hover:underline">
                         Lupa password?
                     </a>
                 </div>
+
+               
+
+               
+                
+
 
                 {{-- Tombol Login --}}
                 <div>
@@ -78,6 +85,13 @@
                         Log In
                     </button>
                 </div>
+                 {{-- Link ke Halaman Register --}}
+                <p class="text-center text-sm text-gray-600 dark:text-gray-400" data-aos="fade-up" data-aos-delay="200">
+                    Belum punya akun?
+                    <a href="{{ route('register') }}" class="font-semibold text-primary hover:underline">
+                        Daftar di sini
+                    </a>
+                </p>
             </form>
 
             {{-- Link ke Halaman Register --}}

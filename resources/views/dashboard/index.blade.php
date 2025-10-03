@@ -61,7 +61,6 @@
                                 style="display: none;" x-cloak>
 
                                 <a href="{{ route('profile.show') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil Saya</a>
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Notifikasi</a>
                                 <div class="border-t border-gray-100 my-1"></div>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
@@ -90,7 +89,7 @@
                                 <p class="text-gray-500 dark:text-gray-400 text-sm">Skill Kredit</p>
                                 <div class="flex items-center gap-2 mt-1">
                                     <i class="ri-money-dollar-circle-fill text-yellow-400 text-2xl"></i>
-                                    <p class="text-2xl font-extrabold text-gray-800 dark:text-white">150</p>
+                                    <p class="text-2xl font-extrabold text-gray-800 dark:text-white">{{ auth()->user()->koin }}</p>
                                 </div>
                             </div>
                         </div>
@@ -102,16 +101,38 @@
                             </div>
                             <div>
                                 <p class="text-gray-500 dark:text-gray-400 text-sm">Rating Reputasi</p>
-                                <div class="flex items-center gap-2 mt-1">
-                                    <p class="text-2xl font-extrabold text-gray-800 dark:text-white">4,8</p>
-                                    <div class="flex text-yellow-400">
-                                        <i class="ri-star-s-fill"></i>
-                                        <i class="ri-star-s-fill"></i>
-                                        <i class="ri-star-s-fill"></i>
-                                        <i class="ri-star-s-fill"></i>
-                                        <i class="ri-star-half-s-line"></i>
-                                    </div>
-                                </div>
+                               <div class="flex items-center gap-2 mt-1">
+                            {{-- Rating angka --}}
+                            <p class="text-2xl font-extrabold text-gray-800 dark:text-white">
+                                {{ number_format($kelas->rating, 1) }}
+                            </p>
+
+                            {{-- Bintang --}}
+                            <div class="flex text-yellow-400">
+                                @php
+                                    $rating = $kelas->rating; // contoh: 4.8
+                                    $fullStars = floor($rating);   // bintang penuh
+                                    $halfStar = ($rating - $fullStars >= 0.5) ? 1 : 0; // bintang setengah
+                                    $emptyStars = 5 - ($fullStars + $halfStar); // sisanya kosong
+                                @endphp
+
+                                {{-- Bintang penuh --}}
+                                @for ($i = 0; $i < $fullStars; $i++)
+                                    <i class="ri-star-s-fill"></i>
+                                @endfor
+
+                                {{-- Bintang setengah --}}
+                                @if ($halfStar)
+                                    <i class="ri-star-half-s-line"></i>
+                                @endif
+
+                                {{-- Bintang kosong --}}
+                                @for ($i = 0; $i < $emptyStars; $i++)
+                                    <i class="ri-star-line"></i>
+                                @endfor
+                            </div>
+                        </div>
+
                             </div>
                         </div>
 
@@ -133,7 +154,7 @@
                             </div>
                             <div>
                                 <p class="text-gray-500 dark:text-gray-400 text-sm">Materi</p>
-                                <p class="text-2xl font-extrabold text-gray-800 dark:text-white mt-1">10</p>
+                                <p class="text-2xl font-extrabold text-gray-800 dark:text-white mt-1">{{ $ikutKelas->count() }}</p>
                             </div>
                         </div>
 
@@ -142,51 +163,46 @@
 
                         {{-- Sesi Saya --}}
                         <div class="mt-8">
-                            <div class="flex items-center justify-between mb-4">
-                                <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">Sesi Saya</h2>
-                                <a href="#" class="text-sm font-medium text-primary  hover:underline">Lihat Semua</a>
+                            @if ($ikutKelas->isEmpty())
+                                <div class="bg-white dark:bg-gray-800/50 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 text-center">
+                                <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Sesi Saya</h3>
+                                <p class="text-gray-500 dark:text-gray-400 mb-4">
+                                    Anda belum mengikuti sesi apa pun. Mulailah dengan menjelajahi kelas yang tersedia!
+                                </p>
+                                <a href="{{ route('kelas.show') }}" 
+                                class="inline-block px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-primary 600">
+                                Lihat Kelas
+                                </a>
                             </div>
-                            @include('components.card-modul')
-                        </div>
 
-                        {{-- Pelajaran Trending --}}
-                        <div class="mt-8">
-                            <div class="flex items-center justify-between mb-4">
-                                <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">Pelajaran Trending</h2>
-                                <a href="#" class="text-sm font-medium text-primary  hover:underline">Lihat Semua</a>
-                            </div>
-                            @include('components.card-modul')
-
+                            @else
+                                <div class="flex items-center justify-between mb-4">
+                                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">Sesi Saya</h2>
+                                    <a href="#" class="text-sm font-medium text-primary  hover:underline">Lihat Semua</a>
+                                </div>
+                                @include('components.card-modul')
+                            @endif
                         </div>
                     </div>
-
                     {{-- Kolom Panel Info (Kanan pada layar besar) --}}
                     <div class="col-span-12 xl:col-span-4 space-y-8">
                         {{-- Komunitas --}}
                         <div class="bg-white dark:bg-gray-800/50 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                              <div class="flex items-center justify-between mb-4">
                                 <h3 class="font-semibold text-gray-700 dark:text-gray-200">Komunitas</h3>
-                                <a href="#" class="text-sm font-medium text-primary  hover:underline">Lihat Semua</a>
+                                <a href="{{ route('sosial') }}" class="text-sm font-medium text-primary  hover:underline">Lihat Semua</a>
                             </div>
-                             <ul class="space-y-2">
-                                 @for ($i = 0 ; $i < 5; $i++ )
-                                    @include('components.community-item')
-                                 @endfor
-
-                             </ul>
-                        </div>
-
-                        {{-- Chat --}}
-                        <div class="bg-white dark:bg-gray-800/50 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-                             <div class="flex items-center justify-between mb-4">
-                                <h3 class="font-semibold text-gray-700 dark:text-gray-200">Chat</h3>
-                                <a href="#" class="text-sm font-medium text-primary  hover:underline">Lihat Semua</a>
-                            </div>
-                             <ul class="space-y-4">
-                                @for ($i =0 ;$i < 5; $i++)
-                                    @include('components.chat-item')
+                            @if ($komunitas->isEmpty())
+                                <p class="text-gray-500 dark:text-gray-400 text-center">
+                                    Anda belum bergabung dengan komunitas apa pun. Jelajahi dan temukan komunitas yang sesuai dengan minat Anda!
+                                </p>
+                            @else
+                            <ul class="space-y-2">
+                                @for ($i = 0 ; $i < 5; $i++ )
+                                @include('components.community-item')
                                 @endfor
-                             </ul>
+                            </ul>
+                            @endif
                         </div>
                     </div>
                 </div>
