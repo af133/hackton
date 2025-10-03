@@ -4,32 +4,38 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class kelas extends Model
+class Kelas extends Model
 {
     protected $table = 'kelass';
 
     protected $fillable = [
-        'nama_kelas',
-        'level_id',
+        'judul_kelas',
+        'deskripsi',
+        'kategori',
+        'path_gambar',
+        'level_kelas',
         'harga_koin',
-        'Keterangan',
-        'durasi_jam',
+        'tags',
+        'is_draft',
         'rating',
-        'tanggal_kelas',
         'dibuat_oleh',
     ];
 
-    public function levelSkill()
-    {
-        return $this->belongsTo(levelSkill::class, 'level_id');
-    }
+    protected $casts = [
+        'tags' => 'array',
+        'is_draft' => 'boolean',
+    ];
+
     public function creator()
     {
         return $this->belongsTo(User::class, 'dibuat_oleh');
     }
+
     public function detailPembelians()
     {
-        return $this->hasMany(detailPembelian::class, 'kelas_id');
+        return $this->hasMany(DetailPembelian::class, 'kelas_id');
     }
-
+    public function moduls() {
+        return $this->hasMany(Modul::class, 'class_id');
+    }
 }

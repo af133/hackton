@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Buat Kelas Baru - SkillSwap')
-@section('body_class', 'bg-background') {{-- Menggunakan warna background baru --}}
+@section('body_class', 'bg-background')
 
 @section('content')
 <div x-data="{ sidebarOpen: false }" class="flex h-screen bg-background">
@@ -12,21 +12,19 @@
 
         <div class="relative flex-1 overflow-y-auto">
             <main class="relative z-10 p-6 md:p-8">
-                <form action="#" method="POST">
+                <form action="{{ route('kelas.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    {{-- Header Halaman --}}
-                    <div class="md:flex md:items-center md:justify-between mb-6">
-                        <div class="min-w-0 flex-1">
-                            <h1 class="text-3xl font-bold text-gray-800">Buat Kelas Baru</h1>
-                        </div>
-                        <div class="mt-4 flex-shrink-0 flex md:mt-0 md:ml-4 gap-x-2">
-                            <button type="button" class="px-4 py-2 text-sm font-semibold text-gray-700 bg-white border rounded-lg shadow-sm hover:bg-gray-50">
-                                Simpan sebagai Draft
-                            </button>
-                            <button type="submit" class="px-4 py-2 text-sm font-semibold text-white bg-primary rounded-lg shadow-sm hover:bg-primary-dark">
-                                Publikasikan Kelas
-                            </button>
-                        </div>
+
+                    {{-- Tombol Draft & Publish di Atas --}}
+                    <div class="mb-6 flex justify-end gap-x-2">
+                        <button type="submit" name="action" value="draft"
+                            class="px-4 py-2 text-sm font-semibold text-gray-700 bg-white border rounded-lg shadow-sm hover:bg-gray-50">
+                            Simpan sebagai Draft
+                        </button>
+                        <button type="submit" name="action" value="publish"
+                            class="px-4 py-2 text-sm font-semibold text-white bg-primary rounded-lg shadow-sm hover:bg-primary-dark">
+                            Publikasikan Kelas
+                        </button>
                     </div>
 
                     {{-- Layout Dua Kolom --}}
@@ -76,7 +74,7 @@
                             </div>
                         </div>
 
-                        {{-- Kolom Kanan: Pengaturan --}}
+                        {{-- Kolom Kanan: Pengaturan & Tags --}}
                         <div class="lg:col-span-1 space-y-8">
                             <div class="bg-white p-6 rounded-2xl shadow-md">
                                 <h2 class="text-xl font-bold text-gray-800 mb-5">Pengaturan Kelas</h2>
@@ -96,7 +94,8 @@
                                 </div>
                             </div>
 
-                             <div x-data="{ tags: ['UI/UX', 'Desain Web'], newTag: '' }" class="bg-white p-6 rounded-2xl shadow-md">
+                            {{-- Tags --}}
+                            <div x-data="{ tags: ['UI/UX', 'Desain Web'], newTag: '' }" class="bg-white p-6 rounded-2xl shadow-md">
                                 <h2 class="text-xl font-bold text-gray-800 mb-5">Tags / Kata Kunci</h2>
                                 <div class="flex flex-wrap items-center gap-2 mb-4">
                                     <template x-for="(tag, index) in tags" :key="index">
@@ -107,8 +106,10 @@
                                     </template>
                                 </div>
                                 <input type="text" x-model="newTag" @keydown.enter.prevent="if (newTag.trim()) tags.push(newTag.trim()); newTag = ''" placeholder="Tambah tag..." class="w-full rounded-lg border-gray-300 shadow-sm sm:text-sm focus:border-primary focus:ring-primary">
+                                <input type="hidden" name="tags" :value="JSON.stringify(tags)">
                             </div>
                         </div>
+
                     </div>
                 </form>
             </main>

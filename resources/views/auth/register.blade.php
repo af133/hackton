@@ -85,18 +85,8 @@
                     </a>
                 </p>
             </form> 
-            <p class="text-center text-sm text-gray-600 dark:text-gray-400" data-aos="fade-up" data-aos-delay="200">
-<<<<<<< HEAD
-                Sudah punya akun?
-                <a href="{{ route('login') }}" class="font-semibold text-primary hover:underline">
-                    Login di sini
-=======
-                Belum punya akun?
-                <a href="{{ route('login') }}" class="font-semibold text-primary hover:underline">
-                    Daftar di sini
->>>>>>> 2278567 (update)
-                </a>
-            </p>
+          
+          
         </div>
     </div>
 </div>

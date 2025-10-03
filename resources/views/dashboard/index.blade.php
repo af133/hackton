@@ -81,6 +81,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
                         {{-- Card Skill Kredit --}}
+                        <a href="#">
                         <div class="bg-white dark:bg-gray-800/50 p-5 rounded-2xl shadow-md flex items-center gap-5 transition-transform transform hover:-translate-y-1">
                             <div class="flex-shrink-0 w-16 h-16 flex items-center justify-center bg-primary text-white rounded-2xl">
                                 <i class="ri-graduation-cap-line text-3xl"></i>
@@ -93,7 +94,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        </a>
                         {{-- Card Rating Reputasi --}}
                         <div class="bg-white dark:bg-gray-800/50 p-5 rounded-2xl shadow-md flex items-center gap-5 transition-transform transform hover:-translate-y-1">
                             <div class="flex-shrink-0 w-16 h-16 flex items-center justify-center bg-primary text-white rounded-2xl">
@@ -148,6 +149,7 @@
                         </div>
 
                         {{-- Card Materi --}}
+                        <a href="{{ route('kelas.show') }}">
                         <div class="bg-white dark:bg-gray-800/50 p-5 rounded-2xl shadow-md flex items-center gap-5 transition-transform transform hover:-translate-y-1">
                             <div class="flex-shrink-0 w-16 h-16 flex items-center justify-center bg-primary text-white rounded-2xl">
                                 <i class="ri-book-3-line text-3xl"></i>
@@ -157,7 +159,7 @@
                                 <p class="text-2xl font-extrabold text-gray-800 dark:text-white mt-1">{{ $ikutKelas->count() }}</p>
                             </div>
                         </div>
-
+                        </a>
                     </div>
                 </div>
 

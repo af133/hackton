@@ -34,10 +34,11 @@ Route::middleware('auth')->group(function () {
     // Halaman Kelas & Pelajaran
     Route::get('/kelas', [CourseController::class, 'show'])->name('kelas.show');
     Route::get('/kelas/detail', [CourseController::class,'showkelas'])->name('detailkelas.show');
-    Route::get('/kelas/create', [CourseController::class,'showcreate']);
+    Route::get('/kelas/create', [CourseController::class,'showcreate'])->name('kelas.create');
+    Route::post('/kelas/create', [CourseController::class,'store'])->name('kelas.store');
     Route::get('/kelas/detail/manajemen',[CourseController::class,'showdetail']);
     Route::get('/kelas/modul', [LessonController::class, 'show'])->name('modul.show');
-    Route::get('/kelas/modul/create', [LessonController::class, 'showcreate']);
+    Route::get('/kelas/modul/create', [LessonController::class, 'showcreate'])->name('modul.create');
 
     // Sosial / Community routes
     Route::get('/sosial', [SocialController::class,'index'])->name('sosial');

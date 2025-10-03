@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('level_skills', function (Blueprint $table) {
-        $table->id();
-        $table->string('tingkatan');
-    });
+        Schema::create('moduls', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('class_id')->constrained('kelass')->onDelete('cascade');
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->timestamps();
+        });
+
     }
 
     /**
@@ -22,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('level_skills');
+        Schema::dropIfExists('moduls');
     }
 };
