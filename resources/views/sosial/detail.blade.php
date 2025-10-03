@@ -79,7 +79,7 @@
                                             <button class="flex items-center gap-1 hover:text-primary"><i class="ri-heart-3-line"></i> 12</button>
                                             <button class="flex items-center gap-1 hover:text-primary"><i class="ri-chat-3-line"></i> 5</button>
                                         </div>
-                                        <a href="#" class="text-sm font-semibold text-primary hover:underline">Lihat Diskusi</a>
+                                        <a href="{{ route('sosial.post') }}" class="text-sm font-semibold text-primary hover:underline">Lihat Diskusi</a>
                                     </div>
                                 </div>
                             </div>

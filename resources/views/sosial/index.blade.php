@@ -44,7 +44,7 @@
                                     <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white" src="https://i.pravatar.cc/150?u=b" alt="">
                                     <span class="flex items-center justify-center h-8 w-8 rounded-full bg-secondary text-primary text-xs font-bold ring-2 ring-white">+10</span>
                                 </div>
-                                <a href="#" class="px-4 py-2 text-sm font-semibold text-primary bg-secondary rounded-lg hover:bg-opacity-80">Lihat</a>
+                                <a href="{{ route('sosial.show') }}" class="px-4 py-2 text-sm font-semibold text-primary bg-secondary rounded-lg hover:bg-opacity-80">Lihat</a>
                             </div>
                         </div>
                     </div>
@@ -61,7 +61,7 @@
                                     <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white" src="https://i.pravatar.cc/150?u=e" alt="">
                                     <span class="flex items-center justify-center h-8 w-8 rounded-full bg-secondary text-primary text-xs font-bold ring-2 ring-white">+42</span>
                                 </div>
-                                <a href="#" class="px-4 py-2 text-sm font-semibold text-white bg-primary rounded-lg hover:bg-primary-dark">Join</a>
+                                <a href="{{ route('sosial.show')}}" class="px-4 py-2 text-sm font-semibold text-white bg-primary rounded-lg hover:bg-primary-dark">Join</a>
                             </div>
                         </div>
                     </div>

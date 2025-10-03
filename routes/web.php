@@ -9,6 +9,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LandingpageController;
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\CommunityController;
+use App\Http\Controllers\KreditController;
 
 Route::get('/', [LandingpageController::class, 'index'])->name('landing');
 
@@ -48,4 +49,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/communities/{chat}/join', [CommunityController::class,'join'])->name('communities.join');
     Route::post('/communities/{chat}/leave', [CommunityController::class,'leave'])->name('communities.leave');
     Route::post('/communities/{chat}/send', [CommunityController::class,'sendMessage'])->name('communities.send');
+
+    Route::get('/kredit',[KreditController::class,'index'])->name('skill-credit');
+    Route::get('/kredit/history',[KreditController::class,'history'])->name('skill-credit.history');
 });
