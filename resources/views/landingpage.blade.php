@@ -110,6 +110,9 @@
                 <a href="#cara-kerja" x-ref="cara-kerja" @click.prevent="setActiveTab('cara-kerja')" @mouseenter="hoveredTab = 'cara-kerja'; updateHighlight('cara-kerja')" :class="(hoveredTab === 'cara-kerja' || (hoveredTab === null && activeTab === 'cara-kerja')) ? 'text-white' : 'text-gray-900'" class="relative z-10 px-4 py-2 text-sm font-medium rounded-full transition-colors duration-300">Cara kerja</a>
             </div>
 
+            @auth
+                
+            @endauth
             {{-- Tombol Login/Register (Desktop) --}}
             <div class="hidden md:flex items-center space-x-4">
                 {{-- Tombol Log In berubah style saat di-scroll --}}

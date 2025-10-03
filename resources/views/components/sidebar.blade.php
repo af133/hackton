@@ -14,7 +14,7 @@
             <i class="ri-book-open-line mr-3 text-lg"></i>
             Kelas
         </a>
-        <a href="{{ route('social') }}" class="flex items-center px-4 py-2.5 text-sm font-medium text-gray-500  hover:bg-gray-100  rounded-lg transition-colors">
+        <a href="{{ route('sosial') }}" class="flex items-center px-4 py-2.5 text-sm font-medium text-gray-500  hover:bg-gray-100  rounded-lg transition-colors">
             <i class="ri-group-line mr-3 text-lg"></i>
             Sosial
         </a>
