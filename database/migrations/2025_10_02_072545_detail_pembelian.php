@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('pembelian_id')->constrained('pembelians')->onDelete('cascade');
 
             // kolom kelas_id
-            $table->foreignId('kelas_id')->constrained('kelas')->onDelete('cascade');
+            $table->foreignId('kelas_id')->constrained('kelass')->onDelete('cascade');
 
             // tanggal default hari ini
             $table->date('tanggal_pembelian');
