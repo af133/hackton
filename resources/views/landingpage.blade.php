@@ -63,7 +63,7 @@
                 if (isScrolled) {
                     scrollTimeout = setTimeout(() => {
                         showNav = false;
-                    }, 1000); // Sembunyikan setelah 2 detik tidak aktif
+                    }, 1000); // Sembunyikan setelah 1 detik tidak aktif
                 }
             });
 
@@ -111,7 +111,7 @@
             </div>
 
             @auth
-                
+
             @endauth
             {{-- Tombol Login/Register (Desktop) --}}
             <div class="hidden md:flex items-center space-x-4">
@@ -233,65 +233,65 @@
 
         {{-- Logika Alpine.js diperbarui untuk Intersection Observer --}}
         <div x-data="{
-                features: ['profile', 'matching', 'credit'],
-                activeFeature: 'profile',
-                interval: null,
+                    features: ['profile', 'matching', 'credit'],
+                    activeFeature: 'profile',
+                    interval: null,
 
-                nextFeature() {
-                    const currentIndex = this.features.indexOf(this.activeFeature);
-                    const nextIndex = (currentIndex + 1) % this.features.length;
-                    this.activeFeature = this.features[nextIndex];
-                },
+                    nextFeature() {
+                        const currentIndex = this.features.indexOf(this.activeFeature);
+                        const nextIndex = (currentIndex + 1) % this.features.length;
+                        this.activeFeature = this.features[nextIndex];
+                    },
 
-                startSlider() {
-                    // Mencegah duplikasi timer
-                    if (this.interval) return;
-                    this.interval = setInterval(() => {
-                        this.nextFeature();
-                    }, 3000);
-                },
+                    startSlider() {
+                        // Mencegah duplikasi timer
+                        if (this.interval) return;
+                        this.interval = setInterval(() => {
+                            this.nextFeature();
+                        }, 3000);
+                    },
 
-                stopSlider() {
-                    clearInterval(this.interval);
-                    this.interval = null;
-                },
+                    stopSlider() {
+                        clearInterval(this.interval);
+                        this.interval = null;
+                    },
 
-                selectFeature(feature) {
-                    this.activeFeature = feature;
-                    this.stopSlider();
-                    this.startSlider();
-                }
-            }"
-             {{-- PERUBAHAN UTAMA: x-init sekarang menggunakan Intersection Observer --}}
-             x-init="() => {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        // Jika elemen (slider) masuk ke viewport
-                        if (entry.isIntersecting) {
-                            startSlider();
-                        }
-                        // Jika elemen keluar dari viewport
-                        else {
-                            stopSlider();
-                        }
-                    });
-                }, { threshold: 0.1 }); // Memicu saat 10% elemen terlihat
+                    selectFeature(feature) {
+                        this.activeFeature = feature;
+                        this.stopSlider();
+                        this.startSlider();
+                    }
+                }"
+                {{-- PERUBAHAN UTAMA: x-init sekarang menggunakan Intersection Observer --}}
+                x-init="() => {
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            // Jika elemen (slider) masuk ke viewport
+                            if (entry.isIntersecting) {
+                                startSlider();
+                            }
+                            // Jika elemen keluar dari viewport
+                            else {
+                                stopSlider();
+                            }
+                        });
+                    }, { threshold: 0.1 }); // Memicu saat 10% elemen terlihat
 
-                observer.observe($el); // $el adalah elemen div ini sendiri
-             }"
-             @mouseenter="stopSlider()"
-             @mouseleave="isIntersecting && startSlider()" {{-- Hanya mulai lagi jika masih terlihat --}}
-             class="mt-16 relative min-h-[450px]">
+                    observer.observe($el); // $el adalah elemen div ini sendiri
+                }"
+                @mouseenter="stopSlider()"
+                @mouseleave="isIntersecting && startSlider()" {{-- Hanya mulai lagi jika masih terlihat --}}
+                class="mt-16 relative min-h-[450px]">
 
             {{-- Konten Fitur 1: Profil Skill --}}
             <div x-show="activeFeature === 'profile'"
-                 x-transition:enter="transition ease-out duration-500"
-                 x-transition:enter-start="opacity-0 transform translate-y-5"
-                 x-transition:enter-end="opacity-100 transform translate-y-0"
-                 x-transition:leave="transition ease-in duration-500 absolute w-full"
-                 x-transition:leave-start="opacity-100 transform translate-y-0"
-                 x-transition:leave-end="opacity-0 transform -translate-y-5"
-                 class="w-full">
+                    x-transition:enter="transition ease-out duration-500"
+                    x-transition:enter-start="opacity-0 transform translate-y-5"
+                    x-transition:enter-end="opacity-100 transform translate-y-0"
+                    x-transition:leave="transition ease-in duration-500 absolute w-full"
+                    x-transition:leave-start="opacity-100 transform translate-y-0"
+                    x-transition:leave-end="opacity-0 transform -translate-y-5"
+                    class="w-full">
                 <div class="grid md:grid-cols-2 gap-16 items-center">
                     <div data-aos="fade-right">
                         <div class="inline-flex items-center gap-x-3 bg-primary/10 text-primary dark:bg-primary/20 px-4 py-2 rounded-full mb-6">
@@ -327,28 +327,24 @@
 
             {{-- Konten Fitur 2: Skill Matching (tersembunyi) --}}
             <div x-show="activeFeature === 'matching'"
-                 x-transition:enter="transition ease-out duration-500"
-                 x-transition:enter-start="opacity-0 transform translate-y-5"
-                 x-transition:enter-end="opacity-100 transform translate-y-0"
-                 x-transition:leave="transition ease-in duration-500 absolute w-full"
-                 x-transition:leave-start="opacity-100 transform translate-y-0"
-                 x-transition:leave-end="opacity-0 transform -translate-y-5"
-                 style="display: none;" class="w-full">
-                 <div class="grid md:grid-cols-2 gap-16 items-center">
+                    x-transition:enter="transition ease-out duration-500"
+                    x-transition:enter-start="opacity-0 transform translate-y-5"
+                    x-transition:enter-end="opacity-100 transform translate-y-0"
+                    x-transition:leave="transition ease-in duration-500 absolute w-full"
+                    x-transition:leave-start="opacity-100 transform translate-y-0"
+                    x-transition:leave-end="opacity-0 transform -translate-y-5"
+                    style="display: none;" class="w-full">
+                <div class="grid md:grid-cols-2 gap-16 items-center">
                     <div class="md:order-last" data-aos="fade-left">
                         <div class="inline-flex items-center gap-x-3 bg-primary/10 text-primary dark:bg-primary/20 px-4 py-2 rounded-full mb-6">
-                           <h3 class="text-2xl font-bold">Skill Matching</h3>
+                            <h3 class="text-2xl font-bold">Skill Matching</h3>
                         </div>
                         <p class="text-lg text-gray-700 dark:text-gray-300 mb-6">Temukan <strong class="text-primary">partner belajar</strong> yang paling cocok.</p>
                         <ul class="space-y-4 text-gray-600 dark:text-gray-400">
-                           <li class="flex items-start gap-x-3">
+                            <li class="flex items-start gap-x-3">
                                 <i class="ri-checkbox-circle-line text-primary mt-1"></i>
-                                <span><b>Mutual match:</b> barter langsung skill yang kamu butuhkan.</span>
-                           </li>
-                           <li class="flex items-start gap-x-3">
-                                <i class="ri-checkbox-circle-line text-primary mt-1"></i>
-                               <span><b>Credit match:</b> gunakan kredit untuk belajar skill lain secara fleksibel.</span>
-                           </li>
+                                <span><b>Credit match:</b> gunakan kredit untuk belajar skill lain secara fleksibel.</span>
+                            </li>
                         </ul>
                     </div>
                     <div class="relative" data-aos="fade-right">
@@ -361,35 +357,35 @@
 
             {{-- Konten Fitur 3: Skill Credit System (tersembunyi) --}}
             <div x-show="activeFeature === 'credit'"
-                 x-transition:enter="transition ease-out duration-500"
-                 x-transition:enter-start="opacity-0 transform translate-y-5"
-                 x-transition:enter-end="opacity-100 transform translate-y-0"
-                 x-transition:leave="transition ease-in duration-500 absolute w-full"
-                 x-transition:leave-start="opacity-100 transform translate-y-0"
-                 x-transition:leave-end="opacity-0 transform -translate-y-5"
-                 style="display: none;" class="w-full">
+                    x-transition:enter="transition ease-out duration-500"
+                    x-transition:enter-start="opacity-0 transform translate-y-5"
+                    x-transition:enter-end="opacity-100 transform translate-y-0"
+                    x-transition:leave="transition ease-in duration-500 absolute w-full"
+                    x-transition:leave-start="opacity-100 transform translate-y-0"
+                    x-transition:leave-end="opacity-0 transform -translate-y-5"
+                    style="display: none;" class="w-full">
                 <div class="grid md:grid-cols-2 gap-16 items-center">
-                   <div data-aos="fade-right">
-                       <div class="inline-flex items-center gap-x-3 bg-primary/10 text-primary dark:bg-primary/20 px-4 py-2 rounded-full mb-6">
-                           <h3 class="text-2xl font-bold">Skill Credit System</h3>
-                       </div>
-                       <p class="text-lg text-gray-700 dark:text-gray-300 mb-6">Sistem barter yang <strong class="text-primary">adil dan fleksibel</strong> tanpa uang.</p>
-                       <ul class="space-y-4 text-gray-600 dark:text-gray-400">
-                           <li class="flex items-start gap-x-3">
+                    <div data-aos="fade-right">
+                        <div class="inline-flex items-center gap-x-3 bg-primary/10 text-primary dark:bg-primary/20 px-4 py-2 rounded-full mb-6">
+                            <h3 class="text-2xl font-bold">Skill Credit System</h3>
+                        </div>
+                        <p class="text-lg text-gray-700 dark:text-gray-300 mb-6">Sistem barter yang <strong class="text-primary">adil dan fleksibel</strong> tanpa uang.</p>
+                        <ul class="space-y-4 text-gray-600 dark:text-gray-400">
+                            <li class="flex items-start gap-x-3">
                                 <i class="ri-checkbox-circle-line text-primary mt-1"></i>
-                               <span>Ajarkan orang lain untuk mendapatkan Skill Credit.</span>
-                           </li>
-                           <li class="flex items-start gap-x-3">
+                                <span>Ajarkan orang lain untuk mendapatkan Skill Credit.</span>
+                            </li>
+                            <li class="flex items-start gap-x-3">
                                 <i class="ri-checkbox-circle-line text-primary mt-1"></i>
-                               <span>Gunakan kredit yang terkumpul untuk belajar skill baru dari siapapun.</span>
-                           </li>
-                       </ul>
-                   </div>
-                   <div class="relative" data-aos="fade-left">
-                       <div class="absolute -top-8 -left-8 w-48 h-48 bg-cyan-300/30 dark:bg-cyan-700/30 rounded-2xl transform rotate-12 z-0"></div>
-                       <div class="absolute -bottom-8 -right-8 w-64 h-64 bg-primary/10 dark:bg-primary/20 rounded-2xl transform rotate-6 z-0"></div>
-                       <div class="relative z-10"><img src="{{ asset('images/feature-profile.png') }}" alt="Skill Credit System" class="rounded-2xl shadow-2xl w-full"></div>
-                   </div>
+                                <span>Gunakan kredit yang terkumpul untuk belajar skill baru dari siapapun.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="relative" data-aos="fade-left">
+                        <div class="absolute -top-8 -left-8 w-48 h-48 bg-cyan-300/30 dark:bg-cyan-700/30 rounded-2xl transform rotate-12 z-0"></div>
+                        <div class="absolute -bottom-8 -right-8 w-64 h-64 bg-primary/10 dark:bg-primary/20 rounded-2xl transform rotate-6 z-0"></div>
+                        <div class="relative z-10"><img src="{{ asset('images/feature-profile.png') }}" alt="Skill Credit System" class="rounded-2xl shadow-2xl w-full"></div>
+                    </div>
                 </div>
             </div>
 
@@ -407,8 +403,9 @@
 <section id="cara-kerja" data-section class="relative py-16 md:py-24 bg-white dark:bg-gray-900 overflow-hidden">
     <div class="max-w-7xl mx-auto px-6 md:px-8">
 
-        {{-- Baris Kartu Fitur Tambahan (Feedback, Booking, Community) --}}
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-24">
+        {{-- Baris Kartu Fitur Tambahan (Feedback, Community) --}}
+        {{-- DIUBAH: dari lg:grid-cols-3 menjadi lg:grid-cols-2 dan ditengahkan --}}
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-24 lg:max-w-4xl lg:mx-auto">
 
             {{-- Card 1: Feedback dan Rating --}}
             <div class="relative bg-white dark:bg-gray-800 p-8 pt-16 rounded-2xl shadow-lg text-center" data-aos="fade-up">
@@ -424,21 +421,8 @@
                 </ul>
             </div>
 
-            {{-- Card 2: Session Booking (Highlighted) --}}
-            <div class="relative bg-primary/5 dark:bg-gray-800/50 p-8 pt-16 rounded-2xl shadow-xl text-center transform scale-105" data-aos="fade-up" data-aos-delay="150">
-                <div class="absolute -top-7 left-1/2 -translate-x-1/2 flex items-center justify-center h-14 w-14 rounded-xl bg-orange-500 shadow-lg">
-                    {{-- PERUBAHAN: Menggunakan Font Icon dari CDN --}}
-                    <i class="ri-calendar-2-line text-3xl text-white"></i>
-                </div>
-                <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">Session Booking</h3>
-                <ul class="space-y-3 text-gray-500 dark:text-gray-400 text-left">
-                    <li class="flex items-start gap-x-3"><i class="ri-calendar-check-line text-blue-500 mt-1"></i><span>Booking online (Zoom/Google Meet) atau offline.</span></li>
-                    <li class="flex items-start gap-x-3"><i class="ri-notification-3-line text-red-500 mt-1"></i><span>Reminder otomatis ke kalender & notifikasi.</span></li>
-                </ul>
-            </div>
-
             {{-- Card 3: Community / Circle --}}
-            <div class="relative bg-white dark:bg-gray-800 p-8 pt-16 rounded-2xl shadow-lg text-center" data-aos="fade-up" data-aos-delay="300">
+            <div class="relative bg-white dark:bg-gray-800 p-8 pt-16 rounded-2xl shadow-lg text-center" data-aos="fade-up" data-aos-delay="150">
                 <div class="absolute -top-7 left-1/2 -translate-x-1/2 flex items-center justify-center h-14 w-14 rounded-xl bg-cyan-500 shadow-lg">
                     {{-- PERUBAHAN: Menggunakan Font Icon dari CDN --}}
                     <i class="ri-team-line text-3xl text-white"></i>

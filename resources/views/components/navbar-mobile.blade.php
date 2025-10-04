@@ -41,7 +41,7 @@ MOBILE BOTTOM NAVIGATION BAR
     </a>
 
     {{-- Route: skill-credit* (sesuaikan namanya) --}}
-    <a href="#" {{-- Ganti href dengan route yang sesuai, misal: {{ route('skill-credit') }} --}}
+    <a href="{{ route('skill-credit') }}" {{-- Ganti href dengan route yang sesuai, misal: {{ route('skill-credit') }} --}}
        @class([
             'flex flex-col items-center justify-center p-3 w-full transition-colors',
             'text-indigo-600' => request()->routeIs('skill-credit*'),
