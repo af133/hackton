@@ -20,7 +20,6 @@ class CommunityMessage extends Model
         return $this->belongsTo(Community::class);
     }
 
-    // Pengirim pesan
     public function user()
     {
         return $this->belongsTo(User::class);
