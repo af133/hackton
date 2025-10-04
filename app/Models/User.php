@@ -2,6 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Kelas;
+use App\Models\Status;
+use App\Models\Pembelian;
+use App\Models\TarikUang;
+use App\Models\Community;
+use App\Models\DetailPembelian;
+use App\Models\CommunityMessage;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -54,7 +61,7 @@ class User extends Authenticatable
     }
     public function kelas()
     {
-        return $this->hasMany(kelas::class, 'dibuat_oleh'); 
+        return $this->hasMany(kelas::class, 'dibuat_oleh');
     }
 
     public function pembelians()
@@ -83,10 +90,10 @@ class User extends Authenticatable
     return $this->hasManyThrough(
         detailPembelian::class,
         Pembelian::class,
-        'user_id',        
-        'pembelian_id',  
-        'id',            
-        'id'        
+        'user_id',
+        'pembelian_id',
+        'id',
+        'id'
     );
 }
 
@@ -95,10 +102,10 @@ public function kelasDiikuti()
     return $this->hasManyThrough(
         kelas::class,
         detailPembelian::class,
-        'pembelian_id',   
-        'id',           
-        'id',            
-        'kelas_id' 
+        'pembelian_id',
+        'id',
+        'id',
+        'kelas_id'
     );
 }
 
