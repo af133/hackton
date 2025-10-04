@@ -10,6 +10,7 @@ use App\Http\Controllers\LandingpageController;
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\KreditController;
+use App\Http\Controllers\DiscussionController;
 
 Route::get('/', [LandingpageController::class, 'index'])->name('landing');
 
@@ -34,12 +35,26 @@ Route::middleware('auth')->group(function () {
 
     // Halaman Kelas & Pelajaran
     Route::get('/kelas', [CourseController::class, 'show'])->name('kelas.show');
-    Route::get('/kelas/detail', [CourseController::class,'showkelas'])->name('detailkelas.show');
+    Route::get('/kelas/detail/{kelasId}', [CourseController::class,'showkelas'])->name('kelas.detail');
+    Route::post('kelas/{id}/toggle-status', [CourseController::class, 'toggleStatus'])->name('kelas.toggleStatus');
+
     Route::get('/kelas/create', [CourseController::class,'showcreate'])->name('kelas.create');
     Route::post('/kelas/create', [CourseController::class,'store'])->name('kelas.store');
+    
+    Route::get('/kelas/{kelasId}/mulai', [CourseController::class,'mulai'])->name('kelas.mulai');
+    Route::get('/kelas/{kelas}/modul/{modul}/lesson/{lesson}', [LessonController::class, 'show'])->name('lesson.show');
+    Route::post('/lesson/{lesson}/discussion', [DiscussionController::class, 'store'])->name('discussion.store');
+    Route::post('/kelas/{id}/beli', [CourseController::class, 'beli'])->name('kelas.beli');
+
+
     Route::get('/kelas/detail/manajemen',[CourseController::class,'showdetail']);
-    Route::get('/kelas/modul', [LessonController::class, 'show'])->name('modul.show');
-    Route::get('/kelas/modul/create', [LessonController::class, 'showcreate'])->name('modul.create');
+    Route::get('/kelas/modul/{id}', [LessonController::class, 'index'])->name('modul.show');
+
+    Route::get('/kelas/modul/create/{kelasId}', [LessonController::class, 'showcreate'])->name('modul.create');
+    Route::post('/modul/store', [LessonController::class, 'store'])->name('modul.store');
+    Route::get('/lessons/{lesson}/{action}', [LessonController::class, 'handleFile'])
+    ->where('action', 'preview|download')
+    ->name('lessons.file');
 
     Route::get('/sosial',[SocialController::class,'index'])->name('sosial');
     Route::get('/sosial/detail',[SocialController::class,'showdetail'])->name('sosial.show');

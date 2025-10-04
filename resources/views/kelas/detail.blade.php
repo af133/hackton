@@ -14,24 +14,80 @@
         {{-- Area Konten Utama dengan Scroll --}}
         <div class="relative flex-1 overflow-y-auto">
             <main class="relative z-10 p-6 md:p-8">
+               @if ($kelas->dibuat_oleh == Auth::id())
+                <div class="mb-4 flex justify-end">
+                    <form action="{{ route('kelas.toggleStatus', $kelas->id) }}" method="POST">
+                        @csrf
+                        <button type="submit"
+                            class="px-5 py-2 rounded-lg font-semibold transition-colors duration-300
+                                {{ $kelas->is_draft ? 'bg-purple-600 text-white hover:bg-purple-700' : 'bg-purple-300 text-white hover:bg-purple-400' }}">
+                            {{ $kelas->is_draft ? 'Set Publish' : 'Set Draft' }}
+                        </button>
+                    </form>
+                </div>
+                @endif
+
 
                 {{--
                 ======================================================================
                 1. BANNER KELAS
                 ======================================================================
                 --}}
+                @php
+                    $gambarPath = $kelas->path_gambar ? asset('storage/kelas/' . $kelas->path_gambar) : asset('images/default-thumbnail.jpg');
+                @endphp
                 <div class="relative w-full rounded-2xl shadow-lg overflow-hidden mb-8">
-                    <img src="https://images.unsplash.com/photo-1597733336794-12d05021d510?q=80&w=1974" class="absolute inset-0 w-full h-full object-cover" alt="AI Banner">
+                    <img src="{{ asset($gambarPath) }}" class="absolute inset-0 w-full h-full object-cover" alt="AI Banner">
                     <div class="absolute inset-0 bg-gradient-to-t from-purple-800 to-indigo-600 opacity-80"></div>
                     <div class="relative p-8">
                         <div class="mb-12">
-                            <p class="text-indigo-200 font-semibold">Kelas Lanjutan</p>
-                            <h1 class="text-4xl font-bold text-white tracking-tight mt-1">Artificial Intelligence</h1>
-                            <p class="text-lg text-indigo-100 mt-2">Oleh Andre Firmansyah</p>
+                            <p class="text-indigo-200 font-semibold">{{ $kelas->level_kelas }}</p>
+                            <h1 class="text-4xl font-bold text-white tracking-tight mt-1">{{ $kelas->judul_kelas }}</h1>
+                            <p class="text-lg text-indigo-100 mt-2">Oleh {{ $pemilik->name }}</p>
                         </div>
-                        <button class="px-6 py-3 font-semibold text-indigo-700 bg-white hover:bg-gray-100 rounded-lg transition-colors">
-                            Mulai Belajar
-                        </button>
+                        @php
+                            $firstModul = $moduls->first()?->id;
+                            $firstLesson = $lessons->first()?->id;
+                        @endphp
+                        @if($firstModul && $firstLesson)
+                            @if ( $sudahBeli == false )
+                                <div x-data="{ openConfirm: false }">
+                                        <button 
+                                            @click="openConfirm = true"
+                                            class="px-6 py-3 font-semibold text-indigo-700 bg-white hover:bg-gray-100 rounded-lg">
+                                            Mulai Belajar (Beli Kelas Dulu)
+                                        </button>
+
+                                        <!-- Modal Konfirmasi -->
+                                        <div x-show="openConfirm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                                            <div class="bg-white rounded-xl shadow-lg p-6 w-96">
+                                                <h2 class="text-xl font-bold mb-4">Konfirmasi Pembelian</h2>
+                                                <p class="text-gray-600 mb-6">Apakah Anda yakin ingin membeli kelas <b>{{ $kelas->judul_kelas }}</b>?</p>
+                                                <div class="flex justify-end gap-4">
+                                                    <button @click="openConfirm = false" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">Batal</button>
+                                                    
+                                                    <form method="POST" action="{{ route('kelas.beli', $kelas->id) }}">
+                                                        @csrf
+                                                        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                                                            Ya, Beli
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            @else
+                                <a href="{{ route('lesson.show', [$kelas->id,$firstModul, $firstLesson]) }}"
+                                class="px-6 py-3 font-semibold text-indigo-700 bg-white hover:bg-gray-100 rounded-lg">
+                                    Mulai Belajar
+                                </a>
+                            @endif
+                        @else
+                            <button class="px-6 py-3 font-semibold text-gray-400 bg-gray-200 cursor-not-allowed rounded-lg">
+                                Belum ada materi
+                            </button>
+                        @endif
+
                     </div>
                 </div>
 
@@ -40,51 +96,49 @@
                 2. LAYOUT DUA KOLOM (MODUL & JADWAL)
                 ======================================================================
                 --}}
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1  lg:grid-cols-3 gap-8">
 
                     {{-- Kolom Kiri: Daftar Modul --}}
                     <div class="lg:col-span-2">
                         <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-5">Materi Pelajaran</h2>
-
-                        {{-- Accordion Interaktif dengan Alpine.js --}}
-                        <div x-data="{ openModule: 1 }" class="space-y-4">
-
-                            {{-- Modul 1 --}}
-                            <div class="bg-white dark:bg-gray-800/50 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                        @php
+                            $urutan=0
+                        @endphp
+                        @foreach ($moduls as $modul )
+                         {{-- Accordion Interaktif dengan Alpine.js --}}
+                        <div x-data="{ openModule: 1 }" class="space-y-6">
+                            
+                            <div class="bg-white dark:bg-gray-800/50 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 mt-5">
                                 <button @click="openModule = (openModule === 1) ? null : 1" class="w-full flex justify-between items-center p-5 text-left">
-                                    <span class="font-semibold text-gray-800 dark:text-white">Modul 1: Pengenalan AI</span>
+                                    <span class="font-semibold text-gray-800 dark:text-white">Modul  <span>{{ ++$urutan }}:</span> {{ $modul->title}}</span>
                                     <i class="ri-arrow-down-s-line text-xl transition-transform" :class="{ 'rotate-180': openModule === 1 }"></i>
                                 </button>
                                 <div x-show="openModule === 1" x-transition class="p-5 border-t border-gray-200 dark:border-gray-700">
-                                    <ul class="space-y-3">
-                                        <li class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900">
-                                            <div class="flex items-center gap-4"><i class="ri-play-circle-line text-2xl text-indigo-500"></i><span>Sejarah Kecerdasan Buatan</span></div>
-                                            <span class="text-sm text-gray-500">12:30</span>
-                                        </li>
-                                        <li class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900">
-                                            <div class="flex items-center gap-4"><i class="ri-play-circle-line text-2xl text-indigo-500"></i><span>Jenis-jenis AI</span></div>
-                                            <span class="text-sm text-gray-500">15:00</span>
-                                        </li>
-                                        <li class="flex items-center justify-between p-3 rounded-lg bg-indigo-50 dark:bg-indigo-900/50">
-                                            <div class="flex items-center gap-4"><i class="ri-file-text-line text-2xl text-indigo-500"></i><span>Studi Kasus: AI di Industri</span></div>
-                                            <span class="text-sm text-gray-500">Bacaan</span>
-                                        </li>
+                                    <ul class="space-y-3 ">
+                                        @foreach ($modul->lessons as $lesson)
+                                        <a href="{{ $sudahBeli ? route('lesson.show', [$kelas->id, $modul->id, $lesson->id]) : '#' }}">
+                                            @if ($lesson->type == 'video')
+                                            <li class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900">
+                                                <div class="flex items-center gap-4"><i class="ri-play-circle-line text-2xl text-indigo-500"></i><span>{{ $lesson->title }}</span></div>
+                                            </li>
+                                            @else    
+                                            <li class="flex items-center justify-between p-3 rounded-lg bg-indigo-50 dark:bg-indigo-900/50">
+                                                <div class="flex items-center gap-4"><i class="ri-file-text-line text-2xl text-indigo-500"></i><span>{{ $lesson->title }}</span></div>
+                                                <span class="text-sm text-gray-500">Bacaan</span>
+                                            </li>
+                                            @endif
+                                            </a>
+                                        @endforeach
                                     </ul>
                                 </div>
                             </div>
-
-                            {{-- Modul 2 --}}
-                            <div class="bg-white dark:bg-gray-800/50 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-                                <button @click="openModule = (openModule === 2) ? null : 2" class="w-full flex justify-between items-center p-5 text-left">
-                                    <span class="font-semibold text-gray-800 dark:text-white">Modul 2: Machine Learning</span>
-                                    <i class="ri-arrow-down-s-line text-xl transition-transform" :class="{ 'rotate-180': openModule === 2 }"></i>
-                                </button>
-                                <div x-show="openModule === 2" x-transition class="p-5 border-t border-gray-200 dark:border-gray-700">
-                                    <p class="text-gray-600 dark:text-gray-400">Materi untuk modul ini akan segera tersedia.</p>
-                                </div>
-                            </div>
-
                         </div>
+                            
+                        @endforeach
+                          
+
+                       
+
                     </div>
 
                     {{-- Kolom Kanan: Jadwal Live Session --}}
@@ -123,7 +177,6 @@
                         </div>
                     </div>
                 </div>
-
             </main>
         </div>
     </div>

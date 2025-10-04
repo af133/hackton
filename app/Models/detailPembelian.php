@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class detailPembelian extends Model
 {
+    public $timestamps = false;
     protected $table = 'detail_pembelians';
     protected $fillable = [
         'pembelian_id',
@@ -19,7 +20,7 @@ class detailPembelian extends Model
 
     public function kelas()
     {
-        return $this->belongsTo(kelas::class, 'kelas_id');
+        return $this->belongsTo(Kelas::class, 'kelas_id');
     }
 
     
