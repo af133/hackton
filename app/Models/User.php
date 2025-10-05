@@ -54,7 +54,7 @@ class User extends Authenticatable
     }
     public function kelas()
     {
-        return $this->hasMany(kelas::class, 'dibuat_oleh'); 
+        return $this->hasMany(Kelas::class, 'dibuat_oleh');
     }
 
     public function pembelians()
@@ -83,22 +83,22 @@ class User extends Authenticatable
     return $this->hasManyThrough(
         detailPembelian::class,
         Pembelian::class,
-        'user_id',        
-        'pembelian_id',  
-        'id',            
-        'id'        
+        'user_id',
+        'pembelian_id',
+        'id',
+        'id'
     );
 }
 
 public function kelasDiikuti()
 {
     return $this->hasManyThrough(
-        kelas::class,
+        Kelas::class,
         detailPembelian::class,
-        'pembelian_id',   
-        'id',           
-        'id',            
-        'kelas_id' 
+        'pembelian_id',
+        'id',
+        'id',
+        'kelas_id'
     );
 }
 
