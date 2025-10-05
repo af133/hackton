@@ -99,7 +99,7 @@ class CourseController extends Controller
         $lessons = $moduls->flatMap->lessons;
         $pembelian = detailPembelian::whereHas('pembelian', function ($q) {
         $q->where('user_id', auth()->id());
-        })->where('kelas_id', $kelasId)->first();   
+        })->where('kelas_id', $kelasId)->first();
         $sudahBeli = false;
         if($pembelian || $kelas->dibuat_oleh == auth()->id())
         {
@@ -142,12 +142,12 @@ class CourseController extends Controller
 
     // Buat detail pembelian
     detailPembelian::create([
-        'pembelian_id' => $pembelian->id, 
+        'pembelian_id' => $pembelian->id,
         'kelas_id' => $kelas->id,
-        'tanggal_beli' => now(),
+        'tanggal_pembelian' => now()->toDateString(),
         'rating'=>0
 
-        
+
     ]);
 
     return redirect()->route('kelas.show', $kelas->id)->with('success', 'Kelas berhasil dibeli! 🎉');
@@ -186,7 +186,7 @@ class CourseController extends Controller
             $file->storeAs('kelas', $filename, 'public');
             $kelas->path_gambar = $filename;
         } else {
-            $kelas->path_gambar = 'default-thumbnail.jpg'; 
+            $kelas->path_gambar = 'default-thumbnail.jpg';
         }
 
         $kelas->save();
