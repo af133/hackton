@@ -105,16 +105,22 @@
                                <div class="flex items-center gap-2 mt-1">
                             {{-- Rating angka --}}
                             <p class="text-2xl font-extrabold text-gray-800 dark:text-white">
-                                {{ number_format($rating , 1) }}
+                                {{ $rating ==0?0 :number_format($rating , 1) }}
                             </p>
 
                             {{-- Bintang --}}
                             <div class="flex text-yellow-400">
                                 @php
-                                   
+                                   if($rating == 0){
+                                    $fullStars = 0;
+                                    $halfStar = 0;
+                                    $emptyStars = 5;
+                                   }
+                                   else{
                                     $fullStars = floor($rating);   // bintang penuh
                                     $halfStar = ($rating - $fullStars >= 0.5) ? 1 : 0; // bintang setengah
                                     $emptyStars = 5 - ($fullStars + $halfStar); // sisanya kosong
+                                   }
                                 @endphp
 
                                 {{-- Bintang penuh --}}
@@ -183,7 +189,7 @@
                                     <a href="#" class="text-sm font-medium text-primary  hover:underline">Lihat Semua</a>
                                 </div>
                                 @foreach ($ikutKelas as $detail )
-                                     @include('components.card-modul',['kelas'=>$detail->kelas,'nama'=>$detail->kelas->creator->name])
+                                     @include('components.card-modul',['kelas'=>$detail->kelas,'nama'=>$detail->kelas->creator->name,'rating'=>$rating])
                                     
                                 @endforeach
                             @endif

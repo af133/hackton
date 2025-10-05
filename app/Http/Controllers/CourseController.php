@@ -11,6 +11,67 @@ use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller
 {
+    public function kelasSaya(Request $request)
+{
+    $userId = auth()->id();
+    $search = $request->input('search');
+
+    // Semua kelas
+    $semuaKelas = Kelas::query()
+        ->when($search, function ($query, $search) {
+            $query->where('judul_kelas', 'like', "%{$search}%");
+        })
+        ->with(['detailPembelians'])
+        ->latest()
+        ->get();
+
+    // Kelas yang diikuti user
+    $kelasDiikuti = Kelas::whereHas('detailPembelians', function ($q) use ($userId) {
+            $q->where('user_id', $userId);
+        })
+        ->when($search, function ($query, $search) {
+            $query->where('judul_kelas', 'like', "%{$search}%");
+        })
+        ->with('detailPembelians')
+        ->latest()
+        ->get();
+
+    // Kelas yang dimiliki user
+    $kelasSaya = Kelas::where('dibuat_oleh', $userId)
+        ->when($search, function ($query, $search) {
+            $query->where('judul_kelas', 'like', "%{$search}%");
+        })
+        ->with('detailPembelians')
+        ->latest()
+        ->get();
+
+    return view('kelas.index', compact('semuaKelas', 'kelasDiikuti', 'kelasSaya'));
+}
+  public function beriRating(Request $request, $id)
+{
+    $request->validate([
+        'rating' => 'required|numeric|min:1|max:5'
+    ]);
+
+    $userId = auth()->id();
+
+    $detail = DetailPembelian::where('kelas_id', $id)
+        ->whereHas('pembelian', function($q) use ($userId) {
+            $q->where('user_id', $userId);
+        })
+        ->first();
+
+    if (!$detail) {
+        return redirect()->back()->with('error', 'Record detail pembelian tidak ditemukan!');
+    }
+
+    $detail->rating = $request->rating;
+    $detail->save();
+
+    return redirect()->back()->with('success', 'Rating berhasil disimpan!');
+}
+
+
    public function show()
     {
         $semuaKelas = Kelas::where('is_draft', false)->get();
@@ -53,7 +114,7 @@ class CourseController extends Controller
     public function beli($id)
 {
     $kelas = Kelas::findOrFail($id);
-    $user = Auth::user();
+    $user = auth()->user();
     $pemilik = User::findOrFail($kelas->dibuat_oleh);
 
     // cek saldo cukup?

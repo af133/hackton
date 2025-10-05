@@ -11,6 +11,7 @@ class detailPembelian extends Model
     protected $fillable = [
         'pembelian_id',
         'kelas_id',
+        'rating',
         'tanggal_pembelian',
     ];
     public function pembelian()

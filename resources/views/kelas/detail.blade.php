@@ -55,7 +55,7 @@
                                         <button 
                                             @click="openConfirm = true"
                                             class="px-6 py-3 font-semibold text-indigo-700 bg-white hover:bg-gray-100 rounded-lg">
-                                            Mulai Belajar (Beli Kelas Dulu)
+                                            Mulai Belajar (Beli Kelas Dulu {{ $kelas->harga_koin }} Koin)
                                         </button>
 
                                         <!-- Modal Konfirmasi -->
@@ -87,7 +87,24 @@
                                 Belum ada materi
                             </button>
                         @endif
+                        @if ($sudahBeli && $kelas->dibuat_oleh != Auth::id())
+                            {{-- Rating Bintang --}}
+                           <form action="{{ route('kelas.beriRating', $kelas->id) }}" method="POST" class="flex items-center space-x-2 mt-6">
+                            @csrf
+                            @foreach([1,2,3,4,5] as $star)
+                                <button 
+                                    type="submit" 
+                                    name="rating" 
+                                    value="{{ $star }}" 
+                                    class="text-4xl focus:outline-none transition-all duration-300
+                                        {{ ($userRating ?? 0) >= $star ? 'text-yellow-400 scale-110 drop-shadow-md' : 'text-gray-300 hover:text-yellow-200 hover:scale-105' }}">
+                                    ★
+                                </button>
+                            @endforeach
+                        </form>
 
+
+                        @endif
                     </div>
                 </div>
 

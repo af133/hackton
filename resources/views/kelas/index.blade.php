@@ -12,10 +12,29 @@
         <div class="relative flex-1 overflow-y-auto">
             <main class="relative z-10 p-6 md:p-8">
                 <h1 class="text-3xl font-bold text-gray-800 mb-6">Kelas Saya</h1>
-
+                <form method="GET" action="{{ route('kelas.saya') }}" class="mb-6 relative max-w-md">
+                    <input 
+                        type="text" 
+                        name="search" 
+                        placeholder="Cari kelas berdasarkan judul..." 
+                        value="{{ request('search') }}"
+                        class="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg w-full 
+                            bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 placeholder-gray-400 
+                            focus:ring-2 focus:ring-indigo-500 outline-none transition"
+                    >
+                    <i class="ri-search-line absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </form>
                 {{-- Kontainer Utama dengan Alpine.js untuk Tabs --}}
                 <div x-data="{ activeTab: 'all' }">
-
+@if (session('success'))
+    <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg">
+        {{ session('success') }}
+    </div>
+@elseif (session('error'))
+    <div class="mb-4 p-4 bg-red-100 text-red-800 rounded-lg">
+        {{ session('error') }}
+    </div>
+@endif
                     {{-- Navigasi Tabs --}}
                     <div class="border-b border-gray-200">
                         <nav class="-mb-px flex space-x-8" aria-label="Tabs">
@@ -37,6 +56,8 @@
                             
                         </nav>
                     </div>
+                    <!-- Search Bar -->
+
 
                     {{-- Konten Tab --}}
                     <div class="mt-6">

@@ -13,14 +13,10 @@ return new class extends Migration
     {
        Schema::create('detail_pembelians', function (Blueprint $table) {
             $table->id();
-
             $table->foreignId('pembelian_id')->constrained('pembelians')->onDelete('cascade');
-
-            // kolom kelas_id
             $table->foreignId('kelas_id')->constrained('kelass')->onDelete('cascade');
-
-            // tanggal default hari ini
-            $table->date('tanggal_pembelian');
+            $table->date('tanggal_pembelian')->default(DB::raw('CURRENT_DATE'));
+            $table->decimal('rating', 2, 1)->default(0);
 
         });
 

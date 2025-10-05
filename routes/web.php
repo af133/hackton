@@ -45,6 +45,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/kelas/{kelas}/modul/{modul}/lesson/{lesson}', [LessonController::class, 'show'])->name('lesson.show');
     Route::post('/lesson/{lesson}/discussion', [DiscussionController::class, 'store'])->name('discussion.store');
     Route::post('/kelas/{id}/beli', [CourseController::class, 'beli'])->name('kelas.beli');
+    Route::get('/kelas-saya', [CourseController::class, 'kelasSaya'])->name('kelas.saya');
+
+   Route::post('/kelas/{id}/rating', [CourseController::class, 'beriRating'])->name('kelas.beriRating');
 
 
     Route::get('/kelas/detail/manajemen',[CourseController::class,'showdetail']);
