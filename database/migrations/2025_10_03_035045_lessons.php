@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('lessons', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('module_id')->constrained('modules')->onDelete('cascade');
+            $table->foreignId('module_id')->constrained('moduls')->onDelete('cascade');
             $table->string('title');
-            $table->enum('type', ['video', 'teks'])->default('video');
+            $table->enum('type', ['video', 'teks','pdf'])->default('video');
             $table->text('content')->nullable();
         });
 

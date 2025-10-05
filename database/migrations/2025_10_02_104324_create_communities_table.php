@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->string('name');
             $table->enum('type', ['Publik', 'Private'])->default('Publik');
             $table->string('avatar')->nullable();
+            $table->text('description')->nullable();
             $table->foreignId('creator_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });

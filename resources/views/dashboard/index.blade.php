@@ -105,16 +105,22 @@
                                <div class="flex items-center gap-2 mt-1">
                             {{-- Rating angka --}}
                             <p class="text-2xl font-extrabold text-gray-800 dark:text-white">
-                                {{ number_format($kelas->rating, 1) }}
+                                {{ $rating ==0?0 :number_format($rating , 1) }}
                             </p>
 
                             {{-- Bintang --}}
                             <div class="flex text-yellow-400">
                                 @php
-                                    $rating = $kelas->rating; // contoh: 4.8
+                                   if($rating == 0){
+                                    $fullStars = 0;
+                                    $halfStar = 0;
+                                    $emptyStars = 5;
+                                   }
+                                   else{
                                     $fullStars = floor($rating);   // bintang penuh
                                     $halfStar = ($rating - $fullStars >= 0.5) ? 1 : 0; // bintang setengah
                                     $emptyStars = 5 - ($fullStars + $halfStar); // sisanya kosong
+                                   }
                                 @endphp
 
                                 {{-- Bintang penuh --}}
@@ -182,7 +188,10 @@
                                     <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">Sesi Saya</h2>
                                     <a href="#" class="text-sm font-medium text-primary  hover:underline">Lihat Semua</a>
                                 </div>
-                                @include('components.card-modul')
+                                @foreach ($ikutKelas as $detail )
+                                     @include('components.card-modul',['kelas'=>$detail->kelas,'nama'=>$detail->kelas->creator->name,'rating'=>$rating])
+                                    
+                                @endforeach
                             @endif
                         </div>
                     </div>
@@ -200,9 +209,10 @@
                                 </p>
                             @else
                             <ul class="space-y-2">
-                                @for ($i = 0 ; $i < 5; $i++ )
-                                @include('components.community-item')
-                                @endfor
+                                @foreach ($komunitas as $komunitass )
+                                    
+                                @endforeach
+                                @include('components.community-item',['komunitas'=>$komunitass])
                             </ul>
                             @endif
                         </div>

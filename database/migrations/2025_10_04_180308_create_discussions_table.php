@@ -11,21 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('moduls', function (Blueprint $table) {
+        Schema::create('discussions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('class_id')->constrained('kelass')->onDelete('cascade');
-            $table->string('title');
-            $table->text('description')->nullable();
+            $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->text('content');
             $table->timestamps();
-        });
+        });}
 
-    }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('moduls');
+        Schema::dropIfExists('discussions');
     }
 };

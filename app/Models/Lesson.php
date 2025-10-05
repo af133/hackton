@@ -5,9 +5,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Lesson extends Model
 {
+    public $timestamps = false;
     protected $fillable = ['module_id', 'title', 'type', 'content'];
 
     public function module() {
         return $this->belongsTo(Modul::class);
     }
+    public function discussions()
+    {
+        return $this->hasMany(Discussion::class)->latest(); // urut terbaru
+    }
+
 }

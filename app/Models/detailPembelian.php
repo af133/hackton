@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class detailPembelian extends Model
 {
+    public $timestamps = false;
     protected $table = 'detail_pembelians';
     protected $fillable = [
         'pembelian_id',
         'kelas_id',
+        'rating',
         'tanggal_pembelian',
     ];
     public function pembelian()
@@ -19,7 +21,7 @@ class detailPembelian extends Model
 
     public function kelas()
     {
-        return $this->belongsTo(kelas::class, 'kelas_id');
+        return $this->belongsTo(Kelas::class, 'kelas_id');
     }
 
     

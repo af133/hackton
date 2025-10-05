@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Modul extends Model
 {
     protected $fillable = ['class_id', 'title', 'description'];
-
+    protected $table = 'moduls';
     public function lessons() {
-        return $this->hasMany(Lesson::class);
+        return $this->hasMany(Lesson::class,'module_id');
     }
 
     public function kelas() {

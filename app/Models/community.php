@@ -13,6 +13,7 @@ class Community extends Model
         'type',
         'avatar',
         'creator_id',
+        'description',
     ];
 
     // Relasi pembuat komunitas

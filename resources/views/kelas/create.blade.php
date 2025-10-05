@@ -11,6 +11,27 @@
         @include('components.header-mobile')
 
         <div class="relative flex-1 overflow-y-auto">
+            {{-- Notifikasi Flash Message --}}
+            <div class="p-4">
+                @if(session('success'))
+                    <div x-data="{ show: true }" 
+                        x-show="show" 
+                        x-init="setTimeout(() => show = false, 4000)" 
+                        class="bg-purple-600 text-white px-4 py-3 rounded-lg mb-4 shadow-md">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div x-data="{ show: true }" 
+                        x-show="show" 
+                        x-init="setTimeout(() => show = false, 4000)" 
+                        class="bg-red-500 text-white px-4 py-3 rounded-lg mb-4 shadow-md">
+                        {{ session('error') }}
+                    </div>
+                @endif
+            </div>
+
             <main class="relative z-10 p-6 md:p-8">
                 <form action="{{ route('kelas.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
