@@ -60,7 +60,8 @@ Route::middleware('auth')->group(function () {
     ->name('lessons.file');
 
     Route::get('/sosial',[SocialController::class,'index'])->name('sosial');
-    Route::get('/sosial/detail',[SocialController::class,'showdetail'])->name('sosial.show');
+    Route::get('/sosial/detail/{id}',[SocialController::class,'showdetail'])->name('sosial.show');
+    Route::get('/sosial/create',[SocialController::class,'create'])->name('sosial.create');
     Route::get('/sosial/detail/post',[SocialController::class,'showpost'])->name('sosial.post');
 
     Route::post('/communities', [CommunityController::class,'store'])->name('communities.store');
@@ -70,4 +71,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/kredit',[KreditController::class,'index'])->name('skill-credit');
     Route::get('/kredit/history',[KreditController::class,'history'])->name('skill-credit.history');
+
+    route::get('/live-class', [CourseController::class, 'liveClass'])->name('kelas.live');
 });

@@ -209,9 +209,10 @@
                                 </p>
                             @else
                             <ul class="space-y-2">
-                                @for ($i = 0 ; $i < 5; $i++ )
-                                @include('components.community-item')
-                                @endfor
+                                @foreach ($komunitas as $komunitass )
+                                    
+                                @endforeach
+                                @include('components.community-item',['komunitas'=>$komunitass])
                             </ul>
                             @endif
                         </div>

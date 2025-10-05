@@ -4,76 +4,55 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Chat;
+use App\Models\Community;
 use Illuminate\Support\Facades\Auth;
 
 class CommunityController extends Controller
 {
-    // Menampilkan semua komunitas
     public function index()
     {
-        $chats = Chat::where('type','group')->with('users','messages.user')->get();
-        return view('communities.index', compact('chats'));
+        $communities = Community::all();
+        $ikutKomunitas= auth()->user()->communities()->with('messages.user','users')->get();
+        return view('sosial.index', compact('communities','ikutKomunitas'));
     }
-
-    // Membuat komunitas baru
     public function store(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'avatar' => 'nullable|image|max:5120', // max 5MB
+    ]);
+
+    // Upload avatar jika ada
+    $avatarPath = $request->hasFile('avatar') 
+        ? $request->file('avatar')->store('avatars', 'public') 
+        : null;
+
+    // Simpan komunitas
+    $community = Community::create([
+        'name' => $request->name,
+        'type' => 'Publik', // atau bisa ditambah input select jika mau
+        'avatar' => $avatarPath,
+        'creator_id' => Auth::id(),
+        'description' => $request->description ?? null,
+    ]);
+
+    // Auto-join creator
+    $community->users()->attach(Auth::id());
+
+    return redirect()->route('sosial')
+                     ->with('success', 'Komunitas berhasil dibuat!');
+}
+
+
+    public function join(Community $community)
     {
-        $request->validate([
-            'name' => 'required|string|max:255'
-        ]);
-
-        $chat = Chat::create([
-            'type' => 'group',
-            'name' => $request->name
-        ]);
-
-        // Tambahkan creator sebagai anggota
-        $chat->users()->attach(Auth::id());
-
-        return redirect()->back()->with('success','Komunitas berhasil dibuat!');
+        $community->users()->attach(auth()->id());
+        return back();
     }
 
-    // Bergabung ke komunitas
-    public function join(Chat $chat)
+    public function leave(Community $community)
     {
-        $chat->users()->syncWithoutDetaching(Auth::id());
-        return redirect()->back()->with('success','Berhasil bergabung ke komunitas!');
-    }
-
-    // Keluar dari komunitas
-    public function leave(Chat $chat)
-    {
-        $chat->users()->detach(Auth::id());
-        return redirect()->back()->with('success','Berhasil keluar dari komunitas!');
-    }
-
-    // Mengirim pesan teks, gambar, PDF
-    public function sendMessage(Request $request, Chat $chat)
-    {
-        $request->validate([
-            'message' => 'nullable|string',
-            'file' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120'
-        ]);
-
-        $type = 'text';
-        $filePath = null;
-
-        if($request->hasFile('file')){
-            $file = $request->file('file');
-            $filePath = $file->store('chat_files','public');
-
-            $ext = $file->extension();
-            if(in_array($ext,['jpg','jpeg','png'])) $type = 'image';
-            elseif($ext=='pdf') $type = 'pdf';
-        }
-
-        $chat->messages()->create([
-            'user_id' => Auth::id(),
-            'message' => $request->message,
-            'file' => $filePath,
-            'type' => $type
-        ]);
-
-        return redirect()->back()->with('success','Pesan berhasil dikirim!');
+        $community->users()->detach(auth()->id());
+        return back();
     }
 }

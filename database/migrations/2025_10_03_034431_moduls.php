@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('modules', function (Blueprint $table) {
+        Schema::create('moduls', function (Blueprint $table) {
             $table->id();
             $table->foreignId('class_id')->constrained('kelass')->onDelete('cascade');
             $table->string('title');
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('modules');
+        Schema::dropIfExists('moduls');
     }
 };

@@ -26,15 +26,15 @@
                 </form>
                 {{-- Kontainer Utama dengan Alpine.js untuk Tabs --}}
                 <div x-data="{ activeTab: 'all' }">
-@if (session('success'))
-    <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg">
-        {{ session('success') }}
-    </div>
-@elseif (session('error'))
-    <div class="mb-4 p-4 bg-red-100 text-red-800 rounded-lg">
-        {{ session('error') }}
-    </div>
-@endif
+                    @if (session('success'))
+                        <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-lg">
+                            {{ session('success') }}
+                        </div>
+                    @elseif (session('error'))
+                        <div class="mb-4 p-4 bg-red-100 text-red-800 rounded-lg">
+                            {{ session('error') }}
+                        </div>
+                    @endif
                     {{-- Navigasi Tabs --}}
                     <div class="border-b border-gray-200">
                         <nav class="-mb-px flex space-x-8" aria-label="Tabs">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\detailPembelian;
 use App\Models\pembelian;
+use App\Models\Modul;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Kelas;
@@ -11,6 +12,10 @@ use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller
 {
+    public function liveClass()
+    {
+        return view('kelas.live');
+    }
     public function kelasSaya(Request $request)
 {
     $userId = auth()->id();
@@ -86,14 +91,14 @@ class CourseController extends Controller
         return view('kelas.index', compact('semuaKelas', 'kelasDiikuti', 'kelasSaya'));
     }
 
-    public function showkelas($kelasId)
+     public function showkelas($kelasId)
     {
         $kelas = Kelas::findOrFail($kelasId);
         $pemilik = User::find($kelas->dibuat_oleh);
         $moduls = $kelas->moduls()->orderBy('id')->get();
         $lessons = $moduls->flatMap->lessons;
         $pembelian = detailPembelian::whereHas('pembelian', function ($q) {
-            $q->where('user_id', auth()->id());
+        $q->where('user_id', auth()->id());
         })->where('kelas_id', $kelasId)->first();   
         $sudahBeli = false;
         if($pembelian || $kelas->dibuat_oleh == auth()->id())
@@ -101,9 +106,8 @@ class CourseController extends Controller
             $sudahBeli = true;
         }
 
-        return view('kelas.detail', compact('kelas', 'lessons','moduls', 'pemilik', 'sudahBeli'));
-    }
-    public function toggleStatus($id)
+        return view('kelas.detail', compact('kelas', 'lessons','moduls' , 'pemilik', 'sudahBeli'));
+    }    public function toggleStatus($id)
     {
         $kelas = Kelas::findOrFail($id);
         $kelas->is_draft = !$kelas->is_draft; // Toggle status
