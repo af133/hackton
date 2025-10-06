@@ -79,27 +79,27 @@ class User extends Authenticatable
     }
 
     public function detailPembelians()
-{
-    return $this->hasManyThrough(
-        detailPembelian::class,
-        Pembelian::class,
-        'user_id',
-        'pembelian_id',
-        'id',
-        'id'
-    );
-}
-
-public function kelasDiikuti()
-{
-    return $this->hasManyThrough(
-        Kelas::class,
-        detailPembelian::class,
-        'pembelian_id',
-        'id',
-        'id',
-        'kelas_id'
-    );
-}
+    {
+        return $this->hasManyThrough(
+            DetailPembelian::class,
+            Pembelian::class,
+            'user_id',
+            'pembelian_id',
+            'id',
+            'id'
+        );
+    }
+    
+    public function kelasDiikuti()
+    {
+        return $this->hasManyThrough(
+            Kelas::class,
+            DetailPembelian::class,
+            'pembelian_id',
+            'id',
+            'id',
+            'kelas_id'
+        );
+    }
 
 }
