@@ -24,101 +24,127 @@
                         </nav>
                     </div>
 
-                    <form action="#" method="POST">
+                    <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        {{-- @method('PUT') --}}
+                        @method('PUT')
 
-                        {{-- Konten Tab 1: Informasi Personal --}}
+                        {{-- ... Konten Tab 1: Informasi Personal ... --}}
                         <div x-show="activeTab === 'personal'" class="space-y-8">
-                            <div class="bg-white p-6 rounded-2xl shadow-md">
-                                <h2 class="text-xl font-bold text-gray-800 mb-5">Foto & Nama</h2>
-                                <div class="flex items-center gap-6">
-                                    <img class="h-24 w-24 rounded-full object-cover" src="https://i.pravatar.cc/300?u=aisyahfarah" alt="User Avatar">
-                                    <label for="photo" class="cursor-pointer px-4 py-2 text-sm font-semibold text-indigo-700 bg-indigo-100 rounded-lg hover:bg-indigo-200">
-                                        Ganti Foto
-                                        <input type="file" id="photo" name="photo" class="hidden">
-                                    </label>
-                                </div>
-                                <div class="mt-6">
-                                    <label for="name" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
-                                    <input type="text" id="name" name="name" value="Aisyah Farah" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                </div>
-                            </div>
+                            {{-- Foto & Nama --}}
+                            {{-- Foto & Nama --}}
+                        <div x-data="{ photoPreview: '{{ $user->profile_photo_url }}' }" class="bg-white p-6 rounded-2xl shadow-md">
+                            <h2 class="text-xl font-bold text-gray-800 mb-5">Foto & Nama</h2>
+                            <div class="flex items-center gap-6">
+                                {{-- Gambar ini akan menampilkan preview --}}
+                                <img class="h-24 w-24 rounded-full object-cover":src="photoPreview"alt="User Avatar">
 
+                                <label for="photo" class="cursor-pointer px-4 py-2 text-sm font-semibold text-indigo-700 bg-indigo-100 rounded-lg hover:bg-indigo-200">Ganti Foto
+                                    <input type="file" id="photo" name="profile_photo"class="hidden" @change="photoPreview = URL.createObjectURL($event.target.files[0])">
+                                </label>
+                            </div>
+                            <div class="mt-6">
+                                <label for="name" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
+                                <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}" class="mt-1 block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm sm:text-sm">
+                            </div>
+                            <div class="mt-6">
+                                <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi</label>
+                                <textarea id="description" name="description" rows="3" class="mt-1 block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm sm:text-sm">{{ old('description', $user->description) }}</textarea>
+                            </div>
+                        </div>
+
+                            {{-- Detail Kontak --}}
                             <div class="bg-white p-6 rounded-2xl shadow-md">
                                 <h2 class="text-xl font-bold text-gray-800 mb-5">Detail Kontak</h2>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
-                                        <label for="birth_date" class="block text-sm font-medium text-gray-700">Tanggal Lahir</label>
-                                        <input type="date" id="birth_date" name="birth_date" value="1999-04-08" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                        <label for="phone" class="block text-sm font-medium text-gray-700">Telepon</label>
+                                        <input type="text" id="phone" name="no_hp" value="{{ old('no_hp', $user->no_hp) }}" class="mt-1 px-4 py-3 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm">
                                     </div>
                                     <div>
-                                        <label for="phone" class="block text-sm font-medium text-gray-700">Telepon</label>
-                                        <input type="text" id="phone" name="phone" value="(+62) 812 3456 7890" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                    </div>
-                                    <div class="md:col-span-2">
                                         <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                                        <input type="email" id="email" name="email" value="aisyah.farah@example.com" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                        <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}" class="mt-1 px-4 py-3 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm">
+                                    </div>
+                                    <div>
+                                        <label for="instagram" class="block text-sm font-medium text-gray-700">Instagram URL</label>
+                                        <input type="url" id="instagram" name="instagram_url" value="{{ old('instagram_url', $user->instagram_url) }}" class="mt-1 px-4 py-3 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm">
+                                    </div>
+                                    <div>
+                                        <label for="linkedin" class="block text-sm font-medium text-gray-700">LinkedIn URL</label>
+                                        <input type="url" id="linkedin" name="linkedin_url" value="{{ old('linkedin_url', $user->linkedin_url) }}" class="mt-1 px-4 py-3 block w-full rounded-lg border-gray-300 shadow-sm sm:text-sm">
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        {{-- Konten Tab 2: Pengalaman & Keahlian --}}
+                        {{-- ... Konten Tab 2: Pengalaman & Keahlian ... --}}
                         <div x-show="activeTab === 'pengalaman'" class="space-y-8">
-                            {{-- Bagian Dinamis untuk Pengalaman Kerja --}}
-                            <div x-data="{ experiences: [ { title: 'UI/UX Designer', company: 'Creative Agency', start: '2023-01', end: '' }, { title: 'Frontend Developer (Intern)', company: 'Tech Startup Inc.', start: '2022-07', end: '2022-12' } ] }" class="bg-white p-6 rounded-2xl shadow-md">
+                            {{-- Pengalaman Kerja --}}
+                            <div x-data='{ experiences: @json($user->experiences) }' class="bg-white p-6 rounded-2xl shadow-md">
                                 <h2 class="text-xl font-bold text-gray-800 mb-5">Pengalaman Kerja</h2>
                                 <div class="space-y-4">
                                     <template x-for="(exp, index) in experiences" :key="index">
                                         <div class="p-4 border rounded-lg flex items-start gap-4">
                                             <div class="flex-grow grid grid-cols-2 gap-4">
-                                                <input type="text" x-model="exp.title" placeholder="Posisi" class="rounded-lg border-gray-300 text-sm">
-                                                <input type="text" x-model="exp.company" placeholder="Nama Perusahaan" class="rounded-lg border-gray-300 text-sm">
-                                                <input type="month" x-model="exp.start" placeholder="Tanggal Mulai" class="rounded-lg border-gray-300 text-sm">
-                                                <input type="month" x-model="exp.end" placeholder="Tanggal Selesai" class="rounded-lg border-gray-300 text-sm">
+                                                <input type="text" :name="`experiences[${index}][title]`" x-model="exp.title" placeholder="Posisi" class="rounded-lg px-4 py-3 border-gray-300 text-sm">
+                                                <input type="text" :name="`experiences[${index}][company]`" x-model="exp.company" placeholder="Nama Perusahaan" class="rounded-lg px-4 py-3 border-gray-300 text-sm">
+                                                <input type="date" :name="`experiences[${index}][start_date]`" x-model="exp.start_date" class="rounded-lg px-4 py-3 border-gray-300 text-sm">
+                                                <input type="date" :name="`experiences[${index}][end_date]`" x-model="exp.end_date" class="rounded-lg px-4 py-3 border-gray-300 text-sm">
                                             </div>
                                             <button @click="experiences.splice(index, 1)" type="button" class="text-gray-400 hover:text-red-500"><i class="ri-delete-bin-line"></i></button>
                                         </div>
                                     </template>
                                 </div>
-                                <button @click="experiences.push({ title: '', company: '', start: '', end: '' })" type="button" class="mt-4 text-sm font-semibold text-indigo-600 hover:underline">+ Tambah Pengalaman</button>
+                                <button @click="experiences.push({ title: '', company: '', start_date: '', end_date: '' })" type="button" class="mt-4 text-sm font-semibold text-indigo-600 hover:underline">+ Tambah Pengalaman</button>
                             </div>
 
-                            {{-- Bagian Dinamis untuk Keahlian --}}
-                             <div x-data="{ skills: ['UI/UX Design', 'Prototyping', 'HTML & CSS'], newSkill: '' }" class="bg-white p-6 rounded-2xl shadow-md">
+                            {{-- Keahlian --}}
+                            <div x-data='{ skills: @json($user->skills) }' class="bg-white p-6 rounded-2xl shadow-md">
                                 <h2 class="text-xl font-bold text-gray-800 mb-5">Keahlian</h2>
-                                <div class="flex flex-wrap items-center gap-2 mb-4">
+                                <div class="space-y-4">
                                     <template x-for="(skill, index) in skills" :key="index">
-                                        <span class="inline-flex items-center gap-x-1.5 px-3 py-1 text-sm bg-indigo-100 text-indigo-800 rounded-full font-medium">
-                                            <span x-text="skill"></span>
-                                            <button @click="skills.splice(index, 1)" type="button" class="text-indigo-500 hover:text-indigo-800">&times;</button>
-                                        </span>
+                                        <div class="p-4 border rounded-lg flex items-center gap-4">
+                                            <input type="text" :name="`skills[${index}][name]`" x-model="skill.name" placeholder="Nama Keahlian" class="w-1/2 px-4 py-3 rounded-lg border-gray-300 text-sm">
+                                            <select :name="`skills[${index}][level]`" x-model="skill.level" class="w-1/2 rounded-lg px-4 py-3 border-gray-300 text-sm">
+                                                <option value="Beginner">Beginner</option>
+                                                <option value="Intermediate">Intermediate</option>
+                                                <option value="Advanced">Advanced</option>
+                                            </select>
+                                            <button @click="skills.splice(index, 1)" type="button" class="text-gray-400 hover:text-red-500"><i class="ri-delete-bin-line"></i></button>
+                                        </div>
                                     </template>
                                 </div>
-                                <div class="flex gap-2">
-                                    <input type="text" x-model="newSkill" @keydown.enter.prevent="if (newSkill.trim()) skills.push(newSkill.trim()); newSkill = ''" placeholder="Tambah keahlian baru..." class="flex-grow rounded-lg border-gray-300 shadow-sm sm:text-sm">
-                                    <button @click.prevent="if (newSkill.trim()) skills.push(newSkill.trim()); newSkill = ''" type="button" class="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-lg shadow-sm hover:bg-indigo-700">Tambah</button>
-                                </div>
+                                <button @click="skills.push({ name: '', level: 'Beginner' })" type="button" class="mt-4 text-sm font-semibold text-indigo-600 hover:underline">+ Tambah Keahlian</button>
                             </div>
                         </div>
 
                         {{-- Konten Tab 3: Portofolio --}}
-                         <div x-show="activeTab === 'portofolio'" class="space-y-8">
+                        <div x-show="activeTab === 'portofolio'" class="space-y-8">
                             <div class="bg-white p-6 rounded-2xl shadow-md">
-                                <h2 class="text-xl font-bold text-gray-800 mb-5">Portofolio</h2>
-                                <p class="text-sm text-gray-500 mb-4">Tambahkan proyek terbaik Anda untuk ditampilkan di profil publik.</p>
-                                {{-- Placeholder for Portfolio Upload --}}
-                                <div class="p-8 border-2 border-dashed border-gray-300 rounded-lg text-center">
-                                    <i class="ri-upload-cloud-2-line text-4xl text-gray-400"></i>
-                                    <p class="mt-2 text-gray-500">Fitur upload portofolio akan segera hadir.</p>
+                                <h2 class="text-xl font-bold text-gray-800 mb-5">Portofolio & CV</h2>
+                                <p class="text-sm text-gray-500 mb-4">
+                                    Masukkan tautan (URL) ke CV dan portofolio Anda yang tersimpan di Google Drive, LinkedIn, atau situs web pribadi.
+                                </p>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                                    {{-- UBAH INPUT CV --}}
+                                    <div>
+                                        <label for="cv_path" class="block text-sm font-medium text-gray-700">Tautan CV</label>
+                                        <input type="url" id="cv_path" name="cv_path" value="{{ old('cv_path', $user->cv_path) }}" placeholder="https://..." class="mt-1 block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm sm:text-sm">
+                                    </div>
+
+                                    {{-- UBAH INPUT PORTOFOLIO --}}
+                                    <div>
+                                        <label for="portfolio_path" class="block text-sm font-medium text-gray-700">Tautan Portofolio</label>
+                                        <input type="url" id="portfolio_path" name="portfolio_path" value="{{ old('portfolio_path', $user->portfolio_path) }}" placeholder="https://..." class="mt-1 block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm sm:text-sm">
+                                    </div>
+
                                 </div>
                             </div>
-                         </div>
+                        </div>
 
                         {{-- Tombol Aksi --}}
                         <div class="flex justify-end gap-x-4 pt-4">
-                            <button type="button" class="px-6 py-2.5 font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50">Batal</button>
+                            <a href="{{ route('profile.show') }}" class="px-6 py-2.5 font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50">Batal</a>
                             <button type="submit" class="px-6 py-2.5 font-semibold text-white bg-indigo-600 rounded-lg shadow-sm hover:bg-indigo-700">Simpan Perubahan</button>
                         </div>
                     </form>

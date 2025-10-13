@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Kelas extends Model
 {
@@ -37,5 +38,11 @@ class Kelas extends Model
     }
     public function moduls() {
         return $this->hasMany(Modul::class, 'class_id');
+    }
+    public function getKelasThumbnailUrlAttribute()
+    {
+        return $this->path_gambar
+            ? Storage::disk('cloudinary')->url($this->path_gambar)
+            : 'https://i.pravatar.cc/300';
     }
 }

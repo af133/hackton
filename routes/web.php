@@ -33,14 +33,13 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/profile/mission', [ProfileController::class,'mission'])->name('profile.mission');
 
-    // Halaman Kelas & Pelajaran
     Route::get('/kelas', [CourseController::class, 'show'])->name('kelas.show');
     Route::get('/kelas/detail/{kelasId}', [CourseController::class,'showkelas'])->name('kelas.detail');
     Route::post('kelas/{id}/toggle-status', [CourseController::class, 'toggleStatus'])->name('kelas.toggleStatus');
 
     Route::get('/kelas/create', [CourseController::class,'showcreate'])->name('kelas.create');
     Route::post('/kelas/create', [CourseController::class,'store'])->name('kelas.store');
-    
+
     Route::get('/kelas/{kelasId}/mulai', [CourseController::class,'mulai'])->name('kelas.mulai');
     Route::get('/kelas/{kelas}/modul/{modul}/lesson/{lesson}', [LessonController::class, 'show'])->name('lesson.show');
     Route::post('/lesson/{lesson}/discussion', [DiscussionController::class, 'store'])->name('discussion.store');

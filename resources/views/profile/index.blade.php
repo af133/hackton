@@ -5,10 +5,10 @@
 
 @section('content')
 <div x-data="{ sidebarOpen: false }" class="flex h-screen bg-background">
-    @include('components.sidebar') {{-- Anggap komponen sidebar ada --}}
+    @include('components.sidebar')
 
     <div class="flex-1 flex flex-col overflow-hidden">
-        @include('components.header-mobile') {{-- Anggap komponen header mobile ada --}}
+        @include('components.header-mobile')
 
         <main class="flex-1 overflow-x-hidden overflow-y-auto">
             <div class="container mx-auto px-6 py-8">
@@ -23,34 +23,39 @@
                     <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-md">
                         <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
                             <div class="flex-shrink-0">
-                                <img class="h-32 w-32 rounded-full object-cover ring-4 ring-secondary" src="https://i.pravatar.cc/300?u=aisyah" alt="User Avatar">
+                                <img class="h-32 w-32 rounded-full object-cover ring-4 ring-secondary" src="{{ $user->profile_photo_url }}" alt="User Avatar">
                             </div>
                             <div class="flex-grow w-full text-center sm:text-left">
-                                <h1 class="text-3xl font-bold text-gray-800">Aisyah Farah</h1>
+                                <h1 class="text-3xl font-bold text-gray-800">{{ $user->name }}</h1>
                                 <p class="mt-2 text-gray-600 max-w-lg">
-                                    Saya mahir dalam UI/UX Designer dan senang membagikan ilmu melalui video yang saya bagikan. Saya tertarik mempelajari Digital Marketing.
+                                    {{$user->description}}
                                 </p>
                                 <div class="mt-4 flex flex-wrap justify-center sm:justify-start items-center gap-x-6 gap-y-3">
-                                    <div class="flex items-center gap-2">
-                                        <i class="ri-coin-line w-6 h-6 text-yellow-500"></i>
-                                        <span class="font-bold text-lg text-gray-700">1.500 coin</span>
+                                    <div class="flex items-center justify-start gap-2 bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-100 w-fit">
+                                        <i class="ri-money-dollar-circle-fill text-yellow-500 text-2xl"></i>
+                                        <span class="font-semibold text-gray-800 text-base">
+                                            {{ $user->koin }} <span class="text-sm text-gray-500">coin</span>
+                                        </span>
                                     </div>
+
                                     <div class="flex items-center gap-x-3 text-2xl">
-                                        <a href="#" class="text-gray-400 hover:text-primary transition-colors" title="Mail"><i class="ri-mail-line"></i></a>
-                                        <a href="#" class="text-gray-400 hover:text-primary transition-colors" title="Instagram"><i class="ri-instagram-line"></i></a>
-                                        <a href="#" class="text-gray-400 hover:text-primary transition-colors" title="LinkedIn"><i class="ri-linkedin-box-fill"></i></a>
+                                        <a href="mailto:{{ $user->email }}" class="text-gray-400 hover:text-primary transition-colors" title="Mail"><i class="ri-mail-line"></i></a>
+                                        <a href="{{ $user->instagram_url }}" class="text-gray-400 hover:text-primary transition-colors" title="Instagram"><i class="ri-instagram-line"></i></a>
+                                        <a href="{{ $user->linkedin_url }}" class="text-gray-400 hover:text-primary transition-colors" title="LinkedIn"><i class="ri-linkedin-box-fill"></i></a>
                                     </div>
                                 </div>
                                 <div class="mt-4 pt-4">
                                     <p class="font-semibold text-gray-500 mb-2">Level Skill:</p>
                                     <div class="flex flex-wrap justify-center sm:justify-start gap-2">
-                                        <span class="px-3 py-1 text-sm bg-secondary text-primary rounded-full font-bold">UI/UX Design: <span class="font-normal">Intermediate</span></span>
-                                        <span class="px-3 py-1 text-sm bg-secondary text-primary rounded-full font-bold">Digital Marketing: <span class="font-normal">Beginner</span></span>
+                                        @foreach ($user->skills as $skill)
+                                            <span class="px-3 py-1 text-sm bg-secondary text-primary rounded-full font-bold">{{ $skill->name }}: <span class="font-normal">{{ $skill->level }}</span></span>
+                                        @endforeach
                                     </div>
                                 </div>
-                                 <div class="mt-4 flex justify-center sm:justify-start items-center gap-x-3">
-                                    <a href="#" class="px-5 py-2 bg-primary text-white font-semibold rounded-lg shadow-sm hover:bg-primary/90 transition-colors">View CV</a>
-                                    <a href="#" class="px-5 py-2 bg-gray-100 text-gray-800 font-semibold rounded-lg shadow-sm hover:bg-gray-200 transition-colors">View Portofolio</a>
+                                <div class="mt-4 flex justify-center sm:justify-start items-center gap-x-3">
+                                    <a href="{{ route('profile.edit') }}" class="px-5 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-sm hover:bg-indigo-700 transition-colors">Edit Profil</a>
+                                    <a href="{{ $user->cv_path }}" class="px-5 py-2 bg-primary text-white font-semibold rounded-lg shadow-sm hover:bg-primary/90 transition-colors">View CV</a>
+                                    <a href="{{ $user->portfolio_path }}" class="px-5 py-2 bg-gray-100 text-gray-800 font-semibold rounded-lg shadow-sm hover:bg-gray-200 transition-colors">View Portofolio</a>
                                 </div>
                             </div>
                         </div>

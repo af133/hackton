@@ -14,18 +14,18 @@
             {{-- Notifikasi Flash Message --}}
             <div class="p-4">
                 @if(session('success'))
-                    <div x-data="{ show: true }" 
-                        x-show="show" 
-                        x-init="setTimeout(() => show = false, 4000)" 
+                    <div x-data="{ show: true }"
+                        x-show="show"
+                        x-init="setTimeout(() => show = false, 4000)"
                         class="bg-purple-600 text-white px-4 py-3 rounded-lg mb-4 shadow-md">
                         {{ session('success') }}
                     </div>
                 @endif
 
                 @if(session('error'))
-                    <div x-data="{ show: true }" 
-                        x-show="show" 
-                        x-init="setTimeout(() => show = false, 4000)" 
+                    <div x-data="{ show: true }"
+                        x-show="show"
+                        x-init="setTimeout(() => show = false, 4000)"
                         class="bg-red-500 text-white px-4 py-3 rounded-lg mb-4 shadow-md">
                         {{ session('error') }}
                     </div>
@@ -59,15 +59,15 @@
                                 <div class="space-y-4">
                                     <div>
                                         <label for="title" class="block text-sm font-medium text-gray-700">Judul Kelas</label>
-                                        <input type="text" id="title" name="title" placeholder="Contoh: Belajar UI/UX Design dari Dasar" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm">
+                                        <input type="text" id="title" name="title" placeholder="Contoh: Belajar UI/UX Design dari Dasar" class="mt-1 px-4 py-2 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm">
                                     </div>
                                     <div>
                                         <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi Singkat</label>
-                                        <textarea id="description" name="description" rows="4" placeholder="Jelaskan secara singkat tentang kelas ini..." class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"></textarea>
+                                        <textarea id="description" name="description" rows="4" placeholder="Jelaskan secara singkat tentang kelas ini..." class="mt-1 px-4 py-2 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"></textarea>
                                     </div>
                                     <div>
                                         <label for="category" class="block text-sm font-medium text-gray-700">Kategori</label>
-                                        <select id="category" name="category" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm">
+                                        <select id="category" name="category" class="mt-1 px-4 py-2 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm">
                                             <option>Desain</option>
                                             <option>Teknologi</option>
                                             <option>Bisnis</option>
@@ -111,7 +111,7 @@
                                 </div>
                                 <div class="mt-6">
                                     <label for="credit" class="block text-sm font-medium text-gray-700">Harga (Skill Kredit)</label>
-                                    <input type="number" id="credit" name="credit" value="50" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm">
+                                    <input type="number" id="credit" name="credit" value="50" class="mt-1 px-4 py-2 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm">
                                 </div>
                             </div>
 
@@ -126,7 +126,7 @@
                                         </span>
                                     </template>
                                 </div>
-                                <input type="text" x-model="newTag" @keydown.enter.prevent="if (newTag.trim()) tags.push(newTag.trim()); newTag = ''" placeholder="Tambah tag..." class="w-full rounded-lg border-gray-300 shadow-sm sm:text-sm focus:border-primary focus:ring-primary">
+                                <input type="text" x-model="newTag" @keydown.enter.prevent="if (newTag.trim()) tags.push(newTag.trim()); newTag = ''" placeholder="Tambah tag..." class="w-full rounded-lg px-4 py-2 border-gray-300 shadow-sm sm:text-sm focus:border-primary focus:ring-primary">
                                 <input type="hidden" name="tags" :value="JSON.stringify(tags)">
                             </div>
                         </div>

@@ -16,32 +16,30 @@ class CommunityController extends Controller
         return view('sosial.index', compact('communities','ikutKomunitas'));
     }
     public function store(Request $request)
-{
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'avatar' => 'nullable|image|max:5120', // max 5MB
-    ]);
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'avatar' => 'nullable|image|max:5120',
+        ]);
 
-    // Upload avatar jika ada
-    $avatarPath = $request->hasFile('avatar') 
-        ? $request->file('avatar')->store('avatars', 'public') 
-        : null;
+        $avatarPath = null;
+        if ($request->hasFile('avatar')) {
+            $avatarPath = $request->file('avatar')->store('avatar', 'cloudinary');;
+        }
 
-    // Simpan komunitas
-    $community = Community::create([
-        'name' => $request->name,
-        'type' => 'Publik', // atau bisa ditambah input select jika mau
-        'avatar' => $avatarPath,
-        'creator_id' => Auth::id(),
-        'description' => $request->description ?? null,
-    ]);
+        $community = Community::create([
+            'name' => $request->name,
+            'type' => 'Publik',
+            'avatar' => $avatarPath,
+            'creator_id' => Auth::id(),
+            'description' => $request->description ?? null,
+        ]);
 
-    // Auto-join creator
-    $community->users()->attach(Auth::id());
+        $community->users()->attach(Auth::id());
 
-    return redirect()->route('sosial')
-                     ->with('success', 'Komunitas berhasil dibuat!');
-}
+        return redirect()->route('sosial')
+                        ->with('success', 'Komunitas berhasil dibuat!');
+    }
 
 
     public function join(Community $community)

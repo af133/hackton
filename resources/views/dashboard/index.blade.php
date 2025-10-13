@@ -7,16 +7,7 @@
 <div x-data="{ sidebarOpen: false }" class="flex h-screen bg-gray-100">
     @include('components.sidebar')
     <div class="flex-1 flex flex-col overflow-hidden">
-        {{-- Mobile Header (Sticky) --}}
-        <header class="md:hidden sticky top-0 z-20 flex items-center justify-between h-20 px-6 bg-white/80 backdrop-blur-sm border-b border-gray-200">
-            <button @click="sidebarOpen = true" class="text-gray-500 dark:text-gray-300">
-                <i class="ri-menu-2-line text-2xl"></i>
-            </button>
-            <div class="flex items-center gap-x-3">
-                <span class="font-semibold text-gray-700 dark:text-gray-200 text-sm">Aisyah Farah</span>
-                <img class="h-9 w-9 rounded-full object-cover" src="https://i.pravatar.cc/150?u=aisyahfarah" alt="User avatar">
-            </div>
-        </header>
+        @include('components.header-mobile')
 
         <div class="relative flex-1 overflow-y-auto">
             {{-- Background Gradient (Hanya di Desktop) --}}
@@ -34,7 +25,7 @@
 
                         {{-- Teks Sambutan --}}
                         <div>
-                            <h1 class="text-3xl md:text-4xl font-bold text-white tracking-tight">Selamat Datang Kembali, {{ auth()->user()->name ?? 'Pengguna' }}!</h1>
+                            <h1 class="text-3xl md:text-4xl font-bold text-white tracking-tight">Selamat Datang Kembali, {{ auth()->user()->name }}!</h1>
                             <p class="text-lg text-indigo-100 mt-1">Siap untuk belajar atau berbagi skill hari ini?</p>
                         </div>
 
@@ -42,23 +33,24 @@
                         <div x-data="{ isDropdownOpen: false }" class="relative flex-shrink-0">
                             {{-- Trigger: Bagian yang di-hover (nama & avatar) --}}
                             <div @mouseenter="isDropdownOpen = true" @mouseleave="isDropdownOpen = false" class="sm:flex items-center gap-x-3 cursor-pointer">
-                                <span class="font-semibold text-white text-sm hidden sm:block">{{ auth()->user()->name ?? 'Aisyah Farah' }}</span>
+                                <span class="font-semibold text-white text-sm hidden sm:block">{{ auth()->user()->name }}</span>
+                                {{-- FIX: Menggunakan accessor untuk foto profil --}}
                                 <img class="h-9 w-9 rounded-full object-cover ring-2 ring-white"
-                                    src="{{ auth()->user()->avatar_url ?? 'https://i.pravatar.cc/150?u=aisyahfarah' }}"
-                                    alt="User avatar">
+                                     src="{{ auth()->user()->profile_photo_url }}"
+                                     alt="User avatar">
                             </div>
 
                             {{-- Dropdown Menu --}}
                             <div x-show="isDropdownOpen"
-                                @mouseenter="isDropdownOpen = true" @mouseleave="isDropdownOpen = false"
-                                x-transition:enter="transition ease-out duration-200"
-                                x-transition:enter-start="opacity-0 transform scale-95"
-                                x-transition:enter-end="opacity-100 transform scale-100"
-                                x-transition:leave="transition ease-in duration-75"
-                                x-transition:leave-start="opacity-100 transform scale-100"
-                                x-transition:leave-end="opacity-0 transform scale-95"
-                                class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 ring-1 ring-black/5 z-50"
-                                style="display: none;" x-cloak>
+                                 @mouseenter="isDropdownOpen = true" @mouseleave="isDropdownOpen = false"
+                                 x-transition:enter="transition ease-out duration-200"
+                                 x-transition:enter-start="opacity-0 transform scale-95"
+                                 x-transition:enter-end="opacity-100 transform scale-100"
+                                 x-transition:leave="transition ease-in duration-75"
+                                 x-transition:leave-start="opacity-100 transform scale-100"
+                                 x-transition:leave-end="opacity-0 transform scale-95"
+                                 class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 ring-1 ring-black/5 z-50"
+                                 style="display: none;" x-cloak>
 
                                 <a href="{{ route('profile.show') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil Saya</a>
                                 <div class="border-t border-gray-100 my-1"></div>
@@ -76,98 +68,98 @@
                     {{-- Kolom Konten Utama (Kiri pada layar besar) --}}
                     <div class="col-span-12 xl:col-span-8">
                         {{-- Report Section --}}
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-5">Report</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-5">Report</h2>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
-                        {{-- Card Skill Kredit --}}
-                        <a href="#">
-                        <div class="bg-white dark:bg-gray-800/50 p-5 rounded-2xl shadow-md flex items-center gap-5 transition-transform transform hover:-translate-y-1">
-                            <div class="flex-shrink-0 w-16 h-16 flex items-center justify-center bg-primary text-white rounded-2xl">
-                                <i class="ri-graduation-cap-line text-3xl"></i>
-                            </div>
-                            <div>
-                                <p class="text-gray-500 dark:text-gray-400 text-sm">Skill Kredit</p>
-                                <div class="flex items-center gap-2 mt-1">
-                                    <i class="ri-money-dollar-circle-fill text-yellow-400 text-2xl"></i>
-                                    <p class="text-2xl font-extrabold text-gray-800 dark:text-white">{{ auth()->user()->koin }}</p>
+                                {{-- Card Skill Kredit --}}
+                                <a href="#">
+                                <div class="bg-white dark:bg-gray-800/50 p-5 rounded-2xl shadow-md flex items-center gap-5 transition-transform transform hover:-translate-y-1">
+                                    <div class="flex-shrink-0 w-16 h-16 flex items-center justify-center bg-primary text-white rounded-2xl">
+                                        <i class="ri-graduation-cap-line text-3xl"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-500 dark:text-gray-400 text-sm">Skill Kredit</p>
+                                        <div class="flex items-center gap-2 mt-1">
+                                            <i class="ri-money-dollar-circle-fill text-yellow-400 text-2xl"></i>
+                                            <p class="text-2xl font-extrabold text-gray-800 dark:text-white">{{ auth()->user()->koin }}</p>
+                                        </div>
+                                    </div>
                                 </div>
+                                </a>
+                                {{-- Card Rating Reputasi --}}
+                                <div class="bg-white dark:bg-gray-800/50 p-5 rounded-2xl shadow-md flex items-center gap-5 transition-transform transform hover:-translate-y-1">
+                                    <div class="flex-shrink-0 w-16 h-16 flex items-center justify-center bg-primary text-white rounded-2xl">
+                                        <i class="ri-team-line text-3xl"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-500 dark:text-gray-400 text-sm">Rating Reputasi</p>
+                                       <div class="flex items-center gap-2 mt-1">
+                                        {{-- Rating angka --}}
+                                        <p class="text-2xl font-extrabold text-gray-800 dark:text-white">
+                                            {{ $rating == 0 ? 0 : number_format($rating, 1) }}
+                                        </p>
+
+                                        {{-- Bintang --}}
+                                        <div class="flex text-yellow-400">
+                                            @php
+                                                if($rating == 0){
+                                                 $fullStars = 0;
+                                                 $halfStar = 0;
+                                                 $emptyStars = 5;
+                                                }
+                                                else{
+                                                 $fullStars = floor($rating);
+                                                 $halfStar = ($rating - $fullStars >= 0.5) ? 1 : 0;
+                                                 $emptyStars = 5 - ($fullStars + $halfStar);
+                                                }
+                                            @endphp
+
+                                            {{-- Bintang penuh --}}
+                                            @for ($i = 0; $i < $fullStars; $i++)
+                                                <i class="ri-star-s-fill"></i>
+                                            @endfor
+
+                                            {{-- Bintang setengah --}}
+                                            @if ($halfStar)
+                                                <i class="ri-star-half-s-line"></i>
+                                            @endif
+
+                                            {{-- Bintang kosong --}}
+                                            @for ($i = 0; $i < $emptyStars; $i++)
+                                                <i class="ri-star-line"></i>
+                                            @endfor
+                                        </div>
+                                    </div>
+
+                                    </div>
+                                </div>
+
+                                {{-- Card Permintaan Aktif --}}
+                                <div class="bg-white dark:bg-gray-800/50 p-5 rounded-2xl shadow-md flex items-center gap-5 transition-transform transform hover:-translate-y-1">
+                                    <div class="flex-shrink-0 w-16 h-16 flex items-center justify-center bg-primary text-white rounded-2xl">
+                                        <i class="ri-user-add-line text-3xl"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-500 dark:text-gray-400 text-sm">Permintaan Aktif</p>
+                                        <p class="text-2xl font-extrabold text-gray-800 dark:text-white mt-1">3</p>
+                                    </div>
+                                </div>
+
+                                {{-- Card Materi --}}
+                                <a href="{{ route('kelas.show') }}">
+                                <div class="bg-white dark:bg-gray-800/50 p-5 rounded-2xl shadow-md flex items-center gap-5 transition-transform transform hover:-translate-y-1">
+                                    <div class="flex-shrink-0 w-16 h-16 flex items-center justify-center bg-primary text-white rounded-2xl">
+                                        <i class="ri-book-3-line text-3xl"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-500 dark:text-gray-400 text-sm">Materi</p>
+                                        <p class="text-2xl font-extrabold text-gray-800 dark:text-white mt-1">{{ $ikutKelas->count() }}</p>
+                                    </div>
+                                </div>
+                                </a>
                             </div>
                         </div>
-                        </a>
-                        {{-- Card Rating Reputasi --}}
-                        <div class="bg-white dark:bg-gray-800/50 p-5 rounded-2xl shadow-md flex items-center gap-5 transition-transform transform hover:-translate-y-1">
-                            <div class="flex-shrink-0 w-16 h-16 flex items-center justify-center bg-primary text-white rounded-2xl">
-                                <i class="ri-team-line text-3xl"></i>
-                            </div>
-                            <div>
-                                <p class="text-gray-500 dark:text-gray-400 text-sm">Rating Reputasi</p>
-                               <div class="flex items-center gap-2 mt-1">
-                            {{-- Rating angka --}}
-                            <p class="text-2xl font-extrabold text-gray-800 dark:text-white">
-                                {{ $rating ==0?0 :number_format($rating , 1) }}
-                            </p>
-
-                            {{-- Bintang --}}
-                            <div class="flex text-yellow-400">
-                                @php
-                                   if($rating == 0){
-                                    $fullStars = 0;
-                                    $halfStar = 0;
-                                    $emptyStars = 5;
-                                   }
-                                   else{
-                                    $fullStars = floor($rating);   // bintang penuh
-                                    $halfStar = ($rating - $fullStars >= 0.5) ? 1 : 0; // bintang setengah
-                                    $emptyStars = 5 - ($fullStars + $halfStar); // sisanya kosong
-                                   }
-                                @endphp
-
-                                {{-- Bintang penuh --}}
-                                @for ($i = 0; $i < $fullStars; $i++)
-                                    <i class="ri-star-s-fill"></i>
-                                @endfor
-
-                                {{-- Bintang setengah --}}
-                                @if ($halfStar)
-                                    <i class="ri-star-half-s-line"></i>
-                                @endif
-
-                                {{-- Bintang kosong --}}
-                                @for ($i = 0; $i < $emptyStars; $i++)
-                                    <i class="ri-star-line"></i>
-                                @endfor
-                            </div>
-                        </div>
-
-                            </div>
-                        </div>
-
-                        {{-- Card Permintaan Aktif --}}
-                        <div class="bg-white dark:bg-gray-800/50 p-5 rounded-2xl shadow-md flex items-center gap-5 transition-transform transform hover:-translate-y-1">
-                            <div class="flex-shrink-0 w-16 h-16 flex items-center justify-center bg-primary text-white rounded-2xl">
-                                <i class="ri-user-add-line text-3xl"></i>
-                            </div>
-                            <div>
-                                <p class="text-gray-500 dark:text-gray-400 text-sm">Permintaan Aktif</p>
-                                <p class="text-2xl font-extrabold text-gray-800 dark:text-white mt-1">3</p>
-                            </div>
-                        </div>
-
-                        {{-- Card Materi --}}
-                        <a href="{{ route('kelas.show') }}">
-                        <div class="bg-white dark:bg-gray-800/50 p-5 rounded-2xl shadow-md flex items-center gap-5 transition-transform transform hover:-translate-y-1">
-                            <div class="flex-shrink-0 w-16 h-16 flex items-center justify-center bg-primary text-white rounded-2xl">
-                                <i class="ri-book-3-line text-3xl"></i>
-                            </div>
-                            <div>
-                                <p class="text-gray-500 dark:text-gray-400 text-sm">Materi</p>
-                                <p class="text-2xl font-extrabold text-gray-800 dark:text-white mt-1">{{ $ikutKelas->count() }}</p>
-                            </div>
-                        </div>
-                        </a>
-                    </div>
-                </div>
 
                         {{-- Sesi Saya --}}
                         <div class="mt-8">
@@ -181,7 +173,7 @@
                                 class="inline-block px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-primary 600">
                                 Lihat Kelas
                                 </a>
-                            </div>
+                                </div>
 
                             @else
                                 <div class="flex items-center justify-between mb-4">
@@ -190,7 +182,6 @@
                                 </div>
                                 @foreach ($ikutKelas as $detail )
                                      @include('components.card-modul',['kelas'=>$detail->kelas,'nama'=>$detail->kelas->creator->name,'rating'=>$rating])
-                                    
                                 @endforeach
                             @endif
                         </div>
@@ -209,10 +200,10 @@
                                 </p>
                             @else
                             <ul class="space-y-2">
-                                @foreach ($komunitas as $komunitass )
-                                    
+                                {{-- FIX: Perulangan komunitas yang benar --}}
+                                @foreach ($komunitas as $item)
+                                    @include('components.community-item', ['komunitas' => $item])
                                 @endforeach
-                                @include('components.community-item',['komunitas'=>$komunitass])
                             </ul>
                             @endif
                         </div>
@@ -221,7 +212,6 @@
             </main>
         </div>
     </div>
-
    @include('components.navbar-mobile')
 </div>
 @endsection
