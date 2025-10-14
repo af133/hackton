@@ -150,7 +150,7 @@
                             </div>
                             <div>
                                 <p class="text-gray-500 dark:text-gray-400 text-sm">Permintaan Aktif</p>
-                                <p class="text-2xl font-extrabold text-gray-800 dark:text-white mt-1">3</p>
+                                <p class="text-2xl font-extrabold text-gray-800 dark:text-white mt-1">{{ count($allLiveClasses) }}</p>
                             </div>
                         </div>
 
@@ -210,9 +210,9 @@
                             @else
                             <ul class="space-y-2">
                                 @foreach ($komunitas as $komunitass )
-                                    
+                                    @include('components.community-item',['komunitas'=>$komunitass])
+                                
                                 @endforeach
-                                @include('components.community-item',['komunitas'=>$komunitass])
                             </ul>
                             @endif
                         </div>

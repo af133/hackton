@@ -38,4 +38,8 @@ class Kelas extends Model
     public function moduls() {
         return $this->hasMany(Modul::class, 'class_id');
     }
+    public function sesiLive() {
+
+        return $this->hasMany(LiveClas::class, 'kelas_id');
+    }
 }

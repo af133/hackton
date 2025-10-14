@@ -10,6 +10,7 @@ use App\Http\Controllers\LandingpageController;
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\KreditController;
+use App\Http\Controllers\LiveClassController;
 use App\Http\Controllers\DiscussionController;
 
 Route::get('/', [LandingpageController::class, 'index'])->name('landing');
@@ -37,6 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/kelas', [CourseController::class, 'show'])->name('kelas.show');
     Route::get('/kelas/detail/{kelasId}', [CourseController::class,'showkelas'])->name('kelas.detail');
     Route::post('kelas/{id}/toggle-status', [CourseController::class, 'toggleStatus'])->name('kelas.toggleStatus');
+    Route::post('kelas/modul/liveclass',[CourseController::class,'liveClassStore'])->name('kelas.live.store');
+    Route::get('/live/{room}/{kelasId}', [LiveClassController::class, 'show'])->name('live.show');
 
     Route::get('/kelas/create', [CourseController::class,'showcreate'])->name('kelas.create');
     Route::post('/kelas/create', [CourseController::class,'store'])->name('kelas.store');

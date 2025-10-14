@@ -103,15 +103,46 @@
                                     <label class="block text-sm font-medium text-gray-700">Tingkat Kesulitan</label>
                                     <fieldset class="mt-2">
                                         <div class="space-y-2">
-                                            <div class="flex items-center"><input id="level-beginner" name="level" type="radio" checked class="h-4 w-4 border-gray-300 text-primary focus:ring-primary"><label for="level-beginner" class="ml-3 block text-sm text-gray-800">Pemula</label></div>
-                                            <div class="flex items-center"><input id="level-intermediate" name="level" type="radio" class="h-4 w-4 border-gray-300 text-primary focus:ring-primary"><label for="level-intermediate" class="ml-3 block text-sm text-gray-800">Menengah</label></div>
-                                            <div class="flex items-center"><input id="level-advanced" name="level" type="radio" class="h-4 w-4 border-gray-300 text-primary focus:ring-primary"><label for="level-advanced" class="ml-3 block text-sm text-gray-800">Lanjutan</label></div>
+                                            <div class="flex items-center">
+                                                <input 
+                                                    id="level-beginner" 
+                                                    name="level" 
+                                                    type="radio" 
+                                                    value="Pemula" 
+                                                    checked 
+                                                    class="h-4 w-4 border-gray-300 text-primary focus:ring-primary">
+                                                <label for="level-beginner" class="ml-3 block text-sm text-gray-800">Pemula</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input 
+                                                    id="level-intermediate" 
+                                                    name="level" 
+                                                    type="radio" 
+                                                    value="Menengah" 
+                                                    class="h-4 w-4 border-gray-300 text-primary focus:ring-primary">
+                                                <label for="level-intermediate" class="ml-3 block text-sm text-gray-800">Menengah</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input 
+                                                    id="level-advanced" 
+                                                    name="level" 
+                                                    type="radio" 
+                                                    value="Lanjutan" 
+                                                    class="h-4 w-4 border-gray-300 text-primary focus:ring-primary">
+                                                <label for="level-advanced" class="ml-3 block text-sm text-gray-800">Lanjutan</label>
+                                            </div>
                                         </div>
                                     </fieldset>
                                 </div>
+
                                 <div class="mt-6">
                                     <label for="credit" class="block text-sm font-medium text-gray-700">Harga (Skill Kredit)</label>
-                                    <input type="number" id="credit" name="credit" value="50" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm">
+                                    <input 
+                                        type="number" 
+                                        id="credit" 
+                                        name="credit" 
+                                        value="50" 
+                                        class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm">
                                 </div>
                             </div>
 
@@ -126,10 +157,18 @@
                                         </span>
                                     </template>
                                 </div>
-                                <input type="text" x-model="newTag" @keydown.enter.prevent="if (newTag.trim()) tags.push(newTag.trim()); newTag = ''" placeholder="Tambah tag..." class="w-full rounded-lg border-gray-300 shadow-sm sm:text-sm focus:border-primary focus:ring-primary">
+                                <input 
+                                    type="text" 
+                                    x-model="newTag" 
+                                    @keydown.enter.prevent="if (newTag.trim()) tags.push(newTag.trim()); newTag = ''" 
+                                    placeholder="Tambah tag..." 
+                                    class="w-full rounded-lg border-gray-300 shadow-sm sm:text-sm focus:border-primary focus:ring-primary">
+
+                                {{-- Hidden input agar tags dikirim sebagai JSON --}}
                                 <input type="hidden" name="tags" :value="JSON.stringify(tags)">
                             </div>
                         </div>
+
 
                     </div>
                 </form>
