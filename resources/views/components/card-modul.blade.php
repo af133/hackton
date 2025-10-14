@@ -6,7 +6,7 @@
     <div class="p-5">
         <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{$kelas->judul_kelas}}</h3>
         <p class="text-sm text-gray-500 ">{{ $nama }}</p>
-       
+
         <p class="text-2xl font-extrabold text-gray-800 dark:text-white">
                                 {{$rating==0?0: number_format($rating , 1) }}
         </p>
@@ -42,14 +42,13 @@
             @endfor
         </div>
         <div class="flex items-center justify-between mt-4">
-            <a href="{{ route('kelas.detail',['kelasId'=>$kelas->id]) }}">
-
-                <button class="px-6 py-2.5 font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors">Lanjutkan Sesi</button>
+            <a href="{{ route('kelas.detail', $kelas->id) }}" class="px-6 py-2.5 font-semibold text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors">
+                Lanjutkan Sesi
             </a>
                 <div class="flex items-center gap-x-2 text-gray-400">
                 <button class="w-10 h-10 hover:text-pink-500 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"><i class="ri-heart-line"></i></button>
-                <button 
-                    onclick="shareToWhatsApp()" 
+                <button
+                    onclick="shareToWhatsApp()"
                     class="w-10 h-10 hover:text-indigo-500 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                     <i class="ri-share-line"></i>
                 </button>
@@ -65,7 +64,7 @@ function shareToWhatsApp() {
     const message = encodeURIComponent("Hai! Cek link keren ini:");
     const url = encodeURIComponent(window.location.href); // ambil link halaman saat ini
     const waLink = `https://wa.me/?text=${message}%20${url}`;
-    
+
     // buka WhatsApp
     window.open(waLink, '_blank');
 }

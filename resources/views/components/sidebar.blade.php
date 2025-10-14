@@ -33,7 +33,7 @@
             <i class="ri-group-line mr-3 text-lg"></i>
             Sosial
         </a>
-        <a href="{{ route('skill-credit') }}" {{-- Ganti href dengan route yang sesuai, misal: {{ route('skill-credit') }} --}}
+        <a href="{{ route('skill-credit') }}"
            @class([
                'flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors',
                'bg-primary text-white shadow-sm' => request()->routeIs('skill-credit*'),
@@ -44,7 +44,6 @@
         </a>
     </nav>
 
-    {{-- Upgrade Card --}}
     <div class="px-6 py-4">
         <div class="p-4 text-center bg-gray-100 dark:bg-gray-800 rounded-lg">
             <p class="text-sm text-gray-700 dark:text-gray-300">Upgrade ke Premium untuk fasilitas lebih lengkap</p>

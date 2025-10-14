@@ -3,9 +3,11 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -22,8 +24,13 @@ class User extends Authenticatable
         'email',
         'password',
         'no_hp',
-        'koin'=>0,
         'status_id',
+        'description',
+        'profile_photo_path',
+        'cv_path',
+        'portfolio_path',
+        'instagram_url',
+        'linkedin_url',
     ];
 
     /**
@@ -54,7 +61,7 @@ class User extends Authenticatable
     }
     public function kelas()
     {
-        return $this->hasMany(kelas::class, 'dibuat_oleh'); 
+        return $this->hasMany(Kelas::class, 'dibuat_oleh');
     }
 
     public function pembelians()
@@ -79,27 +86,53 @@ class User extends Authenticatable
     }
 
     public function detailPembelians()
-{
-    return $this->hasManyThrough(
-        detailPembelian::class,
-        Pembelian::class,
-        'user_id',        
-        'pembelian_id',  
-        'id',            
-        'id'        
-    );
-}
+    {
+        return $this->hasManyThrough(
+            DetailPembelian::class,
+            Pembelian::class,
+            'user_id',
+            'pembelian_id',
+            'id',
+            'id'
+        );
+    }
 
-public function kelasDiikuti()
-{
-    return $this->hasManyThrough(
-        kelas::class,
-        detailPembelian::class,
-        'pembelian_id',   
-        'id',           
-        'id',            
-        'kelas_id' 
-    );
-}
+    public function kelasDiikuti()
+    {
+        return $this->hasManyThrough(
+            Kelas::class,
+            DetailPembelian::class,
+            'pembelian_id',
+            'id',
+            'id',
+            'kelas_id'
+        );
+    }
+    public function experiences(): HasMany
+    {
+        return $this->hasMany(Experience::class);
+    }
+
+    public function skills(): HasMany
+    {
+        return $this->hasMany(Skill::class);
+    }
+
+    public function getProfilePhotoUrlAttribute()
+    {
+        return $this->profile_photo_path
+            ? Storage::disk('cloudinary')->url($this->profile_photo_path)
+            : 'https://i.pravatar.cc/300';
+    }
+
+    public function getCvUrlAttribute()
+    {
+        return $this->cv_path ?: '#';
+    }
+
+    public function getPortfolioUrlAttribute()
+    {
+        return $this->portfolio_path ?: '#';
+    }
 
 }

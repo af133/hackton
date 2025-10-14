@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class pembelian extends Model
+class Pembelian extends Model
 {
     public $timestamps = false;
     protected $table = 'pembelians';
@@ -18,6 +18,6 @@ class pembelian extends Model
     }
     public function detailPembelians()
     {
-        return $this->hasMany(detailPembelian::class, 'pembelian_id');
+        return $this->hasMany(DetailPembelian::class, 'pembelian_id');
     }
 }

@@ -1,13 +1,5 @@
-{{--
-======================================================================
-MOBILE BOTTOM NAVIGATION BAR
-- Tampil hanya di layar kecil (md:hidden)
-- Disesuaikan agar sinkron dengan route sidebar
-======================================================================
---}}
 <nav class="md:hidden fixed bottom-0 z-20 inset-x-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-t border-gray-200 dark:border-gray-800 flex justify-around pb-1">
 
-    {{-- Route: dashboard --}}
     <a href="{{ route('dashboard') }}"
        @class([
             'flex flex-col items-center justify-center p-3 w-full transition-colors',
