@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class detailPembelian extends Model
+class DetailPembelian extends Model
 {
     public $timestamps = false;
     protected $table = 'detail_pembelians';

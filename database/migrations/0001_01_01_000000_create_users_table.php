@@ -18,9 +18,15 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('no_hp')->nullable();
+            $table->text('description')->nullable();
+            $table->string('profile_photo_path')->nullable();
+            $table->string('cv_path')->nullable();
+            $table->string('portfolio_path')->nullable();
+            $table->string('instagram_url')->nullable();
+            $table->string('linkedin_url')->nullable(); 
             $table->integer('koin')->default(0);
-             $table->unsignedBigInteger('status_id')->default(2);
-            $table->foreign('status_id')->references('id')->on('statuss')->onDelete('cascade')  ;
+            $table->unsignedBigInteger('status_id')->default(2);
+            $table->foreign('status_id')->references('id')->on('statuss')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });

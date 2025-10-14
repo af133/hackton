@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    
+
     public function index()
     {
         $komunitas= auth()->user()->communities()->with('messages.user','users')->get();
@@ -25,5 +25,5 @@ class DashboardController extends Controller
 
         return view('dashboard.index', compact('allLiveClasses','kelas','ikutKelas','komunitas','rating'));
     }
-     
+
 }

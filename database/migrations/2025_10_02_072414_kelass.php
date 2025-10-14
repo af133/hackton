@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('judul_kelas');
             $table->string('deskripsi');
-            $table->string('kategori'); // ganti dari integer ke string jika pakai nama kategori
-            $table->string('path_gambar')->default('https://www.quipper.com/id/blog/wp-content/uploads/2023/05/Ketahui-5-Jenis-Media-Pembelajaran-Berbasis-Teknologi-dan-Cara-Memilih-yang-Tepat.webp');
+            $table->string('kategori');
+            $table->string('path_gambar')->nullable();
             $table->string('level_kelas');
             $table->integer('harga_koin');
             $table->text('tags');
