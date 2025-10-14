@@ -45,4 +45,8 @@ class Kelas extends Model
             ? Storage::disk('cloudinary')->url($this->path_gambar)
             : 'https://i.pravatar.cc/300';
     }
+    public function sesiLive() {
+
+        return $this->hasMany(LiveClas::class, 'kelas_id');
+    }
 }

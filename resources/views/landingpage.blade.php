@@ -109,34 +109,40 @@
                 <a href="#fitur" x-ref="fitur" @click.prevent="setActiveTab('fitur')" @mouseenter="hoveredTab = 'fitur'; updateHighlight('fitur')" :class="(hoveredTab === 'fitur' || (hoveredTab === null && activeTab === 'fitur')) ? 'text-white' : 'text-gray-900'" class="relative z-10 px-4 py-2 text-sm font-medium rounded-full transition-colors duration-300">Fitur Kami</a>
                 <a href="#cara-kerja" x-ref="cara-kerja" @click.prevent="setActiveTab('cara-kerja')" @mouseenter="hoveredTab = 'cara-kerja'; updateHighlight('cara-kerja')" :class="(hoveredTab === 'cara-kerja' || (hoveredTab === null && activeTab === 'cara-kerja')) ? 'text-white' : 'text-gray-900'" class="relative z-10 px-4 py-2 text-sm font-medium rounded-full transition-colors duration-300">Cara kerja</a>
             </div>
-
             @auth
-
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="{{ route('dashboard') }}" class="px-5 py-2 rounded-lg text-sm font-semibold transition-colors"
+                        :class="isScrolled ? 'text-primary hover:bg-primary/10' : 'bg-black/20 border border-white/20 text-white hover:bg-black/30'">
+                        Dashboard
+                    </a>
+                </div>
             @endauth
+            @guest
             {{-- Tombol Login/Register (Desktop) --}}
-            <div class="hidden md:flex items-center space-x-4">
-                {{-- Tombol Log In berubah style saat di-scroll --}}
-                <a href="{{ route('login') }}" class="px-5 py-2 rounded-lg text-sm font-semibold transition-colors"
-                    :class="isScrolled ? 'text-primary hover:bg-primary/10' : 'bg-black/20 border border-white/20 text-white hover:bg-black/30'">
-                    Log In
-                </a>
-                {{-- Tombol Register berubah style saat di-scroll --}}
-                <a href="{{ route('register') }}" class="px-5 py-2 rounded-lg text-sm font-semibold transition-colors"
-                    :class="isScrolled ? 'bg-primary text-white hover:bg-primary-dark' : 'bg-gray-900 text-white hover:bg-gray-800'">
-                    Register
-                </a>
-            </div>
+                <div class="hidden md:flex items-center space-x-4">
+                    {{-- Tombol Log In berubah style saat di-scroll --}}
+                    <a href="{{ route('login') }}" class="px-5 py-2 rounded-lg text-sm font-semibold transition-colors"
+                        :class="isScrolled ? 'text-primary hover:bg-primary/10' : 'bg-black/20 border border-white/20 text-white hover:bg-black/30'">
+                        Log In
+                    </a>
+                    {{-- Tombol Register berubah style saat di-scroll --}}
+                    <a href="{{ route('register') }}" class="px-5 py-2 rounded-lg text-sm font-semibold transition-colors"
+                        :class="isScrolled ? 'bg-primary text-white hover:bg-primary-dark' : 'bg-gray-900 text-white hover:bg-gray-800'">
+                        Register
+                    </a>
+                </div>
 
-            {{-- Tombol Hamburger (Mobile) --}}
-            <div class="md:hidden">
-                <button @click="open = !open" class="focus-outline-none p-2 rounded-full transition-colors"
-                        :class="isScrolled ? 'text-gray-800 dark:text-gray-200 bg-gray-100 dark:bg-gray-700' : 'text-white bg-black/20'">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path :class="{'hidden': open, 'inline-flex': !open }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                        <path :class="{'hidden': !open, 'inline-flex': open }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
+                {{-- Tombol Hamburger (Mobile) --}}
+                <div class="md:hidden">
+                    <button @click="open = !open" class="focus-outline-none p-2 rounded-full transition-colors"
+                            :class="isScrolled ? 'text-gray-800 dark:text-gray-200 bg-gray-100 dark:bg-gray-700' : 'text-white bg-black/20'">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path :class="{'hidden': open, 'inline-flex': !open }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                            <path :class="{'hidden': !open, 'inline-flex': open }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            @endguest
         </div>
 
         {{-- Menu Mobile Dropdown --}}
@@ -145,8 +151,14 @@
             <a href="#fitur" @click="open = false; setActiveTab('fitur')" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Fitur Kami</a>
             <a href="#cara-kerja" @click="open = false; setActiveTab('cara-kerja')" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Cara kerja</a>
             <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                <a href="{{ route('login') }}" class="block w-full text-center px-5 py-2 border border-primary text-primary rounded-lg text-sm font-semibold hover:bg-primary/10 dark:hover:bg-gray-700">Log In</a>
-                <a href="{{ route('register') }}" class="block w-full text-center mt-2 px-5 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primary-dark">Register</a>
+                @auth
+                    <a href="{{ route('dashboard') }}" class="block w-full text-center px-5 py-2 border border-primary text-primary rounded-lg text-sm font-semibold hover:bg-primary/10 dark:hover:bg-gray-700">Dashboard</a>
+                    
+                @endauth
+                @guest
+                    <a href="{{ route('login') }}" class="block w-full text-center px-5 py-2 border border-primary text-primary rounded-lg text-sm font-semibold hover:bg-primary/10 dark:hover:bg-gray-700">Log In</a>
+                    <a href="{{ route('register') }}" class="block w-full text-center mt-2 px-5 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primary-dark">Register</a>
+                @endguest
             </div>
         </div>
     </nav>

@@ -4,12 +4,35 @@ namespace App\Http\Controllers;
 
 use App\Models\detailPembelian;
 use App\Models\pembelian;
+use App\Models\Modul;
+use App\Models\LiveClas;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Kelas;
 
 class CourseController extends Controller
 {
+    public function liveClassStore(Request $request){
+         $request->validate([
+        'kelas_id' => 'required|exists:kelass,id',
+        'judul' => 'required|string|max:255',
+        'tanggal' => 'required|date',
+        'waktu_mulai' => 'required|date_format:H:i',
+        'waktu_selesai' => 'required|date_format:H:i|after:waktu_mulai',
+        'zona_waktu' => 'required|string|max:10',
+    ]);
+
+    LiveClas::create([
+        'kelas_id' => $request->kelas_id,
+        'judul' => $request->judul,
+        'tanggal' => $request->tanggal,
+        'waktu_mulai' => $request->waktu_mulai,
+        'waktu_selesai' => $request->waktu_selesai,
+        'zona_waktu' => $request->zona_waktu,
+    ]);
+
+    return redirect()->back()->with('success', 'Live class berhasil ditambahkan!');
+    }
     public function liveClass()
     {
         return view('kelas.live');
@@ -97,12 +120,13 @@ class CourseController extends Controller
         $q->where('user_id', auth()->id());
         })->where('kelas_id', $kelasId)->first();
         $sudahBeli = false;
+        $sesiLive = $kelas->sesiLive()->orderBy('tanggal', 'desc')->get();
         if($pembelian || $kelas->dibuat_oleh == auth()->id())
         {
             $sudahBeli = true;
         }
 
-        return view('kelas.detail', compact('kelas', 'lessons','moduls' , 'pemilik', 'sudahBeli'));
+        return view('kelas.detail', compact('kelas', 'lessons','moduls' , 'pemilik', 'sudahBeli','sesiLive'));
     }
 
     public function toggleStatus($id)

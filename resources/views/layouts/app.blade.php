@@ -16,9 +16,9 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900 transition-colors duration-300">
+<body class="bg-gray-50 text-gray-900 transition-colors duration-300 ">
 
-    <main class="min-h-screen">
+    <main class="min-h-screen ">
         @yield('content')
     </main>
 

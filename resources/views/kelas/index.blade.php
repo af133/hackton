@@ -72,8 +72,13 @@
                                         <div class="mt-3 flex justify-between items-center">
                                             <h3 class="text-lg font-bold text-gray-900 truncate">{{ $kelas->judul_kelas }}</h3>
                                             <span class="text-sm font-semibold px-2 py-1 rounded
-                                                {{ $kelas->is_draft ? 'bg-gray-200 text-gray-800' : 'bg-green-100 text-green-800' }}">
-                                                {{ $kelas->is_draft ? 'Draft' : 'Publish' }}
+                                                {{
+                                                $kelas->level == 'Pemula' ? 'bg-blue-100 text-blue-800' :
+                                                ($kelas->level == 'Menengah' ? 'bg-yellow-100 text-yellow-800' :
+                                                ($kelas->level == 'Lanjutan' ? 'bg-green-100 text-green-800' :
+                                                'bg-gray-200 text-gray-800'))
+                                                }}">
+                                                {{ $kelas->level_kelas }}
                                             </span>
                                         </div>
                                         <div class="mt-3 flex justify-between text-sm text-gray-600 border-t pt-3">
