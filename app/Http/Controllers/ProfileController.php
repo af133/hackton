@@ -31,7 +31,7 @@ class ProfileController extends Controller
             'description' => 'nullable|string',
             'profile_photo' => 'nullable|image|max:2048',
             'cv_path' => 'nullable|url',
-            'portfolio_path' => 'nullable|url', 
+            'portfolio_path' => 'nullable|url',
             'instagram_url' => 'nullable|url',
             'linkedin_url' => 'nullable|url',
         ]);
