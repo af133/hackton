@@ -198,10 +198,8 @@ class CourseController extends Controller
         if ($request->hasFile('thumbnail')) {
             $path = $request->file('thumbnail')->store('thumbnail', 'cloudinary');
             $kelas->path_gambar = $path;
-        } else {
-            $kelas->path_gambar = 'default-thumbnail.jpg';
         }
-
+        
         $kelas->save();
 
         return redirect()->route('kelas.show')->with('success', 'Kelas berhasil disimpan!');
