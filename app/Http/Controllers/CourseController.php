@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\detailPembelian;
-use App\Models\pembelian;
+use App\Models\DetailPembelian;
+use App\Models\Pembelian;
 use App\Models\Modul;
 use App\Models\LiveClas;
 use App\Models\User;
@@ -116,7 +116,7 @@ class CourseController extends Controller
         $pemilik = User::find($kelas->dibuat_oleh);
         $moduls = $kelas->moduls()->orderBy('id')->get();
         $lessons = $moduls->flatMap->lessons;
-        $pembelian = detailPembelian::whereHas('pembelian', function ($q) {
+        $pembelian = DetailPembelian::whereHas('pembelian', function ($q) {
         $q->where('user_id', auth()->id());
         })->where('kelas_id', $kelasId)->first();
         $sudahBeli = false;
@@ -159,7 +159,7 @@ class CourseController extends Controller
             'kelas_id' => $kelas->id,
         ]);
 
-        detailPembelian::create([
+        DetailPembelian::create([
             'pembelian_id' => $pembelian->id,
             'kelas_id' => $kelas->id,
             'tanggal_pembelian' => now()->toDateString(),
