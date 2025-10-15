@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DetailPembelian;
-use App\Models\Pembelian;
+use App\Models\User;
+use App\Models\Kelas;
 use App\Models\Modul;
 use App\Models\LiveClas;
-use App\Models\User;
+use App\Models\Pembelian;
 use Illuminate\Http\Request;
-use App\Models\Kelas;
+use App\Events\CoursePurchased;
+use App\Models\DetailPembelian;
 
 class CourseController extends Controller
 {
@@ -182,6 +183,7 @@ class CourseController extends Controller
             'tanggal_pembelian' => now()->toDateString(),
             'rating'=>0
         ]);
+        CoursePurchased::dispatch($user, $kelas);
 
         return redirect()->route('kelas.show', $kelas->id)->with('success', 'Kelas berhasil dibeli! 🎉');
     }

@@ -18,13 +18,12 @@ class UserWithKelasAndBadgesSeeder extends Seeder
     public function run(): void
     {
          DB::transaction(function () {
-            // --- 1. MEMBUAT USER MENTOR ---
             $mentor = User::updateOrCreate(
                 ['email' => 'aisyah.mentor@skillswap.com'],
                 [
-                    'name' => 'Aisyah Farah (Mentor)',
-                    'password' => Hash::make('password'), // Ganti dengan password yang aman
-                    'status_id' => 1, // Sesuaikan dengan status ID untuk mentor
+                    'name' => 'Aisyah Farah',
+                    'password' => Hash::make('password'),
+                    'status_id' => 1,
                     'description' => 'Seorang UI/UX Designer berpengalaman dengan passion untuk mengajar dan berbagi ilmu. Telah bekerja di industri selama lebih dari 5 tahun.',
                     'no_hp' => '081234567890',
                     'instagram_url' => 'https://instagram.com/aisyah',
@@ -32,7 +31,6 @@ class UserWithKelasAndBadgesSeeder extends Seeder
                 ]
             );
 
-            // --- 2. MEMBUAT KELAS UNTUK MENTOR TERSEBUT ---
             $kelasData = [
                 [
                     'judul_kelas' => 'Pengenalan UI/UX Design untuk Pemula',
@@ -59,16 +57,12 @@ class UserWithKelasAndBadgesSeeder extends Seeder
             ];
 
             foreach ($kelasData as $data) {
-                // Membuat kelas dan langsung menghubungkannya dengan user mentor
                 $mentor->kelas()->create($data);
             }
 
-            // --- 3. MEMBERIKAN BADGE KEPADA MENTOR ---
-            // Pastikan BadgeSeeder sudah dijalankan sebelumnya!
             $badges = Badge::whereIn('key', ['fast-learner', 'top-mentor', 'master-teacher'])->get()->keyBy('key');
 
             if ($badges->isNotEmpty()) {
-                // Badge 'Fast Learner' -> Sudah didapatkan (unlocked)
                 if (isset($badges['fast-learner'])) {
                     $mentor->badges()->attach($badges['fast-learner']->id, [
                         'unlocked_at' => Carbon::now(),
@@ -76,17 +70,15 @@ class UserWithKelasAndBadgesSeeder extends Seeder
                     ]);
                 }
 
-                // Badge 'Top Mentor' -> Dalam proses (in-progress)
                 if (isset($badges['top-mentor'])) {
                     $mentor->badges()->attach($badges['top-mentor']->id, [
-                        'progress' => 60 // Progress 60%
+                        'progress' => 60
                     ]);
                 }
 
-                // Badge 'Master Teacher' -> Dalam proses (in-progress)
                 if (isset($badges['master-teacher'])) {
                     $mentor->badges()->attach($badges['master-teacher']->id, [
-                        'progress' => 40 // Sudah menyelesaikan 2/5 kelas
+                        'progress' => 40 
                     ]);
                 }
             }

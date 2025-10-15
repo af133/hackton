@@ -36,73 +36,78 @@
                 <div class="relative w-full rounded-2xl shadow-lg overflow-hidden mb-8">
                     <img src="{{ $kelas->kelas_thumbnail_url }}" class="absolute inset-0 w-full h-full object-cover" alt="AI Banner">
                     <div class="absolute inset-0 bg-gradient-to-t from-purple-800 to-indigo-600 opacity-80"></div>
+                    {{-- KODE BARU (RAPi) --}}
                     <div class="relative p-8">
                         <div class="mb-12">
                             <p class="text-indigo-200 font-semibold">{{ $kelas->level_kelas }}</p>
                             <h1 class="text-4xl font-bold text-white tracking-tight mt-1">{{ $kelas->judul_kelas }}</h1>
                             <p class="text-lg text-indigo-100 mt-2">Oleh {{ $pemilik?->name ?? 'Pengguna Tidak Ditemukan' }}</p>
                         </div>
-                        @php
-                            $firstModul = $moduls->first()?->id;
-                            $firstLesson = $lessons->first()?->id;
-                        @endphp
-                        @if($firstModul && $firstLesson)
-                            @if ( $sudahBeli == false )
-                                <div x-data="{ openConfirm: false }">
-                                        <button
-                                            @click="openConfirm = true"
-                                            class="px-6 py-3 font-semibold text-indigo-700 bg-white hover:bg-gray-100 rounded-lg">
-                                            Mulai Belajar (Beli Kelas Dulu {{ $kelas->harga_koin }} Koin)
-                                        </button>
 
-                                        <!-- Modal Konfirmasi -->
-                                        <div x-show="openConfirm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                                            <div class="bg-white rounded-xl shadow-lg p-6 w-96">
-                                                <h2 class="text-xl font-bold mb-4">Konfirmasi Pembelian</h2>
-                                                <p class="text-gray-600 mb-6">Apakah Anda yakin ingin membeli kelas <b>{{ $kelas->judul_kelas }}</b>?</p>
-                                                <div class="flex justify-end gap-4">
-                                                    <button @click="openConfirm = false" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">Batal</button>
+                        {{-- 1. Tambahkan div pembungkus dengan flexbox vertikal --}}
+                        <div class="flex flex-col items-start space-y-6">
+                            @php
+                                $firstModul = $moduls->first()?->id;
+                                $firstLesson = $lessons->first()?->id;
+                            @endphp
 
-                                                    <form method="POST" action="{{ route('kelas.beli', $kelas->id) }}">
-                                                        @csrf
-                                                        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
-                                                            Ya, Beli
-                                                        </button>
-                                                    </form>
+                            {{-- 2. Pindahkan blok tombol aksi ke dalam div ini --}}
+                            <div>
+                                @if($firstModul && $firstLesson)
+                                    @if ( $sudahBeli == false )
+                                        <div x-data="{ openConfirm: false }">
+                                            <button
+                                                @click="openConfirm = true"
+                                                class="px-6 py-3 font-semibold text-indigo-700 bg-white hover:bg-gray-100 rounded-lg">
+                                                Mulai Belajar (Beli Kelas Dulu {{ $kelas->harga_koin }} Koin)
+                                            </button>
+
+                                            <div x-show="openConfirm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                                                <div class="bg-white rounded-xl shadow-lg p-6 w-96">
+                                                    <h2 class="text-xl font-bold mb-4">Konfirmasi Pembelian</h2>
+                                                    <p class="text-gray-600 mb-6">Apakah Anda yakin ingin membeli kelas <b>{{ $kelas->judul_kelas }}</b>?</p>
+                                                    <div class="flex justify-end gap-4">
+                                                        <button @click="openConfirm = false" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">Batal</button>
+                                                        <form method="POST" action="{{ route('kelas.beli', $kelas->id) }}">
+                                                            @csrf
+                                                            <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                                                                Ya, Beli
+                                                            </button>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            @else
-                                <a href="{{ route('lesson.show', [$kelas->id,$firstModul, $firstLesson]) }}"
-                                class="px-6 py-3 font-semibold text-indigo-700 bg-white hover:bg-gray-100 rounded-lg">
-                                    Mulai Belajar
-                                </a>
+                                    @else
+                                        <a href="{{ route('lesson.show', [$kelas->id, $firstModul, $firstLesson]) }}"
+                                        class="px-6 py-3 font-semibold text-indigo-700 bg-white hover:bg-gray-100 rounded-lg">
+                                            Mulai Belajar
+                                        </a>
+                                    @endif
+                                @else
+                                    <button class="px-6 py-3 font-semibold text-gray-400 bg-gray-200 cursor-not-allowed rounded-lg">
+                                        Belum ada materi
+                                    </button>
+                                @endif
+                            </div>
+
+                            {{-- 3. Pindahkan blok form rating ke dalam div ini --}}
+                            @if ($sudahBeli && $kelas->dibuat_oleh != Auth::id())
+                                {{-- Rating Bintang --}}
+                                <form action="{{ route('kelas.beriRating', $kelas->id) }}" method="POST" class="flex items-center space-x-2">
+                                    @csrf
+                                    @foreach([1,2,3,4,5] as $star)
+                                        <button
+                                            type="submit"
+                                            name="rating"
+                                            value="{{ $star }}"
+                                            class="text-4xl focus:outline-none transition-all duration-300 {{ ($userRating ?? 0) >= $star ? 'text-yellow-400 scale-110 drop-shadow-md' : 'text-gray-300 hover:text-yellow-200 hover:scale-105' }}">
+                                            ★
+                                        </button>
+                                    @endforeach
+                                </form>
                             @endif
-                        @else
-                            <button class="px-6 py-3 font-semibold text-gray-400 bg-gray-200 cursor-not-allowed rounded-lg">
-                                Belum ada materi
-                            </button>
-                        @endif
-                        @if ($sudahBeli && $kelas->dibuat_oleh != Auth::id())
-                            {{-- Rating Bintang --}}
-                           <form action="{{ route('kelas.beriRating', $kelas->id) }}" method="POST" class="flex items-center space-x-2 mt-6">
-                            @csrf
-                            @foreach([1,2,3,4,5] as $star)
-                                <button
-                                    type="submit"
-                                    name="rating"
-                                    value="{{ $star }}"
-                                    class="text-4xl focus:outline-none transition-all duration-300
-                                        {{ ($userRating ?? 0) >= $star ? 'text-yellow-400 scale-110 drop-shadow-md' : 'text-gray-300 hover:text-yellow-200 hover:scale-105' }}">
-                                    ★
-                                </button>
-                            @endforeach
-                        </form>
-
-
-                        @endif
+                        </div>
                     </div>
                 </div>
 
@@ -115,7 +120,17 @@
 
                     {{-- Kolom Kiri: Daftar Modul --}}
                     <div class="lg:col-span-2">
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-5">Materi Pelajaran</h2>
+                        <div class="flex justify-between items-center mb-5">
+                            <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200">Materi Pelajaran</h2>
+                            {{-- 2. Tambahkan tombol yang hanya muncul untuk pemilik kelas --}}
+                            @if ($kelas->dibuat_oleh == Auth::id())
+                                <a href="{{ route('modul.create', ['kelasId' => $kelas->id]) }}"
+                                class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-primary hover:bg-primary/90 rounded-lg shadow-sm">
+                                    <i class="ri-add-line"></i>
+                                    <span>Tambah Materi</span>
+                                </a>
+                            @endif
+                        </div>
                         @php
                             $urutan=0
                         @endphp

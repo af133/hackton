@@ -73,13 +73,19 @@ class BadgeSeeder extends Seeder
                 'icon_path' => 'images/generalbadge/GenerousSharer.png',
                 'type' => 'general',
             ],
+            [
+                'key' => 'welcome-aboard',
+                'name' => 'Welcome Aboard',
+                'description' => 'Diberikan kepada pengguna yang berhasil melakukan pembelian kelas pertama mereka.',
+                'icon_path' => 'images/badge/WelcomeAboard.png',
+                'type' => 'individual',
+            ],
         ];
 
         // Looping untuk memasukkan data
         foreach ($badges as $badgeData) {
-            // Menggunakan updateOrCreate untuk menghindari duplikasi jika seeder dijalankan berkali-kali
             Badge::updateOrCreate(
-                ['key' => $badgeData['key']], // Cek berdasarkan 'key'
+                ['key' => $badgeData['key']],
                 $badgeData // Data yang akan di-insert atau di-update
             );
         }

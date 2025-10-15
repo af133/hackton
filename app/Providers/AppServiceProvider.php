@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\CoursePurchased;
+use App\Listeners\AwardAchievementsListener;
+use App\Services\AchievementService;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,6 +28,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Event::listen(
+            CoursePurchased::class,
+            AwardAchievementsListener::class
+        );
     }
 }
