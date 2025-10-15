@@ -51,7 +51,7 @@ class CourseController extends Controller
             ->latest()
             ->get();
 
-        $kelasDiikuti = Kelas::whereHas('DetailPembelians', function ($q) use ($userId) {
+        $kelasDiikuti = Kelas::whereHas('detailPembelians.pembelian', function ($q) use ($userId) {
                 $q->where('user_id', $userId);
             })
             ->when($search, function ($query, $search) {

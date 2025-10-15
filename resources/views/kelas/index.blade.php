@@ -66,37 +66,7 @@
                         <div x-show="activeTab === 'all'" x-transition>
                             <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                                 @forelse ($semuaKelas as $kelas)
-                                <div class="bg-white rounded-2xl shadow-md overflow-hidden transform hover:-translate-y-1 transition-transform duration-300">
-                                    <div class="h-40 bg-cover bg-center" style="background-image: url('{{ $kelas->kelas_thumbnail_url  }}');"></div>
-                                    <div class="p-5">
-                                        <div class="mt-3 flex justify-between items-center">
-                                            <h3 class="text-lg font-bold text-gray-900 truncate">{{ $kelas->judul_kelas }}</h3>
-                                            <span class="text-sm font-semibold px-2 py-1 rounded
-                                                {{
-                                                $kelas->level == 'Pemula' ? 'bg-blue-100 text-blue-800' :
-                                                ($kelas->level == 'Menengah' ? 'bg-yellow-100 text-yellow-800' :
-                                                ($kelas->level == 'Lanjutan' ? 'bg-green-100 text-green-800' :
-                                                'bg-gray-200 text-gray-800'))
-                                                }}">
-                                                {{ $kelas->level_kelas }}
-                                            </span>
-                                        </div>
-                                        <div class="mt-3 flex justify-between text-sm text-gray-600 border-t pt-3">
-                                            <div class="flex items-center gap-2">
-                                                <i class="ri-group-line text-indigo-500"></i>
-                                                <span>{{ $kelas->detailPembelians->count() }} Murid</span>
-                                            </div>
-                                            <div class="flex items-center gap-2">
-                                                <i class="ri-star-s-fill text-yellow-400"></i>
-                                                <span>{{ $kelas->rating }} ({{ $kelas->detailPembelians->count() }} review)</span>
-                                            </div>
-                                        </div>
-                                        <a href="{{ route('kelas.detail', $kelas->id) }}"
-                                           class="mt-4 block w-full px-5 py-2.5 text-sm font-semibold text-primary-dark bg-indigo-100 hover:bg-indigo-200 rounded-lg text-center">
-                                            Lihat Kelas
-                                        </a>
-                                    </div>
-                                </div>
+                                    @include('components.kelas-card', ['kelas' => $kelas, 'tipe' => 'jelajah'])
                                 @empty
                                     <p class="text-gray-600">Belum ada kelas tersedia.</p>
                                 @endforelse
@@ -106,22 +76,7 @@
                         <div x-show="activeTab === 'diikuti'" x-transition>
                             <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                                 @forelse ($kelasDiikuti as $kelas)
-                                <div class="bg-white rounded-2xl shadow-md overflow-hidden transform hover:-translate-y-1 transition-transform duration-300">
-                                    <div class="h-40 bg-cover bg-center" style="background-image: url('{{ $kelas->kelas_thumbnail_url }}');"></div>
-                                    <div class="p-5">
-                                        <h3 class="text-lg font-bold text-gray-900 truncate">{{ $kelas->judul_kelas }}</h3>
-                                        <div class="mt-3 flex justify-between text-sm text-gray-600 border-t pt-3">
-                                            <div class="flex items-center gap-2">
-                                                <i class="ri-star-s-fill text-yellow-400"></i>
-                                                <span>{{ $kelas->rating }} / 5</span>
-                                            </div>
-                                        </div>
-                                        <a href="{{ route('kelas.show', $kelas->id) }}"
-                                           class="mt-4 block w-full px-5 py-2.5 text-sm font-semibold text-primary-dark bg-indigo-100 hover:bg-indigo-200 rounded-lg text-center">
-                                            Lanjutkan Belajar
-                                        </a>
-                                    </div>
-                                </div>
+                                    @include('components.kelas-card', ['kelas' => $kelas, 'tipe' => 'diikuti'])
                                 @empty
                                     <p class="text-gray-600">Anda belum mengikuti kelas apa pun.</p>
                                 @endforelse
@@ -137,32 +92,7 @@
                             </div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                                 @forelse ($kelasSaya as $kelas)
-                                <div class="bg-white rounded-2xl shadow-md overflow-hidden transform hover:-translate-y-1 transition-transform duration-300">
-                                    <div class="h-40 bg-cover bg-center" style="background-image: url('{{ $kelas->kelas_thumbnail_url }}');"></div>
-                                    <div class="p-5">
-                                        <div class="mt-3 flex justify-between items-center">
-                                            <h3 class="text-lg font-bold text-gray-900 truncate">{{ $kelas->judul_kelas }}</h3>
-                                            <span class="text-sm font-semibold px-2 py-1 rounded
-                                                {{ $kelas->is_draft ? 'bg-gray-200 text-gray-800' : 'bg-green-100 text-green-800' }}">
-                                                {{ $kelas->is_draft ? 'Draft' : 'Publish' }}
-                                            </span>
-                                        </div>
-                                        <div class="mt-3 flex justify-between text-sm text-gray-600 border-t pt-3">
-                                            <div class="flex items-center gap-2">
-                                                <i class="ri-group-line text-indigo-500"></i>
-                                                <span>{{ $kelas->detailPembelians->count() }} Murid</span>
-                                            </div>
-                                            <div class="flex items-center gap-2">
-                                                <i class="ri-star-s-fill text-yellow-400"></i>
-                                                <span>{{ $kelas->rating }} ({{ $kelas->detailPembelians->count() }} review)</span>
-                                            </div>
-                                        </div>
-                                        <a href="{{ route('modul.create',['kelasId'=>$kelas->id]) }}"
-                                           class="mt-4 block w-full px-5 py-2.5 text-sm font-semibold text-primary-dark bg-indigo-100 hover:bg-indigo-200 rounded-lg text-center">
-                                            Kelola Kelas
-                                        </a>
-                                    </div>
-                                </div>
+                                    @include('components.kelas-card', ['kelas' => $kelas, 'tipe' => 'dimiliki'])
                                 @empty
                                     <p class="text-gray-600">Anda belum membuat kelas apa pun.</p>
                                 @endforelse

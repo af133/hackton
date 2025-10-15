@@ -117,24 +117,11 @@
                     <div>
                         <div class="flex justify-between items-center mb-4">
                              <h2 class="text-2xl font-bold text-gray-800">Materi yang diajarkan</h2>
-                             <a href="#" class="text-sm font-semibold text-primary hover:underline">Lihat Semua</a>
+                             <a href="{{ route('kelas.show') }}" class="text-sm font-semibold text-primary hover:underline">Lihat Semua</a>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            @forelse($user->kelas as $kelas)
-                                <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 transform hover:-translate-y-1 transition-all duration-300 hover:shadow-lg">
-                                    <img class="h-48 w-full object-cover" src="{{ $kelas->kelas_thumbnail_url }}" alt="Thumbnail {{ $kelas->judul_kelas }}">
-                                    <div class="p-5">
-                                        <h3 class="text-lg font-bold text-gray-900 truncate">{{ $kelas->judul_kelas }}</h3>
-                                        <p class="text-sm text-gray-500">Oleh {{ $kelas->creator->name }}</p>
-                                        <div class="flex items-center text-yellow-400 mt-1">
-                                           {{-- Logic untuk bintang rating bisa ditambahkan di sini --}}
-                                           <span class="text-gray-600 ml-2 text-sm">({{ $kelas->rating }})</span>
-                                        </div>
-                                        <div class="flex items-center justify-between mt-4">
-                                            <a href="#" class="px-6 py-2.5 font-semibold text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors">Lihat Materi</a>
-                                        </div>
-                                    </div>
-                                </div>
+                            @forelse($kelasDimiliki as $kelas)
+                                @include('components.kelas-card', ['kelas' => $kelas, 'tipe' => 'dimiliki'])
                             @empty
                                 <p class="text-gray-500 col-span-full">Anda belum membuat materi apapun.</p>
                             @endforelse
@@ -145,23 +132,11 @@
                     <div>
                         <div class="flex justify-between items-center mb-4">
                             <h2 class="text-2xl font-bold text-gray-800">Materi yang diikuti</h2>
-                             <a href="#" class="text-sm font-semibold text-primary hover:underline">Lihat Semua</a>
+                             <a href="{{ route('kelas.show') }}" class="text-sm font-semibold text-primary hover:underline">Lihat Semua</a>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            @forelse($user->kelasDiikuti as $kelas)
-                               <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 transform hover:-translate-y-1 transition-all duration-300 hover:shadow-lg">
-                                    <img class="h-48 w-full object-cover" src="{{ $kelas->kelas_thumbnail_url }}" alt="Thumbnail {{ $kelas->judul_kelas }}">
-                                    <div class="p-5">
-                                        <h3 class="text-lg font-bold text-gray-900 truncate">{{ $kelas->judul_kelas }}</h3>
-                                        <p class="text-sm text-gray-500">Oleh {{ $kelas->creator->name }}</p>
-                                        <div class="flex items-center text-yellow-400 mt-1">
-                                            <span class="text-gray-600 ml-2 text-sm">({{ $kelas->rating }})</span>
-                                        </div>
-                                        <div class="flex items-center justify-between mt-4">
-                                            <a href="#" class="px-6 py-2.5 font-semibold text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors">Lanjutkan Sesi</a>
-                                        </div>
-                                    </div>
-                                </div>
+                            @forelse($kelasDiikuti as $kelas)
+                                @include('components.kelas-card', ['kelas' => $kelas, 'tipe' => 'diikuti'])
                             @empty
                                 <p class="text-gray-500 col-span-full">Anda belum mengikuti materi apapun.</p>
                             @endforelse

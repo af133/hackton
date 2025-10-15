@@ -126,16 +126,21 @@
                                 </p>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                                    {{-- UBAH INPUT CV --}}
                                     <div>
                                         <label for="cv_path" class="block text-sm font-medium text-gray-700">Tautan CV</label>
                                         <input type="url" id="cv_path" name="cv_path" value="{{ old('cv_path', $user->cv_path) }}" placeholder="https://..." class="mt-1 block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm sm:text-sm">
+                                        @error('cv_path')
+                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                        @enderror
                                     </div>
 
                                     {{-- UBAH INPUT PORTOFOLIO --}}
                                     <div>
                                         <label for="portfolio_path" class="block text-sm font-medium text-gray-700">Tautan Portofolio</label>
                                         <input type="url" id="portfolio_path" name="portfolio_path" value="{{ old('portfolio_path', $user->portfolio_path) }}" placeholder="https://..." class="mt-1 block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm sm:text-sm">
+                                        @error('cv_path')
+                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                        @enderror
                                     </div>
 
                                 </div>
