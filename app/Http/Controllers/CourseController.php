@@ -47,17 +47,17 @@ class CourseController extends Controller
             ->when($search, function ($query, $search) {
                 $query->where('judul_kelas', 'like', "%{$search}%");
             })
-            ->with(['detailPembelians'])
+            ->with(['DetailPembelians'])
             ->latest()
             ->get();
 
-        $kelasDiikuti = Kelas::whereHas('detailPembelians', function ($q) use ($userId) {
+        $kelasDiikuti = Kelas::whereHas('DetailPembelians', function ($q) use ($userId) {
                 $q->where('user_id', $userId);
             })
             ->when($search, function ($query, $search) {
                 $query->where('judul_kelas', 'like', "%{$search}%");
             })
-            ->with('detailPembelians')
+            ->with('DetailPembelians')
             ->latest()
             ->get();
 
@@ -65,14 +65,14 @@ class CourseController extends Controller
             ->when($search, function ($query, $search) {
                 $query->where('judul_kelas', 'like', "%{$search}%");
             })
-            ->with('detailPembelians')
+            ->with('DetailPembelians')
             ->latest()
             ->get();
 
         return view('kelas.index', compact('semuaKelas', 'kelasDiikuti', 'kelasSaya'));
     }
 
-    public function beriRating(Request $request, $id)
+    public function beriRating(Request $request, Kelas $kelas)
     {
         $request->validate([
             'rating' => 'required|numeric|min:1|max:5'
@@ -80,7 +80,7 @@ class CourseController extends Controller
 
         $userId = auth()->id();
 
-        $detail = DetailPembelian::where('kelas_id', $id)
+        $detail = DetailPembelian::where('kelas_id', $kelas->id)
             ->whereHas('pembelian', function($q) use ($userId) {
                 $q->where('user_id', $userId);
             })
@@ -93,40 +93,57 @@ class CourseController extends Controller
         $detail->rating = $request->rating;
         $detail->save();
 
+        $kelas->updateAverageRating();
+
         return redirect()->back()->with('success', 'Rating berhasil disimpan!');
     }
 
     public function show()
     {
         $semuaKelas = Kelas::where('is_draft', false)->get();
-        $kelasDiikuti = Kelas::whereHas('detailPembelians.pembelian', function ($q) {
+        $kelasDiikuti = Kelas::whereHas('DetailPembelians.pembelian', function ($q) {
             $q->where('user_id', auth()->id());
         })->get();
 
         $kelasSaya = Kelas::where('dibuat_oleh', auth()->id())
-            ->with('detailPembelians')
+            ->with('DetailPembelians')
             ->get();
 
         return view('kelas.index', compact('semuaKelas', 'kelasDiikuti', 'kelasSaya'));
     }
 
-    public function showkelas($kelasId)
+    public function showkelas(Kelas $kelas)
     {
-        $kelas = Kelas::findOrFail($kelasId);
         $pemilik = User::find($kelas->dibuat_oleh);
         $moduls = $kelas->moduls()->orderBy('id')->get();
         $lessons = $moduls->flatMap->lessons;
-        $pembelian = DetailPembelian::whereHas('pembelian', function ($q) {
-        $q->where('user_id', auth()->id());
-        })->where('kelas_id', $kelasId)->first();
-        $sudahBeli = false;
         $sesiLive = $kelas->sesiLive()->orderBy('tanggal', 'desc')->get();
-        if($pembelian || $kelas->dibuat_oleh == auth()->id())
-        {
-            $sudahBeli = true;
+
+        $sudahBeli = false;
+        $userRating = 0;
+
+        if (auth()->check()) {
+            $pembelian = DetailPembelian::whereHas('pembelian', function ($q) {
+                $q->where('user_id', auth()->id());
+            })->where('kelas_id', $kelas->id)->first();
+
+            if ($pembelian || $kelas->dibuat_oleh == auth()->id()) {
+                $sudahBeli = true;
+                if ($pembelian) {
+                    $userRating = $pembelian->rating;
+                }
+            }
         }
 
-        return view('kelas.detail', compact('kelas', 'lessons','moduls' , 'pemilik', 'sudahBeli','sesiLive'));
+        return view('kelas.detail', compact(
+            'kelas',
+            'lessons',
+            'moduls',
+            'pemilik',
+            'sudahBeli',
+            'sesiLive',
+            'userRating'
+        ));
     }
 
     public function toggleStatus($id)

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Cloudinary\Api\Exception\NotFound;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
@@ -36,17 +37,33 @@ class Kelas extends Model
     {
         return $this->hasMany(DetailPembelian::class, 'kelas_id');
     }
+
     public function moduls() {
         return $this->hasMany(Modul::class, 'class_id');
     }
+
     public function getKelasThumbnailUrlAttribute()
     {
-        return $this->path_gambar
-            ? Storage::disk('cloudinary')->url($this->path_gambar)
-            : 'https://i.pravatar.cc/300';
+        if (empty($this->path_gambar)) {
+            return asset('images/default-class-image.png');
+        }
+
+        try {
+            return Storage::disk('cloudinary')->url($this->path_gambar);
+        } catch (NotFound $e) {
+            return asset('images/default-class-image.png');
+        }
     }
     public function sesiLive() {
 
         return $this->hasMany(LiveClas::class, 'kelas_id');
+    }
+
+    public function updateAverageRating()
+    {
+        $average = $this->detailPembelians()->where('rating', '>', 0)->avg('rating');
+
+        $this->rating = round($average, 1) ?? 0;
+        $this->save();
     }
 }

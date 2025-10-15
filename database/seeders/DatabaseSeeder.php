@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
                 StatusSeeder::class,
+                BadgeSeeder::class,
         ]);
         User::factory()->create([
             'name' => 'Test User',

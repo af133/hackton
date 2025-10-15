@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Badge;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -10,7 +11,7 @@ class ProfileController extends Controller
 {
     public function show()
     {
-        $user = Auth::user()->load('skills', 'experiences');
+        $user = Auth::user()->load('skills', 'experiences', 'badges', 'kelas');
         return view('profile.index', compact('user'));
     }
 
@@ -79,6 +80,17 @@ class ProfileController extends Controller
 
     public function mission()
     {
-        return view('profile.mission');
+        $user = Auth::user()->load('badges');
+
+        $allBadges = Badge::all();
+
+        $unlockedBadges = $user->badges()->whereNotNull('unlocked_at')->get();
+        $inProgressBadges = $user->badges()->whereNull('unlocked_at')->where('progress', '>', 0)->get();
+
+        $userBadgeIds = $user->badges->pluck('id');
+
+        $lockedBadges = $allBadges->whereNotIn('id', $userBadgeIds);
+
+        return view('profile.mission', compact('user', 'unlockedBadges', 'inProgressBadges', 'lockedBadges'));
     }
 }
