@@ -16,21 +16,23 @@ class Community extends Model
         'description',
     ];
 
-    // Relasi pembuat komunitas
     public function creator()
     {
         return $this->belongsTo(User::class, 'creator_id');
     }
 
-    // Relasi anggota komunitas
     public function users()
     {
         return $this->belongsToMany(User::class, 'community_user');
     }
 
-    // Relasi pesan komunitas
-    public function messages()
+    public function CommunityUser()
     {
-        return $this->hasMany(CommunityMessage::class);
+        return $this->hasMany(CommunityUser::class);
     }
+    public function live()
+    {
+        return $this->hasMany(LiveCommunity::class, 'komunitas_id');
+    }
+    
 }

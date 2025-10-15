@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\detailPembelian;
 use App\Models\pembelian;
 use App\Models\Modul;
+use App\Models\LiveCommunity;
 use App\Models\LiveClas;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -31,8 +32,28 @@ class CourseController extends Controller
         'zona_waktu' => $request->zona_waktu,
     ]);
 
+    
+
     return redirect()->back()->with('success', 'Live class berhasil ditambahkan!');
     }
+
+    public function liveCommunityStore(Request $request){
+         $request->validate([
+        'komunitas_id' => 'required|exists:communities,id',
+        'judul' => 'required|string|max:255',
+        'tanggal' => 'required|date',
+        'waktu_mulai' => 'required|date_format:H:i',
+        'zona_waktu' => 'required|string|max:10',
+    ]);
+    LiveCommunity::create([
+        'komunitas_id' => $request->komunitas_id,
+        'judul' => $request->judul,
+        'tanggal' => $request->tanggal,
+        'waktu_mulai' => $request->waktu_mulai,
+        'zona_waktu' => $request->zona_waktu,
+    ]);
+    return redirect()->back()->with('success', 'Live class berhasil ditambahkan!');
+}
     public function liveClass()
     {
         return view('kelas.live');
@@ -97,18 +118,27 @@ class CourseController extends Controller
     }
 
     public function show()
-    {
-        $semuaKelas = Kelas::where('is_draft', false)->get();
-        $kelasDiikuti = Kelas::whereHas('detailPembelians.pembelian', function ($q) {
-            $q->where('user_id', auth()->id());
-        })->get();
+{
+    $userId = auth()->id();
 
-        $kelasSaya = Kelas::where('dibuat_oleh', auth()->id())
-            ->with('detailPembelians')
-            ->get();
+    $semuaKelas = Kelas::where('is_draft', false)->get();
 
-        return view('kelas.index', compact('semuaKelas', 'kelasDiikuti', 'kelasSaya'));
-    }
+    $kelasDiikuti = Kelas::whereHas('detailPembelians.pembelian', function ($q) use ($userId) {
+        $q->where('user_id', $userId);
+    })
+        ->select('id', 'judul_kelas', 'kategori', 'dibuat_oleh')
+        ->get();
+
+    $kelasSaya = Kelas::where('dibuat_oleh', $userId)
+        ->with(['detailPembelians' => function ($q) {
+            $q->select('id', 'kelas_id', 'pembelian_id', 'rating');
+        }])
+        ->select('id', 'judul_kelas', 'kategori', 'dibuat_oleh')
+        ->get();
+
+    return view('kelas.index', compact('semuaKelas', 'kelasDiikuti', 'kelasSaya'));
+}
+
 
     public function showkelas($kelasId)
     {

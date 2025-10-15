@@ -194,15 +194,17 @@
                                 <h3 class="font-semibold text-gray-700 dark:text-gray-200">Komunitas</h3>
                                 <a href="{{ route('sosial') }}" class="text-sm font-medium text-primary  hover:underline">Lihat Semua</a>
                             </div>
-                            @if ($komunitas->isEmpty())
+                            @if ($komunitass->isEmpty())
                                 <p class="text-gray-500 dark:text-gray-400 text-center">
                                     Anda belum bergabung dengan komunitas apa pun. Jelajahi dan temukan komunitas yang sesuai dengan minat Anda!
                                 </p>
                             @else
                             <ul class="space-y-2">
                                 {{-- FIX: Perulangan komunitas yang benar --}}
-                                @foreach ($komunitas as $item)
-                                    @include('components.community-item', ['komunitas' => $item])
+                                @foreach ($komunitass as $item)
+                                    <a href="{{  route('sosial.show', ['id' => $item->id])  }}">
+                                        @include('components.community-item', ['komunitas' => $item])
+                                    </a>
                                 @endforeach
                             </ul>
                             @endif
