@@ -45,7 +45,7 @@ class MidtransController extends Controller
             'snap_token' => $snapToken
         ]);
     }
-     public function addCoin(Request $request) {
+    public function addCoin(Request $request) {
     $user = auth()->user();
     $coin = $request->input('coin', 0);
     $user->koin += $coin;

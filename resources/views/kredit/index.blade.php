@@ -9,15 +9,8 @@
     @include('components.sidebar')
 
     <div class="flex-1 flex flex-col overflow-hidden">
-        <header class="md:hidden sticky top-0 z-20 flex items-center justify-between h-20 px-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
-            <button @click="sidebarOpen = true" class="text-gray-500 dark:text-gray-300">
-                <i class="ri-menu-2-line text-2xl"></i>
-            </button>
-            <div class="flex items-center gap-x-3">
-                <span class="font-semibold text-gray-700 dark:text-gray-200 text-sm">{{ auth()->user()->name ?? 'Aisyah Farah' }}</span>
-                <img class="h-9 w-9 rounded-full object-cover" src="{{ auth()->user()->avatar_url ?? 'https://i.pravatar.cc/150?u=aisyahfarah' }}" alt="User avatar">
-            </div>
-        </header>
+            @include('components.header-mobile')
+
 
         <div class="relative flex-1 overflow-y-auto">
             <main class="relative z-10 p-6 md:p-8">
@@ -108,16 +101,10 @@
 
     @include('components.navbar-mobile')
 </div>
-{{-- Tombol Paket 100 Credit --}}
-<button onclick="buyCredit(100)" class="w-full mt-6 bg-primary text-white font-semibold py-3 rounded-lg hover:bg-primary-dark transition-colors">
-    Beli Sekarang
-</button>
-
-<span id="user-coin" class="text-5xl font-bold text-gray-800 dark:text-white">{{ number_format(auth()->user()->koin, 0, ',', '.') }}</span>
 
 <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
 <script>
-function buyCredit(coin){
+function buyCredit(coin) {
     // 1. Ambil Snap Token dari server
     fetch("{{ route('midtrans.create') }}", {
         method: "POST",
@@ -125,31 +112,70 @@ function buyCredit(coin){
             "Content-Type": "application/json",
             "X-CSRF-TOKEN": "{{ csrf_token() }}"
         },
-        body: JSON.stringify({ coin: coin, amount: 1 }) // harga 1 rupiah
+        // Sesuaikan 'amount' dengan harga paket yang sebenarnya
+        // Contoh: jika 100 koin = Rp 10.000
+        body: JSON.stringify({
+            coin: coin,
+            amount: coin * 100 // Rp 10.000
+        })
     })
     .then(res => res.json())
     .then(data => {
-        // 2. Tambah koin user langsung
-        fetch("{{ route('user.add-coin') }}", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": "{{ csrf_token() }}"
-            },
-            body: JSON.stringify({ coin: coin })
-        })
-        .then(r => r.json())
-        .then(updated => {
-            document.getElementById('user-coin').innerText = updated.koin.toLocaleString();
-        });
+        if (data.snap_token) {
+            // 2. Tampilkan popup Midtrans
+            snap.pay(data.snap_token, {
+                // 3. Callback yang dijalankan HANYA JIKA pembayaran SUKSES
+                onSuccess: function(result) {
+                    console.log('Payment successful!', result);
 
-        // 3. Tampilkan popup Midtrans
-        snap.pay(data.snap_token, {
-            onClose: function(){
-                // Reload halaman saat popup ditutup
-                location.reload();
-            }
-        });
+                    // 4. KIRIM PERMINTAAN UNTUK MENAMBAH KOIN SETELAH BERHASIL BAYAR
+                    fetch("{{ route('user.add-coin') }}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                        },
+                        body: JSON.stringify({
+                            coin: coin,
+                            // Anda bisa mengirim detail transaksi jika perlu
+                            midtrans_order_id: result.order_id
+                        })
+                    })
+                    .then(r => r.json())
+                    .then(updated => {
+                        // Perbarui tampilan saldo dan beri notifikasi sukses
+                        document.getElementById('user-coin').innerText = updated.koin.toLocaleString();
+                        alert("Top up berhasil!");
+                        // location.reload(); // Opsional, jika ingin refresh halaman
+                    })
+                    .catch(error => {
+                        console.error('Error updating coin:', error);
+                        alert("Pembayaran berhasil, tetapi terjadi kesalahan saat memperbarui saldo. Hubungi support.");
+                    });
+                },
+                onPending: function(result) {
+                    // Opsional: Handle jika pembayaran pending (misal: transfer bank)
+                    console.log('Payment pending.', result);
+                    alert("Menunggu pembayaran Anda. Saldo akan diperbarui setelah pembayaran dikonfirmasi.");
+                    location.reload();
+                },
+                onError: function(result) {
+                    // Opsional: Handle jika pembayaran gagal
+                    console.error('Payment error!', result);
+                    alert("Pembayaran gagal.");
+                },
+                onClose: function() {
+                    // Opsional: Handle jika popup ditutup sebelum pembayaran selesai
+                    console.log('Popup closed without finishing payment.');
+                }
+            });
+        } else {
+            alert('Gagal membuat transaksi. Silakan coba lagi.');
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching snap token:', error);
+        alert('Terjadi kesalahan. Tidak dapat memulai pembayaran.');
     });
 }
 </script>

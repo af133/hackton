@@ -19,7 +19,7 @@ class UserWithKelasAndBadgesSeeder extends Seeder
     {
          DB::transaction(function () {
             $mentor = User::updateOrCreate(
-                ['email' => 'aisyah.mentor@skillswap.com'],
+                ['email' => 'aisyah@skillswap.com'],
                 [
                     'name' => 'Aisyah Farah',
                     'password' => Hash::make('password'),
@@ -36,7 +36,6 @@ class UserWithKelasAndBadgesSeeder extends Seeder
                     'judul_kelas' => 'Pengenalan UI/UX Design untuk Pemula',
                     'deskripsi' => 'Pelajari dasar-dasar User Interface dan User Experience design dari nol. Cocok untuk Anda yang baru memulai karir di dunia digital.',
                     'kategori' => 'UI/UX Design',
-                    'path_gambar' => 'images/kelas/ui-ux-beginner.png',
                     'level_kelas' => 'Beginner',
                     'harga_koin' => 50,
                     'tags' => ['UI', 'UX', 'Design', 'Pemula'],
@@ -47,7 +46,6 @@ class UserWithKelasAndBadgesSeeder extends Seeder
                     'judul_kelas' => 'Mastering Figma: Dari Dasar hingga Prototyping',
                     'deskripsi' => 'Kuasai Figma, tool desain terpopuler saat ini. Kita akan belajar membuat wireframe, high-fidelity design, hingga interactive prototype.',
                     'kategori' => 'UI/UX Design',
-                    'path_gambar' => 'images/kelas/figma-mastery.png',
                     'level_kelas' => 'Intermediate',
                     'harga_koin' => 75,
                     'tags' => ['Figma', 'Prototyping', 'Design System'],
@@ -78,7 +76,7 @@ class UserWithKelasAndBadgesSeeder extends Seeder
 
                 if (isset($badges['master-teacher'])) {
                     $mentor->badges()->attach($badges['master-teacher']->id, [
-                        'progress' => 40 
+                        'progress' => 40
                     ]);
                 }
             }
