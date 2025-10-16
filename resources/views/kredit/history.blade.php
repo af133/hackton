@@ -29,23 +29,23 @@
                 {{-- ======================================= --}}
                 {{-- BAGIAN 1: FILTER & PENCARIAN --}}
                 {{-- ======================================= --}}
-                <div class="bg-white dark:bg-gray-800/50 p-5 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700 mb-8">
+                <div class="bg-white dark:bg-gray-800/50 p-5 rounded-2xl shadow-md borderborder-gray-200 dark:border-gray-700 mb-8">
                     <form action="{{-- route('history.index') --}}" method="GET">
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                             {{-- Filter Tanggal Mulai --}}
                             <div>
                                 <label for="start_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Dari Tanggal</label>
-                                <input type="date" name="start_date" id="start_date" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-primary focus:ring-primary dark:bg-gray-700 dark:text-white sm:text-sm">
+                                <input type="date" name="start_date" id="start_date" class="mt-1 px-4 py-2 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-primary focus:ring-primary dark:bg-gray-700 dark:text-white sm:text-sm">
                             </div>
                             {{-- Filter Tanggal Selesai --}}
                             <div>
                                 <label for="end_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Hingga Tanggal</label>
-                                <input type="date" name="end_date" id="end_date" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-primary focus:ring-primary dark:bg-gray-700 dark:text-white sm:text-sm">
+                                <input type="date" name="end_date" id="end_date" class="mt-1 px-4 py-2 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-primary focus:ring-primary dark:bg-gray-700 dark:text-white sm:text-sm">
                             </div>
                             {{-- Filter Tipe Transaksi --}}
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tipe</o>
-                                <select id="type" name="type" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-primary focus:ring-primary dark:bg-gray-700 dark:text-white sm:text-sm">
+                                <select id="type" name="type" class="mt-1 px-4 py-2 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-primary focus:ring-primary dark:bg-gray-700 dark:text-white sm:text-sm">
                                     <option value="">Semua Tipe</option>
                                     <option value="in">Kredit Masuk</option>
                                     <option value="out">Kredit Keluar</option>

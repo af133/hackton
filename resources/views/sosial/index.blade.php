@@ -35,7 +35,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                     @foreach ( $communities as $community )
                         <div class="bg-white rounded-2xl shadow-md overflow-hidden transform hover:-translate-y-1 transition-transform duration-300 flex flex-col">
-                            <img class="h-40 w-full object-cover" src="{{ asset($community->avatar) }}" alt="AI/ML Banner">
+                            <img class="h-40 w-full object-cover" src="{{ $community->avatar_url }}" alt="AI/ML Banner">
                             <div class="p-5 flex flex-col flex-grow">
                                 <h3 class="text-lg font-bold text-gray-900">{{ $community->name}}</h3>
                                 <p class="text-sm text-gray-500 mt-1 flex-grow">{{ $community->description }}</p>

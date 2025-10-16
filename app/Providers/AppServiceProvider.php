@@ -2,13 +2,15 @@
 
 namespace App\Providers;
 
+use Midtrans\Config;
 use App\Events\CoursePurchased;
-use App\Listeners\AwardAchievementsListener;
+use Illuminate\Support\Facades\URL;
 use App\Services\AchievementService;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
-use Midtrans\Config;
+use App\Listeners\AwardAchievementsListener;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -36,5 +38,8 @@ class AppServiceProvider extends ServiceProvider
         Config::$isProduction = config('midtrans.is_production');
         Config::$isSanitized = true;
         Config::$is3ds = true;
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+    }
     }
 }
