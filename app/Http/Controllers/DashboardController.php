@@ -17,10 +17,11 @@ class DashboardController extends Controller
         $ikutKelas = auth()->user()->detailPembelians()->with('kelas')->get();
         $kelas = auth()->user()->kelas()->get();
         $userId = auth()->user()->id;
-        $liveClasses = LiveCommunity::whereIn('community_id', function ($query) {
-        $query->select('community_id')
-            ->from('community_user')
-            ->where('user_id', auth()->id());})->get();
+        $liveClasses = LiveCommunity::whereIn('komunitas_id', function ($query) {
+            $query->select('community_id')
+                  ->from('community_user')
+                  ->where('user_id', auth()->id());
+        })->get();
 
         $allLiveClasses = collect();
         foreach($kelas as $k){

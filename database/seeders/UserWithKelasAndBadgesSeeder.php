@@ -43,7 +43,7 @@ class UserWithKelasAndBadgesSeeder extends Seeder
                     'rating' => 4.8,
                 ],
                 [
-                    'judul_kelas' => 'Mastering Figma: Dari Dasar hingga Prototyping',
+                    'judul_kelas' => 'Mastering Figma',
                     'deskripsi' => 'Kuasai Figma, tool desain terpopuler saat ini. Kita akan belajar membuat wireframe, high-fidelity design, hingga interactive prototype.',
                     'kategori' => 'UI/UX Design',
                     'level_kelas' => 'Intermediate',
