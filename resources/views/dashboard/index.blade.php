@@ -135,16 +135,19 @@
                                     </div>
                                 </div>
 
-                                {{-- Card Permintaan Aktif --}}
+                                {{-- Card Live Class --}}
                                 <div class="bg-white dark:bg-gray-800/50 p-5 rounded-2xl shadow-md flex items-center gap-5 transition-transform transform hover:-translate-y-1">
                                     <div class="flex-shrink-0 w-16 h-16 flex items-center justify-center bg-primary text-white rounded-2xl">
-                                        <i class="ri-user-add-line text-3xl"></i>
+                                        <i class="ri-live-line text-3xl"></i>
                                     </div>
                                     <div>
-                                        <p class="text-gray-500 dark:text-gray-400 text-sm">Permintaan Aktif</p>
-                                        <p class="text-2xl font-extrabold text-gray-800 dark:text-white mt-1">3</p>
+                                        <p class="text-gray-500 dark:text-gray-400 text-sm">Live Class</p>
+                                        <a href="{{ route('liveclass.index') }}">
+                                            <p class="text-2xl font-extrabold text-gray-800 dark:text-white mt-1">{{ $allLiveClasses->count()}}</p>
+                                        </a>
                                     </div>
                                 </div>
+
 
                                 {{-- Card Materi --}}
                                 <a href="{{ route('kelas.show') }}">
