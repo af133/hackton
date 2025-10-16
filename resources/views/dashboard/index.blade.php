@@ -73,7 +73,7 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
                                 {{-- Card Skill Kredit --}}
-                                <a href="#">
+                                <a href="{{ route('skill-credit') }}">
                                 <div class="bg-white dark:bg-gray-800/50 p-5 rounded-2xl shadow-md flex items-center gap-5 transition-transform transform hover:-translate-y-1">
                                     <div class="flex-shrink-0 w-16 h-16 flex items-center justify-center bg-primary text-white rounded-2xl">
                                         <i class="ri-graduation-cap-line text-3xl"></i>
@@ -184,7 +184,7 @@
                                     <a href="#" class="text-sm font-medium text-primary  hover:underline">Lihat Semua</a>
                                 </div>
                                 @foreach ($ikutKelas as $detail )
-                                     @include('components.card-modul',['kelas'=>$detail->kelas,'nama'=>$detail->kelas->creator->name,'rating'=>$rating])
+                                     @include('components.kelas-card', ['kelas' => $detail->kelas, 'tipe' => 'diikuti'])
                                 @endforeach
                             @endif
                         </div>

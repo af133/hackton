@@ -5,9 +5,11 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -66,7 +68,7 @@ class User extends Authenticatable
 
     public function pembelians()
     {
-        return $this->hasMany(Pembelian::class, 'pengguna_id');
+        return $this->hasMany(Pembelian::class, 'user_id');
     }
     public function tarikUangs()
     {
@@ -84,9 +86,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Community::class,'community_user');
     }
-    
 
-    public function detailPembelians()
+
+    public function DetailPembelians()
     {
         return $this->hasManyThrough(
             DetailPembelian::class,
@@ -98,16 +100,19 @@ class User extends Authenticatable
         );
     }
 
-    public function kelasDiikuti()
+    public function getKelasDiikutiAttribute(): Collection
     {
-        return $this->hasManyThrough(
-            Kelas::class,
-            DetailPembelian::class,
-            'pembelian_id',
-            'id',
-            'id',
-            'kelas_id'
-        );
+        $pembelianIds = $this->pembelians()->pluck('id');
+
+        if ($pembelianIds->isEmpty()) {
+            return new Collection();
+        }
+
+        $kelasIds = DetailPembelian::whereIn('pembelian_id', $pembelianIds)
+            ->pluck('kelas_id')
+            ->unique();
+
+        return Kelas::whereIn('id', $kelasIds)->get();
     }
     public function experiences(): HasMany
     {
@@ -121,9 +126,10 @@ class User extends Authenticatable
 
     public function getProfilePhotoUrlAttribute()
     {
-        return $this->profile_photo_path
-            ? (new \Cloudinary\Cloudinary())->image($this->profile_photo_path)->toUrl()
-            : 'https://i.pravatar.cc/300';
+        if ($this->profile_photo_path) {
+        return Storage::disk('cloudinary')->url($this->profile_photo_path);
+        }
+        return asset('images/default-profile.png');
     }
 
     public function getCvUrlAttribute()
@@ -136,4 +142,10 @@ class User extends Authenticatable
         return $this->portfolio_path ?: '#';
     }
 
+    public function badges(): BelongsToMany
+    {
+        return $this->belongsToMany(Badge::class, 'user_badge')
+                    ->withPivot('progress', 'unlocked_at')
+                    ->withTimestamps();
+    }
 }

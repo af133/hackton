@@ -1,8 +1,10 @@
 <?php
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Community extends Model
 {
@@ -34,5 +36,24 @@ class Community extends Model
     {
         return $this->hasMany(LiveCommunity::class, 'komunitas_id');
     }
-    
+
+    public function getAvatarUrlAttribute(): string
+    {
+
+        if ($this->avatar) {
+            try {
+                return Storage::disk('cloudinary')->url($this->avatar);
+
+            } catch (\Exception $e) {
+                Log::error('Gagal membuat URL Cloudinary untuk avatar komunitas.', [
+                    'community_id' => $this->id,
+                    'avatar_path' => $this->avatar,
+                    'error' => $e->getMessage()
+                ]);
+
+            }
+        }
+        return asset('images/default-class-image.png');
+    }
+
 }

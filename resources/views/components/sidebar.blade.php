@@ -9,8 +9,8 @@
         <a href="{{ route('dashboard') }}"
            @class([
                'flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors',
-               'bg-primary text-white shadow-sm' => request()->routeIs('dashboard'),
-               'text-gray-500 hover:bg-gray-100' => !request()->routeIs('dashboard'),
+               'bg-primary text-white shadow-sm' => request()->routeIs('dashboard','profile.*'),
+               'text-gray-500 hover:bg-gray-100' => !request()->routeIs('dashboard','profile.*'),
            ])>
             <i class="ri-home-4-line mr-3 text-lg"></i>
             Home

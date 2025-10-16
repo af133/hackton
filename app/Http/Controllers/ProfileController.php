@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Badge;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -10,8 +11,19 @@ class ProfileController extends Controller
 {
     public function show()
     {
-        $user = Auth::user()->load('skills', 'experiences');
-        return view('profile.index', compact('user'));
+        $user = Auth::user()->load('skills', 'experiences', 'badges');
+
+        $limit = 3;
+
+        $kelasDimiliki = $user->kelas()
+            ->latest()
+            ->take($limit)
+            ->get();
+
+        $kelasDiikuti = $user->kelasDiikuti
+            ->sortByDesc('created_at')
+            ->take($limit);
+        return view('profile.index', compact('user', 'kelasDimiliki', 'kelasDiikuti'));
     }
 
     public function edit()
@@ -56,8 +68,8 @@ class ProfileController extends Controller
 
         $user->save();
 
+        $user->skills()->delete();
         if ($request->has('skills')) {
-            $user->skills()->delete();
             foreach ($request->skills as $skill) {
                 if (!empty($skill['name']) && !empty($skill['level'])) {
                     $user->skills()->create($skill);
@@ -65,11 +77,16 @@ class ProfileController extends Controller
             }
         }
 
+        $user->experiences()->delete();
         if ($request->has('experiences')) {
-            $user->experiences()->delete();
             foreach ($request->experiences as $experience) {
-                 if (!empty($experience['title'])) {
-                    $user->experiences()->create($experience);
+                if (!empty($experience['title'])) {
+                    $user->experiences()->create([
+                        'title' => $experience['title'],
+                        'company' => $experience['company'] ?? null,
+                        'start_date' => $experience['start_date'] ?? null,
+                        'end_date' => $experience['end_date'] ?? null,
+                    ]);
                 }
             }
         }
@@ -79,6 +96,17 @@ class ProfileController extends Controller
 
     public function mission()
     {
-        return view('profile.mission');
+        $user = Auth::user()->load('badges');
+
+        $allBadges = Badge::all();
+
+        $unlockedBadges = $user->badges()->whereNotNull('unlocked_at')->get();
+        $inProgressBadges = $user->badges()->whereNull('unlocked_at')->where('progress', '>', 0)->get();
+
+        $userBadgeIds = $user->badges->pluck('id');
+
+        $lockedBadges = $allBadges->whereNotIn('id', $userBadgeIds);
+
+        return view('profile.mission', compact('user', 'unlockedBadges', 'inProgressBadges', 'lockedBadges'));
     }
 }

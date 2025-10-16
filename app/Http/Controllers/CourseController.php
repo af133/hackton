@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\detailPembelian;
-use App\Models\pembelian;
+use App\Models\User;
+use App\Models\Kelas;
 use App\Models\Modul;
 use App\Models\LiveCommunity;
 use App\Models\LiveClas;
-use App\Models\User;
+use App\Models\Pembelian;
 use Illuminate\Http\Request;
-use App\Models\Kelas;
+use App\Events\CoursePurchased;
+use App\Models\DetailPembelian;
 
 class CourseController extends Controller
 {
@@ -32,7 +33,7 @@ class CourseController extends Controller
         'zona_waktu' => $request->zona_waktu,
     ]);
 
-    
+
 
     return redirect()->back()->with('success', 'Live class berhasil ditambahkan!');
     }
@@ -68,17 +69,17 @@ class CourseController extends Controller
             ->when($search, function ($query, $search) {
                 $query->where('judul_kelas', 'like', "%{$search}%");
             })
-            ->with(['detailPembelians'])
+            ->with(['DetailPembelians'])
             ->latest()
             ->get();
 
-        $kelasDiikuti = Kelas::whereHas('detailPembelians', function ($q) use ($userId) {
+        $kelasDiikuti = Kelas::whereHas('detailPembelians.pembelian', function ($q) use ($userId) {
                 $q->where('user_id', $userId);
             })
             ->when($search, function ($query, $search) {
                 $query->where('judul_kelas', 'like', "%{$search}%");
             })
-            ->with('detailPembelians')
+            ->with('DetailPembelians')
             ->latest()
             ->get();
 
@@ -86,14 +87,14 @@ class CourseController extends Controller
             ->when($search, function ($query, $search) {
                 $query->where('judul_kelas', 'like', "%{$search}%");
             })
-            ->with('detailPembelians')
+            ->with('DetailPembelians')
             ->latest()
             ->get();
 
         return view('kelas.index', compact('semuaKelas', 'kelasDiikuti', 'kelasSaya'));
     }
 
-    public function beriRating(Request $request, $id)
+    public function beriRating(Request $request, Kelas $kelas)
     {
         $request->validate([
             'rating' => 'required|numeric|min:1|max:5'
@@ -101,7 +102,7 @@ class CourseController extends Controller
 
         $userId = auth()->id();
 
-        $detail = DetailPembelian::where('kelas_id', $id)
+        $detail = DetailPembelian::where('kelas_id', $kelas->id)
             ->whereHas('pembelian', function($q) use ($userId) {
                 $q->where('user_id', $userId);
             })
@@ -114,49 +115,61 @@ class CourseController extends Controller
         $detail->rating = $request->rating;
         $detail->save();
 
+        $kelas->updateAverageRating();
+
         return redirect()->back()->with('success', 'Rating berhasil disimpan!');
     }
 
     public function show()
-{
-    $userId = auth()->id();
+    {
+        $semuaKelas = Kelas::where('is_draft', false)->get();
+        $kelasDiikuti = Kelas::whereHas('detailPembelians.pembelian', function ($q) {
+            $q->where('user_id', auth()->id())
+            ->select('id', 'judul_kelas', 'kategori', 'dibuat_oleh');
+        })->get();
 
-    $semuaKelas = Kelas::where('is_draft', false)->get();
-
-    $kelasDiikuti = Kelas::whereHas('detailPembelians.pembelian', function ($q) use ($userId) {
-        $q->where('user_id', $userId);
-    })
-        ->select('id', 'judul_kelas', 'kategori', 'dibuat_oleh')
-        ->get();
-
-    $kelasSaya = Kelas::where('dibuat_oleh', $userId)
-        ->with(['detailPembelians' => function ($q) {
+        $kelasSaya = Kelas::where('dibuat_oleh', auth()->id())
+            ->with(['DetailPembelians' => function ($q) {
             $q->select('id', 'kelas_id', 'pembelian_id', 'rating');
         }])
         ->select('id', 'judul_kelas', 'kategori', 'dibuat_oleh')
-        ->get();
+            ->get();
 
-    return view('kelas.index', compact('semuaKelas', 'kelasDiikuti', 'kelasSaya'));
-}
+        return view('kelas.index', compact('semuaKelas', 'kelasDiikuti', 'kelasSaya'));
+    }
 
-
-    public function showkelas($kelasId)
+    public function showkelas(Kelas $kelas)
     {
-        $kelas = Kelas::findOrFail($kelasId);
         $pemilik = User::find($kelas->dibuat_oleh);
         $moduls = $kelas->moduls()->orderBy('id')->get();
         $lessons = $moduls->flatMap->lessons;
-        $pembelian = detailPembelian::whereHas('pembelian', function ($q) {
-        $q->where('user_id', auth()->id());
-        })->where('kelas_id', $kelasId)->first();
-        $sudahBeli = false;
         $sesiLive = $kelas->sesiLive()->orderBy('tanggal', 'desc')->get();
-        if($pembelian || $kelas->dibuat_oleh == auth()->id())
-        {
-            $sudahBeli = true;
+
+        $sudahBeli = false;
+        $userRating = 0;
+
+        if (auth()->check()) {
+            $pembelian = DetailPembelian::whereHas('pembelian', function ($q) {
+                $q->where('user_id', auth()->id());
+            })->where('kelas_id', $kelas->id)->first();
+
+            if ($pembelian || $kelas->dibuat_oleh == auth()->id()) {
+                $sudahBeli = true;
+                if ($pembelian) {
+                    $userRating = $pembelian->rating;
+                }
+            }
         }
 
-        return view('kelas.detail', compact('kelas', 'lessons','moduls' , 'pemilik', 'sudahBeli','sesiLive'));
+        return view('kelas.detail', compact(
+            'kelas',
+            'lessons',
+            'moduls',
+            'pemilik',
+            'sudahBeli',
+            'sesiLive',
+            'userRating'
+        ));
     }
 
     public function toggleStatus($id)
@@ -189,12 +202,13 @@ class CourseController extends Controller
             'kelas_id' => $kelas->id,
         ]);
 
-        detailPembelian::create([
+        DetailPembelian::create([
             'pembelian_id' => $pembelian->id,
             'kelas_id' => $kelas->id,
             'tanggal_pembelian' => now()->toDateString(),
             'rating'=>0
         ]);
+        CoursePurchased::dispatch($user, $kelas);
 
         return redirect()->route('kelas.show', $kelas->id)->with('success', 'Kelas berhasil dibeli! 🎉');
     }

@@ -33,79 +33,81 @@
                 1. BANNER KELAS
                 ======================================================================
                 --}}
-                @php
-                    $gambarPath = $kelas->path_gambar ? asset('storage/kelas/' . $kelas->path_gambar) : asset('images/default-thumbnail.jpg');
-                @endphp
                 <div class="relative w-full rounded-2xl shadow-lg overflow-hidden mb-8">
-                    <img src="{{ asset($gambarPath) }}" class="absolute inset-0 w-full h-full object-cover" alt="AI Banner">
+                    <img src="{{ $kelas->kelas_thumbnail_url }}" class="absolute inset-0 w-full h-full object-cover" alt="AI Banner">
                     <div class="absolute inset-0 bg-gradient-to-t from-purple-800 to-indigo-600 opacity-80"></div>
+                    {{-- KODE BARU (RAPi) --}}
                     <div class="relative p-8">
                         <div class="mb-12">
                             <p class="text-indigo-200 font-semibold">{{ $kelas->level_kelas }}</p>
                             <h1 class="text-4xl font-bold text-white tracking-tight mt-1">{{ $kelas->judul_kelas }}</h1>
-                            <p class="text-lg text-indigo-100 mt-2">Oleh {{ $pemilik->name }}</p>
+                            <p class="text-lg text-indigo-100 mt-2">Oleh {{ $pemilik?->name ?? 'Pengguna Tidak Ditemukan' }}</p>
                         </div>
-                        @php
-                            $firstModul = $moduls->first()?->id;
-                            $firstLesson = $lessons->first()?->id;
-                        @endphp
-                        @if($firstModul && $firstLesson)
-                            @if ( $sudahBeli == false )
-                                <div x-data="{ openConfirm: false }">
-                                        <button 
-                                            @click="openConfirm = true"
-                                            class="px-6 py-3 font-semibold text-indigo-700 bg-white hover:bg-gray-100 rounded-lg">
-                                            Mulai Belajar (Beli Kelas Dulu {{ $kelas->harga_koin }} Koin)
-                                        </button>
 
-                                        <!-- Modal Konfirmasi -->
-                                        <div x-show="openConfirm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                                            <div class="bg-white rounded-xl shadow-lg p-6 w-96">
-                                                <h2 class="text-xl font-bold mb-4">Konfirmasi Pembelian</h2>
-                                                <p class="text-gray-600 mb-6">Apakah Anda yakin ingin membeli kelas <b>{{ $kelas->judul_kelas }}</b>?</p>
-                                                <div class="flex justify-end gap-4">
-                                                    <button @click="openConfirm = false" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">Batal</button>
-                                                    
-                                                    <form method="POST" action="{{ route('kelas.beli', $kelas->id) }}">
-                                                        @csrf
-                                                        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
-                                                            Ya, Beli
-                                                        </button>
-                                                    </form>
+                        {{-- 1. Tambahkan div pembungkus dengan flexbox vertikal --}}
+                        <div class="flex flex-col items-start space-y-6">
+                            @php
+                                $firstModul = $moduls->first()?->id;
+                                $firstLesson = $lessons->first()?->id;
+                            @endphp
+
+                            {{-- 2. Pindahkan blok tombol aksi ke dalam div ini --}}
+                            <div>
+                                @if($firstModul && $firstLesson)
+                                    @if ( $sudahBeli == false )
+                                        <div x-data="{ openConfirm: false }">
+                                            <button
+                                                @click="openConfirm = true"
+                                                class="px-6 py-3 font-semibold text-indigo-700 bg-white hover:bg-gray-100 rounded-lg">
+                                                Mulai Belajar (Beli Kelas Dulu {{ $kelas->harga_koin }} Koin)
+                                            </button>
+
+                                            <div x-show="openConfirm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                                                <div class="bg-white rounded-xl shadow-lg p-6 w-96">
+                                                    <h2 class="text-xl font-bold mb-4">Konfirmasi Pembelian</h2>
+                                                    <p class="text-gray-600 mb-6">Apakah Anda yakin ingin membeli kelas <b>{{ $kelas->judul_kelas }}</b>?</p>
+                                                    <div class="flex justify-end gap-4">
+                                                        <button @click="openConfirm = false" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">Batal</button>
+                                                        <form method="POST" action="{{ route('kelas.beli', $kelas->id) }}">
+                                                            @csrf
+                                                            <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                                                                Ya, Beli
+                                                            </button>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            @else
-                                <a href="{{ route('lesson.show', [$kelas->id,$firstModul, $firstLesson]) }}"
-                                class="px-6 py-3 font-semibold text-indigo-700 bg-white hover:bg-gray-100 rounded-lg">
-                                    Mulai Belajar
-                                </a>
+                                    @else
+                                        <a href="{{ route('lesson.show', [$kelas->id, $firstModul, $firstLesson]) }}"
+                                        class="px-6 py-3 font-semibold text-indigo-700 bg-white hover:bg-gray-100 rounded-lg">
+                                            Mulai Belajar
+                                        </a>
+                                    @endif
+                                @else
+                                    <button class="px-6 py-3 font-semibold text-gray-400 bg-gray-200 cursor-not-allowed rounded-lg">
+                                        Belum ada materi
+                                    </button>
+                                @endif
+                            </div>
+
+                            {{-- 3. Pindahkan blok form rating ke dalam div ini --}}
+                            @if ($sudahBeli && $kelas->dibuat_oleh != Auth::id())
+                                {{-- Rating Bintang --}}
+                                <form action="{{ route('kelas.beriRating', $kelas->id) }}" method="POST" class="flex items-center space-x-2">
+                                    @csrf
+                                    @foreach([1,2,3,4,5] as $star)
+                                        <button
+                                            type="submit"
+                                            name="rating"
+                                            value="{{ $star }}"
+                                            class="text-4xl focus:outline-none transition-all duration-300 {{ ($userRating ?? 0) >= $star ? 'text-yellow-400 scale-110 drop-shadow-md' : 'text-gray-300 hover:text-yellow-200 hover:scale-105' }}">
+                                            ★
+                                        </button>
+                                    @endforeach
+                                </form>
                             @endif
-                        @else
-                            <button class="px-6 py-3 font-semibold text-gray-400 bg-gray-200 cursor-not-allowed rounded-lg">
-                                Belum ada materi
-                            </button>
-                        @endif
-                        @if ($sudahBeli && $kelas->dibuat_oleh != Auth::id())
-                            {{-- Rating Bintang --}}
-                           <form action="{{ route('kelas.beriRating', $kelas->id) }}" method="POST" class="flex items-center space-x-2 mt-6">
-                            @csrf
-                            @foreach([1,2,3,4,5] as $star)
-                                <button 
-                                    type="submit" 
-                                    name="rating" 
-                                    value="{{ $star }}" 
-                                    class="text-4xl focus:outline-none transition-all duration-300
-                                        {{ ($userRating ?? 0) >= $star ? 'text-yellow-400 scale-110 drop-shadow-md' : 'text-gray-300 hover:text-yellow-200 hover:scale-105' }}">
-                                    ★
-                                </button>
-                            @endforeach
-                        </form>
-
-
-                        @endif
+                        </div>
                     </div>
                 </div>
 
@@ -118,14 +120,24 @@
 
                     {{-- Kolom Kiri: Daftar Modul --}}
                     <div class="lg:col-span-2">
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-5">Materi Pelajaran</h2>
+                        <div class="flex justify-between items-center mb-5">
+                            <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200">Materi Pelajaran</h2>
+                            {{-- 2. Tambahkan tombol yang hanya muncul untuk pemilik kelas --}}
+                            @if ($kelas->dibuat_oleh == Auth::id())
+                                <a href="{{ route('modul.create', ['kelasId' => $kelas->id]) }}"
+                                class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-primary hover:bg-primary/90 rounded-lg shadow-sm">
+                                    <i class="ri-add-line"></i>
+                                    <span>Tambah Materi</span>
+                                </a>
+                            @endif
+                        </div>
                         @php
                             $urutan=0
                         @endphp
                         @foreach ($moduls as $modul )
                          {{-- Accordion Interaktif dengan Alpine.js --}}
                         <div x-data="{ openModule: 1 }" class="space-y-6">
-                            
+
                             <div class="bg-white dark:bg-gray-800/50 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 mt-5">
                                 <button @click="openModule = (openModule === 1) ? null : 1" class="w-full flex justify-between items-center p-5 text-left">
                                     <span class="font-semibold text-gray-800 dark:text-white">Modul  <span>{{ ++$urutan }}:</span> {{ $modul->title}}</span>
@@ -139,7 +151,7 @@
                                             <li class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900">
                                                 <div class="flex items-center gap-4"><i class="ri-play-circle-line text-2xl text-indigo-500"></i><span>{{ $lesson->title }}</span></div>
                                             </li>
-                                            @else    
+                                            @else
                                             <li class="flex items-center justify-between p-3 rounded-lg bg-indigo-50 dark:bg-indigo-900/50">
                                                 <div class="flex items-center gap-4"><i class="ri-file-text-line text-2xl text-indigo-500"></i><span>{{ $lesson->title }}</span></div>
                                                 <span class="text-sm text-gray-500">Bacaan</span>
@@ -151,11 +163,11 @@
                                 </div>
                             </div>
                         </div>
-                            
-                        @endforeach
-                          
 
-                       
+                        @endforeach
+
+
+
 
                     </div>
 
@@ -168,7 +180,7 @@
                             <div x-data="{ open: false }">
                                 {{-- Tombol tambah live class (hanya untuk pemilik kelas) --}}
                                 @if ($kelas->dibuat_oleh == Auth::id())
-                                    <button 
+                                    <button
                                         @click="open = true"
                                         class="flex items-center gap-2 bg-indigo-600 text-white px-3 py-2 rounded-lg hover:bg-indigo-700 transition mb-4">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -187,33 +199,33 @@
                                     @endphp
 
                                     <div class="flex gap-4 my-3 {{ $isPast ? 'opacity-60 pointer-events-none' : '' }}">
-                                        <div class="flex-shrink-0 text-center 
-                                                    {{ $isPast ? 'bg-gray-200' : 'bg-indigo-100 dark:bg-indigo-900/50' }} 
+                                        <div class="flex-shrink-0 text-center
+                                                    {{ $isPast ? 'bg-gray-200' : 'bg-indigo-100 dark:bg-indigo-900/50' }}
                                                     rounded-lg p-2 w-16">
-                                            <p class="font-bold 
-                                                    {{ $isPast ? 'text-gray-500' : 'text-indigo-700 dark:text-indigo-300' }} 
+                                            <p class="font-bold
+                                                    {{ $isPast ? 'text-gray-500' : 'text-indigo-700 dark:text-indigo-300' }}
                                                     text-lg">
                                                 {{ \Carbon\Carbon::parse($live->tanggal)->format('d') }}
                                             </p>
-                                            <p class="text-xs 
+                                            <p class="text-xs
                                                     {{ $isPast ? 'text-gray-400' : 'text-indigo-500 dark:text-indigo-400' }}">
                                                 {{ \Carbon\Carbon::parse($live->tanggal)->format('M') }}
                                             </p>
                                         </div>
 
                                         <div>
-                                            <p class="font-semibold 
+                                            <p class="font-semibold
                                                     {{ $isPast ? 'text-gray-500' : 'text-gray-800 dark:text-white' }}">
                                                 {{ $live->judul }}
                                             </p>
-                                            <p class="text-sm 
+                                            <p class="text-sm
                                                     {{ $isPast ? 'text-gray-400' : 'text-gray-500 dark:text-gray-400' }}">
                                                 {{ $live->waktu_mulai }} - {{ $live->waktu_selesai }}
                                             </p>
 
-                                            <button 
-                                            
-                                                class="mt-2 text-sm font-semibold rounded-lg px-3 py-1 
+                                            <button
+
+                                                class="mt-2 text-sm font-semibold rounded-lg px-3 py-1
                                                     {{ $isPast ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-indigo-600 text-white hover:bg-indigo-700' }}"
                                                 {{ $isPast ? 'disabled' : '' }}>
                                                 <a href="{{ route('live.show',['room'=>$live->judul,'kelasId'=>$kelas->id,'Kelas']) }}">
@@ -226,7 +238,7 @@
 
                                 @endif
                                 {{-- Popup Form --}}
-                                <div 
+                                <div
                                     x-show="open"
                                     x-transition
                                     @click.self="open = false"
@@ -234,7 +246,7 @@
                                     x-cloak
                                 >
                                     <div class="bg-white/90 dark:bg-gray-800/90 rounded-2xl shadow-2xl w-96 p-6 relative border border-white/20">
-                                        <button 
+                                        <button
                                             @click="open = false"
                                             class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 dark:hover:text-white">
                                             ✖
@@ -279,13 +291,13 @@
 
 
                                             <div class="flex justify-end mt-4">
-                                                <button 
-                                                    type="button" 
+                                                <button
+                                                    type="button"
                                                     @click="open = false"
                                                     class="px-3 py-2 text-sm rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 dark:border-gray-600 dark:text-white dark:hover:bg-gray-700 mr-2">
                                                     Batal
                                                 </button>
-                                                <button 
+                                                <button
                                                     type="submit"
                                                     class="px-4 py-2 text-sm rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">
                                                     Simpan
@@ -295,10 +307,10 @@
                                     </div>
                                 </div>
                             </div>
- 
-                               
 
-                               
+
+
+
 
                             </div>
                         </div>

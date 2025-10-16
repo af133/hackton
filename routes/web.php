@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/mission', [ProfileController::class,'mission'])->name('profile.mission');
 
     Route::get('/kelas', [CourseController::class, 'show'])->name('kelas.show');
-    Route::get('/kelas/detail/{kelasId}', [CourseController::class,'showkelas'])->name('kelas.detail');
+    Route::get('/kelas/detail/{kelas}', [CourseController::class,'showkelas'])->name('kelas.detail');
     Route::post('kelas/{id}/toggle-status', [CourseController::class, 'toggleStatus'])->name('kelas.toggleStatus');
     Route::post('kelas/modul/liveclass',[CourseController::class,'liveClassStore'])->name('kelas.live.store');
     Route::post('komunitas/{id}/liveclass/store/event', [CourseController::class, 'liveCommunityStore'])->name('events.store');
