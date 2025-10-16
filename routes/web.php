@@ -94,4 +94,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/midtrans/create', [MidtransController::class, 'create'])->name('midtrans.create');
     Route::post('/user/add-coin', [MidtransController   ::class, 'addCoin'])->name('user.add-coin');
 
+    Route::get('/live-class', [LiveClassController::class, 'index'])->name('liveclass.index');
+
 });
