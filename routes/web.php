@@ -41,7 +41,7 @@ Route::middleware('auth')->group(function () {
     Route::post('kelas/modul/liveclass',[CourseController::class,'liveClassStore'])->name('kelas.live.store');
     Route::post('komunitas/{id}/liveclass/store/event', [CourseController::class, 'liveCommunityStore'])->name('events.store');
 
-    Route::get('/live/{room}/{kelasId}/{jenisLive}', [CourseController::class, 'liveClass'])
+    Route::get('/live/{kelasId}/{room}', [CourseController::class, 'liveClass'])
     ->name('live.show');
 
     Route::get('/kelas/create', [CourseController::class,'showcreate'])->name('kelas.create');

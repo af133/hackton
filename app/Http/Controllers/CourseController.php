@@ -55,9 +55,9 @@ class CourseController extends Controller
     ]);
     return redirect()->back()->with('success', 'Live class berhasil ditambahkan!');
 }
-    public function liveClass($room, $kelasId, $jenisLive)
+    public function liveClass($room, $kelasId)
     {
-        return view('kelas.live', compact('room', 'kelasId', 'jenisLive'));
+        return view('kelas.live', compact('room', 'kelasId'));
     }
 
     public function kelasSaya(Request $request)
