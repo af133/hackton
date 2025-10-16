@@ -17,8 +17,7 @@ use Illuminate\Support\Str;
         <div class="relative flex-1 overflow-y-auto">
             <main class="relative z-10 p-6 md:p-8 max-w-4xl mx-auto">
 
-                {{-- Navigasi Kembali --}}
-                <a href="{{ url()->previous() }}" class="text-sm font-medium text-primary hover:underline flex items-center gap-1 mb-4">
+                <a href="{{ route('sosial.show', ['id' =>$post->community->id ]) }}" class="text-sm font-medium text-primary hover:underline flex items-center gap-1 mb-4">
                     <i class="ri-arrow-left-s-line"></i>
                     Kembali ke {{ $post->community->name ?? 'Komunitas' }}
                 </a>
@@ -27,11 +26,7 @@ use Illuminate\Support\Str;
                 <div class="bg-white p-6 rounded-2xl shadow-md">
                     <div class="flex items-start gap-4">
                         <img class="h-10 w-10 rounded-full object-cover"
-                            src="{{ $post->user->profile_photo_path
-                                ? (Str::startsWith($post->user->profile_photo_path, 'http')
-                                    ? $post->user->profile_photo_path
-                                    : asset('storage/' . $post->user->profile_photo_path))
-                                : 'https://ui-avatars.com/api/?name=' . urlencode($post->user->name) }}"
+                            src="{{ $post->user->profile_photo_url }}"
                             alt="{{ $post->user->name }}">
 
                         <div class="w-full">
@@ -59,17 +54,13 @@ use Illuminate\Support\Str;
                 {{-- Form Tulis Balasan --}}
                 <div class="mt-6 flex items-start gap-4">
                     <img class="h-10 w-10 rounded-full object-cover"
-                        src="{{ Auth::user()->profile_photo_path
-                            ? (Str::startsWith(Auth::user()->profile_photo_path, 'http')
-                                ? Auth::user()->profile_photo_path
-                                : asset('storage/' . Auth::user()->profile_photo_path))
-                            : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) }}"
+                        src="{{ Auth::user()->profile_photo_url}}"
                         alt="User Avatar">
 
                     <div class="flex-1">
                         <form action="{{ route('sosial.post.reply', $post->id) }}" method="POST">
                             @csrf
-                            <textarea name="message" rows="3" class="w-full bg-white border-transparent rounded-lg shadow-sm focus:ring-primary focus:border-primary text-sm" placeholder="Tulis balasan Anda..."></textarea>
+                            <textarea name="message" rows="3" class="w-full px-4 py-2 bg-white border-transparent rounded-lg shadow-sm focus:ring-primary focus:border-primary text-sm" placeholder="Tulis balasan Anda..."></textarea>
                             <div class="flex justify-end mt-2">
                                 <button type="submit" class="px-4 py-2 text-sm font-semibold text-white bg-primary rounded-lg shadow-sm hover:bg-primary-dark">
                                     Kirim Balasan
@@ -86,11 +77,7 @@ use Illuminate\Support\Str;
                     @forelse ($post->replies as $reply)
                         <div class="flex items-start gap-4 mb-6">
                             <img class="h-9 w-9 rounded-full object-cover"
-                                src="{{ $reply->user->profile_photo_path
-                                    ? (Str::startsWith($reply->user->profile_photo_path, 'http')
-                                        ? $reply->user->profile_photo_path
-                                        : asset('storage/' . $reply->user->profile_photo_path))
-                                    : 'https://ui-avatars.com/api/?name=' . urlencode($reply->user->name) }}"
+                                src="{{ $reply->user->profile_photo_url }}"
                                 alt="{{ $reply->user->name }}">
 
                             <div class="w-full">

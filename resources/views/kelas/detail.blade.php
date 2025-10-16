@@ -228,7 +228,7 @@
                                                 class="mt-2 text-sm font-semibold rounded-lg px-3 py-1
                                                     {{ $isPast ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-indigo-600 text-white hover:bg-indigo-700' }}"
                                                 {{ $isPast ? 'disabled' : '' }}>
-                                                <a href="{{ route('live.show',['room'=>$live->judul,'kelasId'=>$kelas->id,'Kelas']) }}">
+                                                <a href="{{ route('live.show', ['room' => $live->judul, 'kelasId' => $kelas->id, 'jenisLive' => 'Kelas']) }}">
                                                     {{ $isPast ? 'Sesi Selesai' : 'Gabung Sesi' }}
                                                 </a>
                                             </button>

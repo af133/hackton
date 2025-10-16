@@ -178,7 +178,7 @@
                             @else
                                 <div class="flex items-center justify-between mb-4">
                                     <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">Sesi Saya</h2>
-                                    <a href="#" class="text-sm font-medium text-primary  hover:underline">Lihat Semua</a>
+                                    <a href="{{ route('kelas.show') }}" class="text-sm font-medium text-primary  hover:underline">Lihat Semua</a>
                                 </div>
                                 @foreach ($ikutKelas as $detail )
                                      @include('components.kelas-card', ['kelas' => $detail->kelas, 'tipe' => 'diikuti'])
@@ -200,7 +200,6 @@
                                 </p>
                             @else
                             <ul class="space-y-2">
-                                {{-- FIX: Perulangan komunitas yang benar --}}
                                 @foreach ($komunitass as $item)
                                     <a href="{{  route('sosial.show', ['id' => $item->id])  }}">
                                         @include('components.community-item', ['komunitas' => $item])

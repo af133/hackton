@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Auth;
 class LiveClassController extends Controller
 {
         public function show(Request $request, $room,$kelasId,$jenisLive)
-    {
-        return view('kelas.live', compact('room','kelasId','jenisLive'));
-    }
+        {
+            return view('kelas.live', compact('room','kelasId','jenisLive'));
+        }
 
 }

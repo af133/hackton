@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CommunityUser;
-use Illuminate\Http\Request;
+use Log;
 use App\Models\Chat;
 use App\Models\Community;
+use Illuminate\Http\Request;
+use App\Models\CommunityUser;
 use Illuminate\Support\Facades\Auth;
 
 class CommunityController extends Controller
@@ -26,10 +27,10 @@ class CommunityController extends Controller
         $avatarPath = null;
             if ($request->hasFile('avatar')) {
         try {
-            $upload = $request->file('avatar')->storeOnCloudinary('avatar');
-            $avatarPath = $upload->getSecurePath(); // URL langsung ke gambar di Cloudinary
+            $upload = $request->file('avatar')->store('avatars', 'cloudinary');
+            $avatarPath = $upload;
         } catch (\Exception $e) {
-            \Log::error('Gagal upload ke Cloudinary: ' . $e->getMessage());
+            Log::error('Gagal upload ke Cloudinary: ' . $e->getMessage());
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
             }
         }

@@ -41,8 +41,8 @@ Route::middleware('auth')->group(function () {
     Route::post('kelas/modul/liveclass',[CourseController::class,'liveClassStore'])->name('kelas.live.store');
     Route::post('komunitas/{id}/liveclass/store/event', [CourseController::class, 'liveCommunityStore'])->name('events.store');
 
-
-    Route::get('/live/{room}/{kelasId}/{jenisLive}', [LiveClassController::class, 'show'])->name('live.show');
+    Route::get('/live/{room}/{kelasId}/{jenisLive}', [CourseController::class, 'liveClass'])
+    ->name('live.show');
 
     Route::get('/kelas/create', [CourseController::class,'showcreate'])->name('kelas.create');
     Route::post('/kelas/create', [CourseController::class,'store'])->name('kelas.store');
@@ -68,25 +68,18 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/sosial/detail/{id}', [SocialController::class, 'showdetail'])->name('sosial.show');
 
-    // ➕ Buat komunitas baru
     Route::get('/sosial/create', [SocialController::class, 'create'])->name('sosial.create');
 
-    // 📬 Form kirim postingan umum (jika ada halaman khusus)
     Route::get('/sosial/detail/post', [SocialController::class, 'showpost'])->name('sosial.post');
 
-    // ✅ Gabung komunitas
     Route::post('/sosial/{id}/join', [SocialController::class, 'join'])->name('sosial.join');
 
-    // ❌ Keluar komunitas
     Route::post('/sosial/{id}/leave', [SocialController::class, 'leave'])->name('sosial.leave');
 
-    // 📝 Kirim post baru di dalam komunitas
     Route::post('/sosial/{id}/post', [SocialController::class, 'storePost'])->name('sosial.post.store');
 
-    // 📄 Lihat 1 postingan dan semua reply-nya
     Route::get('/sosial/post/{id}', [SocialController::class, 'showSinglePost'])->name('sosial.post.detail');
 
-    // 💬 Balas postingan
     Route::post('/sosial/post/{id}/reply', [SocialController::class, 'reply'])->name('sosial.post.reply');
 
     Route::post('/communities', [CommunityController::class,'store'])->name('communities.store');
