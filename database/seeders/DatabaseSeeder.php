@@ -18,10 +18,5 @@ class DatabaseSeeder extends Seeder
                 BadgeSeeder::class,
                 UserWithKelasAndBadgesSeeder::class
         ]);
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'status_id' => 1
-        ]);
     }
 }
