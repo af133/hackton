@@ -11,7 +11,9 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $komunitass=CommunityUser::where('user_id',auth()->user()->id)->get();
+        $komunitass = CommunityUser::where('user_id', auth()->user()->id)
+                                    ->with('community')
+                                    ->get();
         $ikutKelas = auth()->user()->detailPembelians()->with('kelas')->get();
         $kelas = auth()->user()->kelas()->get();
         $userId = auth()->user()->id;

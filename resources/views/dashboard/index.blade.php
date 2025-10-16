@@ -204,8 +204,8 @@
                             @else
                             <ul class="space-y-2">
                                 @foreach ($komunitass as $item)
-                                    <a href="{{  route('sosial.show', ['id' => $item->id])  }}">
-                                        @include('components.community-item', ['komunitas' => $item])
+                                    <a href="{{ route('sosial.show', ['id' => $item->id]) }}">
+                                        @include('components.community-item', ['komunitas' => $item->community])
                                     </a>
                                 @endforeach
                             </ul>
