@@ -40,7 +40,6 @@
                                 <h3 class="text-lg font-bold text-gray-900">{{ $community->name}}</h3>
                                 <p class="text-sm text-gray-500 mt-1 flex-grow">{{ $community->description }}</p>
                                 <div class="flex items-center justify-between mt-4">
-                                    
                                     @if ($community->users->contains(auth()->user()->id))
                                         <a href="{{ route('sosial.show', ['id' => $community->id]) }}" class="px-4 py-2 text-sm font-semibold text-primary bg-secondary rounded-lg hover:bg-opacity-80">Lihat</a>
                                     @else 

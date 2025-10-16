@@ -8,7 +8,7 @@ use App\Services\AchievementService;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
-
+use Midtrans\Config;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -32,5 +32,9 @@ class AppServiceProvider extends ServiceProvider
             CoursePurchased::class,
             AwardAchievementsListener::class
         );
+        Config::$serverKey = config('midtrans.server_key');
+        Config::$isProduction = config('midtrans.is_production');
+        Config::$isSanitized = true;
+        Config::$is3ds = true;
     }
 }

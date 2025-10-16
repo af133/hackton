@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-       Schema::create('sesi_live', function (Blueprint $table) {
+        Schema::create('live_communites', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kelas_id')->constrained('kelass')->onDelete('cascade');
+            $table->foreignId('komunitas_id')->constrained('communities')->onDelete('cascade');
             $table->string('judul');
             $table->date('tanggal');
             $table->time('waktu_mulai'); 
-            $table->time('waktu_selesai');
             $table->string('zona_waktu', 10)->default('WIB'); 
             
         });
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sesi_live');
+        Schema::dropIfExists('live_communites');
     }
 };

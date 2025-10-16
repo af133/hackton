@@ -74,6 +74,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(TarikUang::class);
     }
+    public function komunitas()
+    {
+        return $this->hasMany(Community::class, 'community_user');
+    }
     public function createdCommunities()
     {
         return $this->hasMany(Community::class,'creator_id');
@@ -82,10 +86,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Community::class,'community_user');
     }
-    public function communityMessages()
-    {
-        return $this->hasMany(CommunityMessage::class);
-    }
+
 
     public function DetailPembelians()
     {

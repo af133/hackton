@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CommunityUser;
 use Illuminate\Http\Request;
 use App\Models\Chat;
 use App\Models\Community;
@@ -12,7 +13,7 @@ class CommunityController extends Controller
     public function index()
     {
         $communities = Community::all();
-        $ikutKomunitas= auth()->user()->communities()->with('messages.user','users')->get();
+        $ikutKomunitas= CommunityUser::where('user_id',auth()->user()->id)->with('community','user')->get();
         return view('sosial.index', compact('communities','ikutKomunitas'));
     }
     public function store(Request $request)
@@ -23,8 +24,14 @@ class CommunityController extends Controller
         ]);
 
         $avatarPath = null;
-        if ($request->hasFile('avatar')) {
-            $avatarPath = $request->file('avatar')->store('avatar', 'cloudinary');;
+            if ($request->hasFile('avatar')) {
+        try {
+            $upload = $request->file('avatar')->storeOnCloudinary('avatar');
+            $avatarPath = $upload->getSecurePath(); // URL langsung ke gambar di Cloudinary
+        } catch (\Exception $e) {
+            \Log::error('Gagal upload ke Cloudinary: ' . $e->getMessage());
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+            }
         }
 
         $community = Community::create([
@@ -36,17 +43,21 @@ class CommunityController extends Controller
         ]);
 
         $community->users()->attach(Auth::id());
-
         return redirect()->route('sosial')
                         ->with('success', 'Komunitas berhasil dibuat!');
     }
 
 
-    public function join(Community $community)
-    {
-        $community->users()->attach(auth()->id());
-        return back();
-    }
+        public function join(Request $request)
+        {
+
+            CommunityUser::create([
+                'community_id' => $request->community_id,
+                'user_id' => auth()->id(),
+            ]);
+
+            return back()->with('success', 'Berhasil bergabung ke komunitas!');
+        }
 
     public function leave(Community $community)
     {

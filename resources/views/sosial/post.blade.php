@@ -3,6 +3,10 @@
 @section('title', 'Detail Diskusi - SkillSwap')
 @section('body_class', 'bg-background')
 
+@php
+use Illuminate\Support\Str;
+@endphp
+
 @section('content')
 <div x-data="{ sidebarOpen: false }" class="flex h-screen bg-background">
     @include('components.sidebar')
@@ -12,30 +16,41 @@
 
         <div class="relative flex-1 overflow-y-auto">
             <main class="relative z-10 p-6 md:p-8 max-w-4xl mx-auto">
+
                 {{-- Navigasi Kembali --}}
-                <a href="#" class="text-sm font-medium text-primary hover:underline flex items-center gap-1 mb-4">
+                <a href="{{ url()->previous() }}" class="text-sm font-medium text-primary hover:underline flex items-center gap-1 mb-4">
                     <i class="ri-arrow-left-s-line"></i>
-                    Kembali ke Digital Marketing Circle
+                    Kembali ke {{ $post->community->name ?? 'Komunitas' }}
                 </a>
 
                 {{-- Postingan Utama --}}
                 <div class="bg-white p-6 rounded-2xl shadow-md">
                     <div class="flex items-start gap-4">
-                        <img class="h-10 w-10 rounded-full object-cover" src="https://i.pravatar.cc/150?u=budi" alt="Budi's Avatar">
+                        <img class="h-10 w-10 rounded-full object-cover"
+                            src="{{ $post->user->profile_photo_path
+                                ? (Str::startsWith($post->user->profile_photo_path, 'http')
+                                    ? $post->user->profile_photo_path
+                                    : asset('storage/' . $post->user->profile_photo_path))
+                                : 'https://ui-avatars.com/api/?name=' . urlencode($post->user->name) }}"
+                            alt="{{ $post->user->name }}">
+
                         <div class="w-full">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="font-semibold text-gray-800">Budi Santoso</p>
-                                    <p class="text-xs text-gray-400">2 jam yang lalu</p>
+                                    <p class="font-semibold text-gray-800">{{ $post->user->name }}</p>
+                                    <p class="text-xs text-gray-400">{{ $post->created_at->diffForHumans() }}</p>
                                 </div>
                                 <button class="text-gray-400 hover:text-primary"><i class="ri-more-2-fill"></i></button>
                             </div>
+
                             <div class="prose prose-sm max-w-none mt-3">
-                                <h2>Rekomendasi Tools SEO Gratis Terbaik?</h2>
-                                <p>Teman-teman, ada yang punya rekomendasi tools SEO gratis yang powerfull untuk riset keyword? Selain Ubersuggest. Terutama untuk analisis kompetitor. Terima kasih!</p>
+                                <p>{{ $post->content }}</p>
                             </div>
+
                             <div class="flex items-center gap-4 text-gray-500 mt-4 border-t pt-3">
-                                <button class="flex items-center gap-1 hover:text-primary"><i class="ri-heart-3-line"></i> 12 Suka</button>
+                                <button class="flex items-center gap-1 hover:text-primary">
+                                    <i class="ri-heart-3-line"></i> {{ $post->likes_count ?? 0 }} Suka
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -43,46 +58,54 @@
 
                 {{-- Form Tulis Balasan --}}
                 <div class="mt-6 flex items-start gap-4">
-                    <img class="h-10 w-10 rounded-full object-cover" src="https://i.pravatar.cc/150?u=aisyahfarah" alt="User Avatar">
+                    <img class="h-10 w-10 rounded-full object-cover"
+                        src="{{ Auth::user()->profile_photo_path
+                            ? (Str::startsWith(Auth::user()->profile_photo_path, 'http')
+                                ? Auth::user()->profile_photo_path
+                                : asset('storage/' . Auth::user()->profile_photo_path))
+                            : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) }}"
+                        alt="User Avatar">
+
                     <div class="flex-1">
-                        <textarea rows="3" class="w-full bg-white border-transparent rounded-lg shadow-sm focus:ring-primary focus:border-primary text-sm" placeholder="Tulis balasan Anda..."></textarea>
-                        <div class="flex justify-end mt-2">
-                            <button class="px-4 py-2 text-sm font-semibold text-white bg-primary rounded-lg shadow-sm hover:bg-primary-dark">Kirim Balasan</button>
-                        </div>
+                        <form action="{{ route('sosial.post.reply', $post->id) }}" method="POST">
+                            @csrf
+                            <textarea name="message" rows="3" class="w-full bg-white border-transparent rounded-lg shadow-sm focus:ring-primary focus:border-primary text-sm" placeholder="Tulis balasan Anda..."></textarea>
+                            <div class="flex justify-end mt-2">
+                                <button type="submit" class="px-4 py-2 text-sm font-semibold text-white bg-primary rounded-lg shadow-sm hover:bg-primary-dark">
+                                    Kirim Balasan
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
-                {{-- Daftar Balasan/Komentar --}}
+                {{-- Daftar Balasan --}}
                 <div class="mt-8">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4">5 Balasan</h3>
-                    <div class="space-y-6">
-                        {{-- Contoh Balasan 1 --}}
-                        <div class="flex items-start gap-4">
-                             <img class="h-9 w-9 rounded-full object-cover" src="https://i.pravatar.cc/150?u=sinta" alt="Sinta's Avatar">
-                             <div class="w-full">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">{{ $post->replies->count() }} Balasan</h3>
+
+                    @forelse ($post->replies as $reply)
+                        <div class="flex items-start gap-4 mb-6">
+                            <img class="h-9 w-9 rounded-full object-cover"
+                                src="{{ $reply->user->profile_photo_path
+                                    ? (Str::startsWith($reply->user->profile_photo_path, 'http')
+                                        ? $reply->user->profile_photo_path
+                                        : asset('storage/' . $reply->user->profile_photo_path))
+                                    : 'https://ui-avatars.com/api/?name=' . urlencode($reply->user->name) }}"
+                                alt="{{ $reply->user->name }}">
+
+                            <div class="w-full">
                                 <div class="bg-white p-4 rounded-lg shadow-sm">
                                     <div class="flex items-center justify-between">
-                                        <p class="font-semibold text-sm text-gray-800">Sinta Aulia</p>
-                                        <p class="text-xs text-gray-400">1 jam yang lalu</p>
+                                        <p class="font-semibold text-sm text-gray-800">{{ $reply->user->name }}</p>
+                                        <p class="text-xs text-gray-400">{{ $reply->created_at->diffForHumans() }}</p>
                                     </div>
-                                    <p class="text-sm text-gray-700 mt-2">Bisa coba Ahrefs Webmaster Tools, kak. Fitur audit dan keyword research-nya lumayan lengkap untuk versi gratis.</p>
+                                    <p class="text-sm text-gray-700 mt-2">{{ $reply->message }}</p>
                                 </div>
-                             </div>
+                            </div>
                         </div>
-                        {{-- Contoh Balasan 2 --}}
-                        <div class="flex items-start gap-4">
-                             <img class="h-9 w-9 rounded-full object-cover" src="https://i.pravatar.cc/150?u=andre" alt="Andre's Avatar">
-                              <div class="w-full">
-                                <div class="bg-white p-4 rounded-lg shadow-sm">
-                                    <div class="flex items-center justify-between">
-                                        <p class="font-semibold text-sm text-gray-800">Andre Firmansyah</p>
-                                        <p class="text-xs text-gray-400">45 menit yang lalu</p>
-                                    </div>
-                                    <p class="text-sm text-gray-700 mt-2">Setuju sama kak Sinta. Selain itu, Google Keyword Planner juga masih sangat relevan kalau diintegrasikan dengan data dari Google Search Console.</p>
-                                </div>
-                             </div>
-                        </div>
-                    </div>
+                    @empty
+                        <p class="text-gray-400 text-sm">Belum ada balasan.</p>
+                    @endforelse
                 </div>
 
             </main>

@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers;
+use App\Models\CommunityUser;
 use App\Models\detailPembelian;
 use App\Models\LiveClas;
 use Illuminate\Http\Request;
@@ -9,7 +10,7 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $komunitas= auth()->user()->communities()->with('messages.user','users')->get();
+        $komunitass=CommunityUser::where('user_id',auth()->user()->id)->get();
         $ikutKelas = auth()->user()->detailPembelians()->with('kelas')->get();
         $kelas = auth()->user()->kelas()->get();
         $userId = auth()->user()->id;
@@ -23,7 +24,7 @@ class DashboardController extends Controller
         })->avg('rating') ?? 0;
 
 
-        return view('dashboard.index', compact('allLiveClasses','kelas','ikutKelas','komunitas','rating'));
+        return view('dashboard.index', compact('allLiveClasses','kelas','ikutKelas','komunitass','rating'));
     }
 
 }
