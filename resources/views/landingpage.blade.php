@@ -3,6 +3,68 @@
 @section('title', 'Tukar Skill, Buka Peluang Baru - SkillSwap')
 
 @section('content')
+ <!-- Floating Chat Button -->
+        <div id="chatToggle"
+            class="fixed bottom-6 right-6 z-[9999] flex items-center justify-center w-16 h-16 rounded-full
+                    bg-gradient-to-b from-primary to-primary-dark shadow-xl cursor-pointer
+                    hover:scale-110 transition-transform duration-300 group">
+            <i class="ri-message-3-line text-white text-3xl"></i>
+
+            <span
+                class="absolute bottom-20 right-0 bg-white text-gray-800 text-sm font-semibold px-3 py-1.5
+                    rounded-full shadow-lg opacity-0 scale-90 group-hover:opacity-100 group-hover:scale-100
+                    transition-all duration-200 whitespace-nowrap">
+                Tanya & Jawab
+            </span>
+        </div>
+
+
+    {{-- Overlay Chat Window --}}
+    <div id="chatOverlay"
+         class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center
+                opacity-0 invisible transition-all duration-300 z-[9998]">
+        <div class="relative w-[95%] md:w-[420px] h-[80vh] bg-white rounded-2xl shadow-2xl overflow-hidden">
+            {{-- Tombol Tutup --}}
+            <button id="chatClose"
+                    class="absolute top-3 right-4 text-gray-500 hover:text-gray-800 text-2xl font-bold z-50">
+                ✕
+            </button>
+
+            {{-- Iframe Botpress --}}
+            <iframe src="https://cdn.botpress.cloud/webchat/v3.3/shareable.html?configUrl=https://files.bpcontent.cloud/2025/10/16/20/20251016205717-9XI5MQKX.json"
+                    class="w-full h-full border-0 rounded-2xl"></iframe>
+        </div>
+    </div>
+
+    {{-- Scripts --}}
+    @stack('scripts')
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true, easing: 'ease-out-cubic' });
+
+        const chatBtn = document.getElementById('chatToggle');
+        const chatOverlay = document.getElementById('chatOverlay');
+        const chatClose = document.getElementById('chatClose');
+
+        function openChat() {
+            chatOverlay.classList.remove('invisible', 'opacity-0');
+            chatOverlay.classList.add('opacity-100');
+        }
+
+        function closeChat() {
+            chatOverlay.classList.add('opacity-0');
+            setTimeout(() => chatOverlay.classList.add('invisible'), 300);
+        }
+
+        chatBtn.addEventListener('click', openChat);
+        chatClose.addEventListener('click', closeChat);
+        chatOverlay.addEventListener('click', e => {
+            if (e.target === chatOverlay) closeChat();
+        });
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeChat();
+        });
+    </script>
 
 {{-- TAMBAHKAN id="beranda" dan data-section agar bisa dideteksi oleh Intersection Observer --}}
 <div id="beranda" data-section class="relative min-h-[600px] flex items-center justify-center overflow-hidden rounded-b-3xl bg-primary dark:bg-gray-900 shadow-lg">
@@ -153,7 +215,7 @@
             <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                 @auth
                     <a href="{{ route('dashboard') }}" class="block w-full text-center px-5 py-2 border border-primary text-primary rounded-lg text-sm font-semibold hover:bg-primary/10 dark:hover:bg-gray-700">Dashboard</a>
-                    
+
                 @endauth
                 @guest
                     <a href="{{ route('login') }}" class="block w-full text-center px-5 py-2 border border-primary text-primary rounded-lg text-sm font-semibold hover:bg-primary/10 dark:hover:bg-gray-700">Log In</a>
