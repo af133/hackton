@@ -23,8 +23,8 @@ return new class extends Migration
             $table->string('cv_path')->nullable();
             $table->string('portfolio_path')->nullable();
             $table->string('instagram_url')->nullable();
-            $table->string('linkedin_url')->nullable(); 
-            $table->integer('koin')->default(0);
+            $table->string('linkedin_url')->nullable();
+            $table->integer('koin')->default(100);
             $table->unsignedBigInteger('status_id')->default(2);
             $table->foreign('status_id')->references('id')->on('statuss')->onDelete('cascade');
             $table->rememberToken();

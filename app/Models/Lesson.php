@@ -13,7 +13,7 @@ class Lesson extends Model
     }
     public function discussions()
     {
-        return $this->hasMany(Discussion::class)->latest(); // urut terbaru
+        return $this->hasMany(Discussion::class)->latest(); 
     }
 
 }

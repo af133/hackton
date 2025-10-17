@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Kelas;
 use App\Models\Modul;
-use App\Models\LiveCommunity;
 use App\Models\LiveClas;
 use App\Models\Pembelian;
 use Illuminate\Http\Request;
+use App\Models\LiveCommunity;
 use App\Events\CoursePurchased;
 use App\Models\DetailPembelian;
+use Illuminate\Support\Facades\DB;
 
 class CourseController extends Controller
 {
@@ -125,14 +126,14 @@ class CourseController extends Controller
         $semuaKelas = Kelas::where('is_draft', false)->get();
         $kelasDiikuti = Kelas::whereHas('detailPembelians.pembelian', function ($q) {
             $q->where('user_id', auth()->id())
-            ->select('id', 'judul_kelas', 'kategori', 'dibuat_oleh');
+            ->select('id', 'judul_kelas', 'kategori', 'dibuat_oleh','path_gambar');
         })->get();
 
         $kelasSaya = Kelas::where('dibuat_oleh', auth()->id())
             ->with(['DetailPembelians' => function ($q) {
             $q->select('id', 'kelas_id', 'pembelian_id', 'rating');
         }])
-        ->select('id', 'judul_kelas', 'kategori', 'dibuat_oleh')
+        ->select('id', 'judul_kelas', 'kategori', 'dibuat_oleh','path_gambar')
             ->get();
 
         return view('kelas.index', compact('semuaKelas', 'kelasDiikuti', 'kelasSaya'));
@@ -185,33 +186,46 @@ class CourseController extends Controller
     {
         $kelas = Kelas::findOrFail($id);
         $user = auth()->user();
-        $pemilik = User::findOrFail($kelas->dibuat_oleh);
-
-        if ($user->koin < $kelas->harga) {
-            return back()->with('error', 'Saldo koin tidak cukup untuk membeli kelas ini.');
+        if ($user->koin < $kelas->harga_koin) {
+        return back()->with('error', 'Saldo koin tidak cukup untuk membeli kelas ini.');
         }
 
-        $user->koin -= $kelas->harga_koin;
-        $user->save();
+        try {
+            DB::transaction(function () use ($user, $kelas) {
+                $pemilik = User::findOrFail($kelas->dibuat_oleh);
 
-        $pemilik->koin += $kelas->harga_koin;
-        $pemilik->save();
+                // Kurangi koin pembeli
+                $user->koin -= $kelas->harga_koin;
+                $user->save();
 
-        $pembelian = Pembelian::create([
-            'user_id' => $user->id,
-            'kelas_id' => $kelas->id,
-        ]);
+                // Tambah koin pemilik
+                $pemilik->koin += $kelas->harga_koin;
+                $pemilik->save();
 
-        DetailPembelian::create([
-            'pembelian_id' => $pembelian->id,
-            'kelas_id' => $kelas->id,
-            'tanggal_pembelian' => now()->toDateString(),
-            'rating'=>0
-        ]);
-        CoursePurchased::dispatch($user, $kelas);
+                // Buat record pembelian
+                $pembelian = Pembelian::create([
+                    'user_id' => $user->id,
+                    'kelas_id' => $kelas->id, // Asumsi ada kolom ini
+                ]);
 
-        return redirect()->route('kelas.show', $kelas->id)->with('success', 'Kelas berhasil dibeli! 🎉');
+                DetailPembelian::create([
+                    'pembelian_id' => $pembelian->id,
+                    'kelas_id' => $kelas->id,
+                    'tanggal_pembelian' => now(),
+                    'rating' => 0
+                ]);
+
+                // Kirim event setelah semua operasi DB sukses
+                CoursePurchased::dispatch($user, $kelas);
+            });
+        } catch (\Exception $e) {
+            // Jika terjadi error, semua akan di-rollback
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat proses pembelian. Silakan coba lagi.');
     }
+
+    return redirect()->route('kelas.show', $kelas->id)->with('success', 'Kelas berhasil dibeli! 🎉');
+    }
+
 
     public function showcreate()
     {

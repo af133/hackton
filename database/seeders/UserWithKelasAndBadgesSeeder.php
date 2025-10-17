@@ -33,7 +33,7 @@ class UserWithKelasAndBadgesSeeder extends Seeder
 
             $kelasData = [
                 [
-                    'judul_kelas' => 'Pengenalan UI/UX Design untuk Pemula',
+                    'judul_kelas' => 'Pengenalan UI/UX Pemula',
                     'deskripsi' => 'Pelajari dasar-dasar User Interface dan User Experience design dari nol. Cocok untuk Anda yang baru memulai karir di dunia digital.',
                     'kategori' => 'UI/UX Design',
                     'level_kelas' => 'Beginner',
